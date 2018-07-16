@@ -7,11 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import system.model.User;
+import system.entity.User;
 import system.service.UserService;
-
-import java.util.List;
-
 
 
 @Controller
@@ -23,7 +20,7 @@ public class UserController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public @ResponseBody
     String getAllUsers() {
-        return userService.getAllUsers().toString();
+        return userService.loadAll().toString();
     }
 
     @RequestMapping(value = "/validate", method = RequestMethod.GET)
@@ -37,7 +34,8 @@ public class UserController {
     @RequestMapping(value = "/check", method = RequestMethod.POST)
     public @ResponseBody
     String checkUser(@ModelAttribute("userFromServer") User user) {
-        if ("admin".equals(user.getName()) && "admin".equals(user.getPassword())) {
+        User u = userService.findByName(user.getName());
+        if (u.getPassword().equals(user.getPassword())) {
             return "valid";
         }
         return "invalid";

@@ -1,20 +1,17 @@
 package system.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import system.dao.UserDao;
-import system.model.User;
+import system.entity.User;
 
 import java.util.List;
 
+public interface UserService {
+    List<User> loadAll();
 
+    User save(User user);
 
-@Service
-public class UserService {
-    @Autowired
-    private UserDao userDao;
+    void delete(int id);
 
-    public List<User> getAllUsers() {
-        return userDao.getAllUsers();
-    }
+    User findByName(String name);
+
+    User findById(int id);
 }
