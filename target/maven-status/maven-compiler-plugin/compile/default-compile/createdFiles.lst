@@ -1,4 +1,7 @@
 system\controller\UserController.class
 system\model\User.class
+system\config\DataConfig.class
 system\service\UserService.class
+system\repository\UserRepository.class
+system\config\AppInitializer.class
 system\dao\UserDao.class
