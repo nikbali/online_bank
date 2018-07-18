@@ -4,10 +4,12 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
+
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
+    @Column(name = "id")
     private long id;
 
     @Column(name = "name")
@@ -56,3 +58,4 @@ public class User {
                 '}';
     }
 }
+

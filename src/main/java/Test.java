@@ -1,4 +1,5 @@
 import system.entity.User;
+import system.repository.implemention.UserRepositoryImpl;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -10,18 +11,23 @@ public class Test {
 
     public static void main(String[] args) {
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("db");
-        EntityManager em = emf.createEntityManager();
+//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("db");
+//        EntityManager em = emf.createEntityManager();
+//
+//        User user = new User("Petya", "pass12bc23");
+//
+//        EntityTransaction et = em.getTransaction();
+//        et.begin();
+//        em.persist(user);
+//        et.commit();
+//
+//        em.close();
+//        emf.close();
 
-        User user = new User("Petya", "pass12bc23");
+        UserRepositoryImpl i = new UserRepositoryImpl();
+        System.out.println(i.findAll());
 
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        em.persist(user);
-        et.commit();
 
-        em.close();
-        emf.close();
 
 
     }

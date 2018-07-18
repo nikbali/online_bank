@@ -1,9 +1,22 @@
 package system.repository.implemention;
 
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import system.entity.User;
 import system.repository.UserRepository;
 
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.List;
+
+@Repository
 public class UserRepositoryImpl implements UserRepository {
+
+    @PersistenceContext(unitName = "db")
+    private EntityManager em;
+
+
     @Override
     public <S extends User> S save(S s) {
         return null;
@@ -26,7 +39,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Iterable<User> findAll() {
-        return null;
+
+       // EntityManager em = emFactory.createEntityManager();
+        Query query = em.createQuery("SELECT t FROM User t");
+        return (List<User>) query.getResultList();
     }
 
     @Override
@@ -58,4 +74,5 @@ public class UserRepositoryImpl implements UserRepository {
     public void deleteAll() {
 
     }
+
 }

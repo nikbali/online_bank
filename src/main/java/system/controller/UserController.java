@@ -10,6 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import system.entity.User;
 import system.service.UserService;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/users")
@@ -19,8 +21,11 @@ public class UserController {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public @ResponseBody
-    String getAllUsers() {
-        return userService.loadAll().toString();
+    ModelAndView getAllUsers() {
+        ModelAndView model = new ModelAndView("user_list");
+        List<User> list =  userService.loadAll();
+        model.addObject("list", list);
+        return model;
     }
 
     @RequestMapping(value = "/validate", method = RequestMethod.GET)
