@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import system.entity.User;
+import system.repository.UserRepository;
 import system.service.UserService;
 
 import java.util.List;
@@ -16,16 +17,36 @@ import java.util.List;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+
     @Autowired
-    private UserService userService;
+    private UserRepository repository;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public @ResponseBody
     ModelAndView getAllUsers() {
         ModelAndView model = new ModelAndView("user_list");
-        List<User> list =  userService.loadAll();
+        Iterable<User> list =  repository.findAll();
         model.addObject("list", list);
         return model;
+    }
+
+    @RequestMapping("/home")
+    public String home() {
+        return "users_page";
+    }
+
+    @RequestMapping(value="/add", method=RequestMethod.GET)
+    public ModelAndView add(){
+        ModelAndView model = new ModelAndView("add_user");
+        User user = new User();
+        model.addObject("user", user);
+        return model;
+    }
+
+    @RequestMapping(value="/save", method=RequestMethod.POST)
+    public ModelAndView save(@ModelAttribute("user") User user){
+        repository.save(user);
+        return new ModelAndView("redirect:/users/list");
     }
 
     @RequestMapping(value = "/validate", method = RequestMethod.GET)
@@ -36,13 +57,5 @@ public class UserController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/check", method = RequestMethod.POST)
-    public @ResponseBody
-    String checkUser(@ModelAttribute("userFromServer") User user) {
-        User u = userService.findByName(user.getName());
-        if (u.getPassword().equals(user.getPassword())) {
-            return "valid";
-        }
-        return "invalid";
-    }
+
 }
