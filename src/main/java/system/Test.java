@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import system.entity.User;
 import system.repository.UserRepository;
 import system.service.UserService;
-import system.service.implemention.UserServiceImpl;
+
 
 @SpringBootApplication
 public class Test {
@@ -23,23 +23,22 @@ public class Test {
     /**
      *
      * Этот метод используется для тестинга, выводит в консоль в виде лога результаты всяких операций с БД
-
+    */
     @Bean
-    public CommandLineRunner demo(UserRepository repository) {
-        return (args) -> {
-            // добавим в бд юзеров
-            repository.save(new User("Jack", "123"));
-            repository.save(new User("петя", "петя123"));
-            repository.save(new User("вася", "вася123"));
+    public CommandLineRunner demo(UserService service) {
 
-            // fetch all Users
+        return  (args) -> {
+
+            User user1 = new User("king@mail.ru" , "king777", "Петя", "Иванов", "dificult", "87779912");
+            service.createUser(user1);
             log.info("User found with findAll():");
             log.info("-------------------------------");
-            for (User user : repository.findAll()) {
+            for (User user : service.loadAll()) {
                 log.info(user.toString());
             }
             log.info("-------------------------------");
         };
+
     }
-*/
+
 }

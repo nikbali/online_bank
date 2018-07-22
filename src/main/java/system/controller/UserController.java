@@ -21,6 +21,9 @@ public class UserController {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public @ResponseBody
     ModelAndView getAllUsers() {
@@ -30,9 +33,13 @@ public class UserController {
         return model;
     }
 
-    @RequestMapping("/home")
-    public String home() {
-        return "users_page";
+    @RequestMapping("/")
+    public ModelAndView home()
+    {
+        ModelAndView model = new ModelAndView("index");
+        User user = new User();
+        model.addObject("user", user);
+        return model;
     }
 
     @RequestMapping(value="/add", method=RequestMethod.GET)
@@ -47,6 +54,23 @@ public class UserController {
     public ModelAndView save(@ModelAttribute("user") User user){
         repository.save(user);
         return new ModelAndView("redirect:/users/list");
+    }
+
+    @RequestMapping(value="/signin", method=RequestMethod.POST)
+    public ModelAndView auth(@ModelAttribute("user") User user)
+    {
+        if(userService.checkLoginExists(user.getLogin()))
+        {
+            User cur_user = userService.findByLogin(user.getLogin());
+            if(cur_user.getPassword().equals(user.getPassword())) return new ModelAndView("redirect:/users/list");
+            return new ModelAndView("redirect:/users/");
+        }
+        else
+        {
+            return new ModelAndView("redirect:/users/");
+        }
+
+
     }
 
     @RequestMapping(value = "/validate", method = RequestMethod.GET)

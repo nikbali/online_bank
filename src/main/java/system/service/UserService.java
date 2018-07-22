@@ -3,15 +3,24 @@ package system.service;
 import system.entity.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
     List<User> loadAll();
 
-    User save(User user);
+    void save(User user);
 
-    void delete(int id);
+    void delete(User user);
 
-    User findByName(String name);
+    User findByLogin(String login);
 
-    User findById(int id);
+    User findByEmail(String email);
+
+    boolean checkUserExist(String login, String email);
+
+    boolean checkLoginExists(String login);
+
+    boolean checkEmailExists(String email);
+
+    User createUser(User user);
 }
