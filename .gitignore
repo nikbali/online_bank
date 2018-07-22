@@ -1,3 +1,7 @@
+### IJ IDEA ###
 .idea
-**/*.iml
-target
+*.iws
+*.iml
+*.ipr
+
+target/
