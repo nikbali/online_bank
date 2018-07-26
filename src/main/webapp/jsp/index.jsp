@@ -6,7 +6,9 @@
 <title>Online Bank</title>
 </head>
 <body>
-    <form:form action="/users/signin" method="POST" modelAttribute="user">
+    <h1>Sign In</h1>
+    <p>${error}</p>
+    <form:form action="/signin" method="POST" modelAttribute="user">
       <form:hidden path="id"/>
           <table>
            <tr>
@@ -15,15 +17,15 @@
            </tr>
            <tr>
                 <td>Password</td>
-                <td><form:input path="password"/></td>
+                <td><form:input type="password" path="password"/></td>
            </tr>
            <tr>
                 <td></td>
-                <td><button type="submit">Sign In</button></td>
+                <td><input type="submit" name="sign-in" value="Sign In"/></td>
            </tr>
            <tr>
                <td></td>
-               <td><button type="submit">Sign Up</button></td>
+               <td><input type="submit" name="sign-up" value="Sign Up"/></td>
           </tr>
           </table>
      </form:form>
