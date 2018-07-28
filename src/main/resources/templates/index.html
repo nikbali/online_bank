@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Online Bank</title>
+</head>
+<body>
+<h1>Sign In</h1>
+<p th:text="${error}"/>
+
+<form th:action="@{/signin}" method="post" th:object="${user}">
+    <table>
+        <tr>
+            <td>Login</td>
+            <td><input type="text" th:field="*{login}"/></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="password" th:field="*{password}"/></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" name="sign-in" value="Sign In"/></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" name="sign-up" value="Sign Up"/></td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

@@ -3,10 +3,8 @@ package system.controller;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import system.entity.User;
 import system.repository.UserRepository;
@@ -30,7 +28,7 @@ public class UserController {
 
     /**
     * Обрабатывает запрос по выводу списка всех юзеров
-     * @return user_list.jsp заполненую юзерами
+     * @return user_list.html заполненую юзерами
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public @ResponseBody
@@ -43,7 +41,7 @@ public class UserController {
 
     /**
      * Запрос к корневой странице, с формой входа
-     * @return index.jsp
+     * @return index.html
      */
     @RequestMapping("/")
     public ModelAndView home()
@@ -119,6 +117,13 @@ public class UserController {
         User user = new User();
         model.addObject("user", user);
         return model;
+    }
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String test(@RequestParam(name = "name")String name, Model model)
+    {
+        model.addAttribute("name", name);
+        return "test";
     }
 
 }
