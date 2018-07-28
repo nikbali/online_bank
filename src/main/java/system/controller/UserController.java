@@ -26,58 +26,26 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    /**
-    * Обрабатывает запрос по выводу списка всех юзеров
-     * @return user_list.html заполненую юзерами
-     */
+
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public @ResponseBody
-    ModelAndView getAllUsers() {
+    public ModelAndView getAllUsers() {
         ModelAndView model = new ModelAndView("user_list");
         Iterable<User> list =  repository.findAll();
         model.addObject("list", list);
         return model;
     }
 
-    /**
-     * Запрос к корневой странице, с формой входа
-     * @return index.html
-     */
-    @RequestMapping("/")
-    public ModelAndView home()
+
+    @RequestMapping(value = {"/", "index"} , method = RequestMethod.GET)
+    public ModelAndView home(@RequestParam(value="error", required = false) String error)
     {
         ModelAndView model = new ModelAndView("index");
+        if(error != null){
+            model.addObject("msg", "The username or password is incorrect!");
+        }
         User user = new User();
         model.addObject("user", user);
         return model;
-    }
-
-    @RequestMapping(value="/add", method=RequestMethod.GET)
-    public ModelAndView add(){
-        ModelAndView model = new ModelAndView("add_user");
-        User user = new User();
-        model.addObject("user", user);
-        return model;
-    }
-
-    /**
-    * Запрос по созданию пользователя
-     */
-    @RequestMapping(value="/save", method=RequestMethod.POST)
-    public ModelAndView save(@ModelAttribute("user") User user){
-
-        try
-        {
-            repository.save(user);
-        }
-        catch (Exception ex)
-        {
-            ModelAndView model = new ModelAndView("redirect:/");
-            model.addObject("error", 2);
-            return model;
-        }
-
-        return new ModelAndView("redirect:/list");
     }
 
     @RequestMapping(params = "sign-in", value="/signin", method=RequestMethod.POST)
@@ -87,19 +55,17 @@ public class UserController {
         if(userService.checkLoginExists(user.getLogin()))
         {
             User cur_user = userService.findByLogin(user.getLogin());
-            if(cur_user.getPassword().equals(user.getPassword())) return new ModelAndView("redirect:/list");
-            return new ModelAndView("redirect:/");
+            if(cur_user.getPassword().equals(user.getPassword()))
+            {
+                return new ModelAndView("redirect:/list");
+            }
         }
-        else
-        {
-            return new ModelAndView("redirect:/");
-        }
+        return new ModelAndView("redirect:/").addObject("error", true);
+
 
     }
 
-    /**
-     * Переход с главной на страницу Регистрации
-     */
+
     @RequestMapping(params = "sign-up", value="/signin", method=RequestMethod.POST)
     public ModelAndView redir(@ModelAttribute("user") User user)
     {
@@ -107,23 +73,35 @@ public class UserController {
         return mv;
     }
 
-    /**
-    * Страница с регистрацией
-     */
     @RequestMapping(value="/registration", method=RequestMethod.GET)
-    public ModelAndView registration()
+    public ModelAndView registration(@RequestParam(value="error", required = false) String error)
     {
         ModelAndView model = new ModelAndView("registration");
+        if(error != null)
+        {
+            model.addObject("msg", "Error create User, try again!");
+        }
         User user = new User();
         model.addObject("user", user);
         return model;
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public String test(@RequestParam(name = "name")String name, Model model)
-    {
-        model.addAttribute("name", name);
-        return "test";
+    @RequestMapping(value="/save", method=RequestMethod.POST)
+    public ModelAndView save(@ModelAttribute("user") User user){
+
+        try
+        {
+            repository.save(user);
+        }
+        catch (Exception ex)
+        {
+            ModelAndView model = new ModelAndView("redirect:/registration");
+            model.addObject("error", true);
+            return model;
+        }
+
+        return new ModelAndView("redirect:/list");
     }
+
 
 }
