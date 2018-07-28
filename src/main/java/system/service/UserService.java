@@ -22,5 +22,5 @@ public interface UserService {
 
     boolean checkEmailExists(String email);
 
-    User createUser(User user);
+    User createUser(User user) throws Exception;
 }

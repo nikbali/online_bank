@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import system.entity.User;
 import system.repository.UserRepository;
 import system.service.UserService;
+import system.utils.CryptoUtils;
 
 import java.sql.SQLDataException;
 import java.sql.SQLException;
@@ -21,16 +22,13 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserRepository repository;
-
-    @Autowired
     private UserService userService;
 
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView getAllUsers() {
         ModelAndView model = new ModelAndView("user_list");
-        Iterable<User> list =  repository.findAll();
+        Iterable<User> list =  userService.loadAll();
         model.addObject("list", list);
         return model;
     }
@@ -52,13 +50,18 @@ public class UserController {
     public ModelAndView auth(@ModelAttribute("user") User user)
     {
 
-        if(userService.checkLoginExists(user.getLogin()))
-        {
-            User cur_user = userService.findByLogin(user.getLogin());
-            if(cur_user.getPassword().equals(user.getPassword()))
-            {
-                return new ModelAndView("redirect:/list");
+        try {
+            if (userService.checkLoginExists(user.getLogin())) {
+                User cur_user = userService.findByLogin(user.getLogin());
+                if (cur_user.getPassword().equals(CryptoUtils.getHash(user.getPassword()))) {
+                    return new ModelAndView("redirect:/list");
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            return new ModelAndView("redirect:/").addObject("error", true);
+
         }
         return new ModelAndView("redirect:/").addObject("error", true);
 
@@ -91,7 +94,7 @@ public class UserController {
 
         try
         {
-            repository.save(user);
+            userService.createUser(user);
         }
         catch (Exception ex)
         {

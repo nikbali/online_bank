@@ -9,9 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import system.entity.User;
 import system.repository.UserRepository;
 import system.service.UserService;
+import system.utils.CryptoUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -25,7 +29,7 @@ public class UserServiceImpl implements UserService {
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
 
-    public User createUser(User user)
+    public User createUser(User user) throws Exception
     {
         if(this.checkLoginExists(user.getLogin()))
         {
@@ -34,7 +38,8 @@ public class UserServiceImpl implements UserService {
         }
         else
         {
-            //коддируем пароль
+            String crypt_pass = CryptoUtils.getHash(user.getPassword());
+            user.setPassword(crypt_pass);
             //создаем ему аккаунт и добаляем
             return userRepository.save(user);
         }
@@ -78,4 +83,6 @@ public class UserServiceImpl implements UserService {
         if(userRepository.findByEmail(email) != null) return true;
         return false;
     }
+
+
 }
