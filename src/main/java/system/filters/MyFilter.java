@@ -10,6 +10,7 @@ import system.entity.User;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -32,7 +33,15 @@ public class MyFilter implements Filter {
         HttpSession session = request.getSession();
         User attr = (User)session.getAttribute("user");
 
-        if(attr != null)filterChain.doFilter(servletRequest, servletResponse);
+        if(attr != null)
+        {
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
+        else
+            {
+                HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
+                httpResponse.sendRedirect("index");
+            }
     }
 
     @Override
