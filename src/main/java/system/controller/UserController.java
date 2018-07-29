@@ -1,20 +1,17 @@
 package system.controller;
 
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import system.entity.User;
-import system.repository.UserRepository;
 import system.service.UserService;
 import system.utils.CryptoUtils;
+import system.utils.UserUtils;
 
-import java.sql.SQLDataException;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
+import javax.servlet.http.HttpSession;
+import java.security.Principal;
 
 
 @Controller
@@ -47,14 +44,16 @@ public class UserController {
     }
 
     @RequestMapping(params = "sign-in", value="/signin", method=RequestMethod.POST)
-    public ModelAndView auth(@ModelAttribute("user") User user)
+    public ModelAndView auth(@ModelAttribute("user") User user, HttpSession session)
     {
 
         try {
             if (userService.checkLoginExists(user.getLogin())) {
                 User cur_user = userService.findByLogin(user.getLogin());
-                if (cur_user.getPassword().equals(CryptoUtils.getHash(user.getPassword()))) {
-                    return new ModelAndView("redirect:/list");
+                if (cur_user.getPassword().equals(CryptoUtils.getHash(user.getPassword())))
+                {
+                    session.setAttribute("user", cur_user);
+                    return new ModelAndView("redirect:/profile");
                 }
             }
         }
@@ -67,7 +66,6 @@ public class UserController {
 
 
     }
-
 
     @RequestMapping(params = "sign-up", value="/signin", method=RequestMethod.POST)
     public ModelAndView redir(@ModelAttribute("user") User user)
@@ -105,6 +103,5 @@ public class UserController {
 
         return new ModelAndView("redirect:/list");
     }
-
 
 }
