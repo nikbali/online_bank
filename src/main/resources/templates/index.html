@@ -1,32 +1,37 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <title>Online Bank</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom styles for this template -->
+    <link href="/css/signin.css" rel="stylesheet">
+
 </head>
+
 <body>
-<h1>Sign In</h1>
-<p th:text="${msg}"/>
 
-<form th:action="@{/signin}" method="post" th:object="${user}">
-    <table>
-        <tr>
-            <td>Login</td>
-            <td><input type="text" th:field="*{login}"/></td>
-        </tr>
-        <tr>
-            <td>Password</td>
-            <td><input type="password" th:field="*{password}"/></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><input type="submit" name="sign-in" value="Sign In"/></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><input type="submit" name="sign-up" value="Sign Up"/></td>
-        </tr>
-    </table>
-</form>
+<div class="container">
 
+    <form class="form-signin" th:action="@{/signin}" method="post" th:object="${user}">
+        <p th:text="${msg}"/>
+        <h2 class="form-signin-heading">Sign In</h2>
+        <label for="inputLogin" class="sr-only">Login</label>
+        <input type="text" th:field="*{login}" id="inputLogin" class="form-control" placeholder="Login" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" th:field="*{password}" id="inputPassword" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" name="sign-in" type="submit">Sign In</button>
+        <button class="btn btn-lg btn-primary btn-block" name="sign-up" type="submit">Sign Up</button>
+    </form>
+
+</div> <!-- /container -->
 </body>
 </html>
