@@ -3,7 +3,6 @@ package system.service;
 import system.entity.User;
 
 import java.util.List;
-import java.util.Set;
 
 public interface UserService {
     List<User> loadAll();
@@ -16,7 +15,7 @@ public interface UserService {
 
     User findByEmail(String email);
 
-    boolean checkUserExist(String login, String email);
+    boolean checkUserExists(String login, String email);//при проверках на булеан лучше называть isUserExists
 
     boolean checkLoginExists(String login);
 

@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
-    public boolean checkUserExist(String login, String email) {
+    public boolean checkUserExists(String login, String email) {
 
         if((userRepository.findByEmail(email) != null)|| (userRepository.findByLogin(login) != null))
         {

@@ -6,4 +6,7 @@ import system.entity.User;
 
 public interface AccountRepository  extends CrudRepository<Account, Long> {
 
+
+
+
 }
