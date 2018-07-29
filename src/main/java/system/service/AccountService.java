@@ -3,17 +3,16 @@ package system.service;
 import system.entity.Account;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AccountService {
     void save(Account account);
 
-    Account createAccount(Account account);//save and create whats the diff ar because of logic of creation?
+    Account createAccount(Account account);
 
-    Account findById(long id);
+    Optional<Account> findById(long id);
 
     boolean existsById(long id);
-
-    Iterable<Account> findAll();
 
     void deleteById(long id);
 

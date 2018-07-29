@@ -4,8 +4,10 @@ import org.springframework.data.repository.CrudRepository;
 import system.entity.Account;
 import system.entity.User;
 
-public interface AccountRepository  extends CrudRepository<Account, Long> {
+import java.util.List;
 
+public interface AccountRepository  extends CrudRepository<Account, Long> {
+    List<Account> findAll();
 
 
 

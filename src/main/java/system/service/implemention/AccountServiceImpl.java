@@ -6,69 +6,66 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import system.entity.Account;
-import system.repository.UserRepository;
+import system.repository.AccountRepository;
 import system.service.AccountService;
 import system.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
 public class AccountServiceImpl implements AccountService {
 
     @Autowired
-    private UserRepository userRepository;
+    private AccountRepository accountRepository;
 
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-
-    @Override
-    public void save(Account account) {
-
-    }
-
+    //реализовать создине объекта, добавить проверки
     @Override
     public Account createAccount(Account account) {
         return null;
     }
 
     @Override
-    public Account findById(long id) {
-        return null;
+    public void save(Account account) {
+        accountRepository.save(account);
+    }
+
+
+    @Override
+    public Optional<Account> findById(long id) {
+        return accountRepository.findById(id);
     }
 
     @Override
     public boolean existsById(long id) {
-        return false;
-    }
-
-    @Override
-    public Iterable<Account> findAll() {
-        return null;
+        return accountRepository.existsById(id);
     }
 
     @Override
     public void deleteById(long id) {
-
+        accountRepository.deleteById(id);
     }
 
     @Override
     public void delete(Account account) {
-
+        accountRepository.delete(account);
     }
 
     @Override
     public void deleteAll() {
-
+        accountRepository.deleteAll();
     }
 
     @Override
     public long count() {
-        return 0;
+        return accountRepository.count();
     }
 
     @Override
     public List<Account> loadAll() {
-        return null;
+        return accountRepository.findAll();
     }
 }
