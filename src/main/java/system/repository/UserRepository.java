@@ -12,5 +12,7 @@ public interface UserRepository extends CrudRepository<User, Long>
 
     User findByEmail(String email);
 
+    User findByDocumentNumber(int document_number);
+
     List<User> findAll();
 }

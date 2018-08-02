@@ -10,6 +10,10 @@
 <form th:action="@{/save}" method="post" th:object="${user}">
     <table>
         <tr>
+            <td>Document Number</td>
+            <td><input type="text" th:field="*{documentNumber}"/></td>
+        </tr>
+        <tr>
             <td>E-mail</td>
             <td><input type="text" th:field="*{email}"/></td>
         </tr>
@@ -25,6 +29,10 @@
         <tr>
             <td>Last Name</td>
             <td><input type="text" th:field="*{last_name}"/></td>
+        </tr>
+        <tr>
+            <td>Middle Name</td>
+            <td><input type="text" th:field="*{middle_name}"/></td>
         </tr>
         <tr>
             <td>Phone</td>

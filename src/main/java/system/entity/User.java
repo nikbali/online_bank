@@ -3,7 +3,10 @@ package system.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -17,25 +20,42 @@ public class User {
     private String email;
     @Column(name = "login", nullable = false, unique = true)
     private String login;
+    @Column(name = "documentNumber", nullable = false, unique = true)
+    private int documentNumber;
     private String first_name;
     private String last_name;
+    private String middle_name;
     private String password;
     private String phone;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Account> accountList;
+    private List<Account> accountList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<UserRole> userRoles = new HashSet<>();
 
     public User() {
     }
 
-    public User(String email, String login, String first_name, String last_name, String password, String phone) {
+    public User(String email, int documentNumber, String login, String first_name, String last_name, String middle_name, String password, String phone) {
         this.email = email;
+        this.documentNumber = documentNumber;
         this.login = login;
         this.first_name = first_name;
         this.last_name = last_name;
+        this.middle_name = middle_name;
         this.password = password;
         this.phone = phone;
+    }
+
+    public int getDocumentNumber() {
+        return documentNumber;
+    }
+
+    public void setDocumentNumber(int documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
     public long getId() {
@@ -78,6 +98,14 @@ public class User {
         this.last_name = last_name;
     }
 
+    public String getMiddle_name() {
+        return middle_name;
+    }
+
+    public void setMiddle_name(String middle_name) {
+        this.middle_name = middle_name;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -102,17 +130,12 @@ public class User {
         this.accountList = accountList;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", login='" + login + '\'' +
-                ", first_name='" + first_name + '\'' +
-                ", last_name='" + last_name + '\'' +
-                ", password='" + password + '\'' +
-                ", phone='" + phone + '\'' +
-                '}';
+    public Set<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Set<UserRole> userRoles) {
+        this.userRoles = userRoles;
     }
 
     @Override
@@ -122,6 +145,7 @@ public class User {
 
         User user = (User) o;
 
+        if (documentNumber != user.documentNumber) return false;
         if (!email.equals(user.email)) return false;
         if (!login.equals(user.login)) return false;
         if (first_name != null ? !first_name.equals(user.first_name) : user.first_name != null) return false;
@@ -134,11 +158,25 @@ public class User {
     public int hashCode() {
         int result = email.hashCode();
         result = 31 * result + login.hashCode();
+        result = 31 * result + documentNumber;
         result = 31 * result + (first_name != null ? first_name.hashCode() : 0);
         result = 31 * result + (last_name != null ? last_name.hashCode() : 0);
         result = 31 * result + password.hashCode();
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", login='" + login + '\'' +
+                ", documentNumber=" + documentNumber +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 }
 

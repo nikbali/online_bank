@@ -13,7 +13,7 @@ public class Account {
     @Column(name = "id")
     private long id;
     private double account_balance;
-    private long account_number;
+    private long accountNumber;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -31,9 +31,9 @@ public class Account {
 
     }
 
-    public Account(double account_balance, long account_number, User user) {
+    public Account(double account_balance, long accountNumber, User user) {
         this.account_balance = account_balance;
-        this.account_number = account_number;
+        this.accountNumber = accountNumber;
         this.user = user;
     }
 
@@ -53,12 +53,12 @@ public class Account {
         this.account_balance = account_balance;
     }
 
-    public long getAccount_number() {
-        return account_number;
+    public long getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setAccount_number(long account_number) {
-        this.account_number = account_number;
+    public void setAccountNumber(long accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public User getUser() {
