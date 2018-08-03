@@ -5,13 +5,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import system.entity.Role;
 import system.entity.User;
+import system.entity.UserRole;
+import system.exceptions.UserExistException;
+import system.repository.RoleRepository;
 import system.service.UserService;
 import system.utils.CryptoUtils;
 import system.utils.UserUtils;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.util.HashSet;
 
 
 @Controller
@@ -20,6 +25,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -75,12 +83,12 @@ public class UserController {
     }
 
     @RequestMapping(value="/registration", method=RequestMethod.GET)
-    public ModelAndView registration(@RequestParam(value="error", required = false) String error)
+    public ModelAndView registration(@RequestParam(value="error", required = false) String error, @RequestParam(value="message", required = false) String error_message )
     {
         ModelAndView model = new ModelAndView("registration");
         if(error != null)
         {
-            model.addObject("msg", "Error create User, try again!");
+            model.addObject("msg", error_message);
         }
         User user = new User();
         model.addObject("user", user);
@@ -92,12 +100,22 @@ public class UserController {
 
         try
         {
-            userService.createUser(user);
+            HashSet<UserRole> userRoles = new HashSet<>();
+            userRoles.add(new UserRole(user, roleRepository.findByName("CLIENT")));
+            userService.createUser(user, userRoles);
         }
         catch (Exception ex)
         {
             ModelAndView model = new ModelAndView("redirect:/registration");
             model.addObject("error", true);
+            if(ex instanceof UserExistException)
+            {
+                UserExistException existException = (UserExistException) ex;
+                model.addObject("message", existException.getMessage());
+            }
+            else {
+                model.addObject("message", "Error create User, try again!");
+            }
             return model;
         }
 
