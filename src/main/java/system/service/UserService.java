@@ -1,8 +1,10 @@
 package system.service;
 
 import system.entity.User;
+import system.entity.UserRole;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
     List<User> loadAll();
@@ -21,5 +23,7 @@ public interface UserService {
 
     boolean checkEmailExists(String email);
 
-    User createUser(User user) throws Exception;
+    boolean checkDocumentNumber(int document_number);
+
+    User createUser(User user, Set<UserRole> roles) throws Exception;
 }

@@ -17,22 +17,27 @@ import java.util.Optional;
 @Transactional
 public class AccountServiceImpl implements AccountService {
 
+    private volatile static long startAccountNumber = 1111111;
+
     @Autowired
     private AccountRepository accountRepository;
 
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-    //реализовать создине объекта, добавить проверки
+
     @Override
-    public Account createAccount(Account account) {
-        return null;
+    public Account createAccount() {
+        Account account = new Account();
+        account.setAccount_balance(0.0);
+        account.setAccountNumber(++startAccountNumber);
+        accountRepository.save(account);
+        return accountRepository.findByAccountNumber(account.getAccountNumber());
     }
 
     @Override
     public void save(Account account) {
         accountRepository.save(account);
     }
-
 
     @Override
     public Optional<Account> findById(long id) {
@@ -43,17 +48,14 @@ public class AccountServiceImpl implements AccountService {
     public boolean existsById(long id) {
         return accountRepository.existsById(id);
     }
-
     @Override
     public void deleteById(long id) {
         accountRepository.deleteById(id);
     }
-
     @Override
     public void delete(Account account) {
         accountRepository.delete(account);
     }
-
     @Override
     public void deleteAll() {
         accountRepository.deleteAll();
@@ -63,7 +65,6 @@ public class AccountServiceImpl implements AccountService {
     public long count() {
         return accountRepository.count();
     }
-
     @Override
     public List<Account> loadAll() {
         return accountRepository.findAll();
