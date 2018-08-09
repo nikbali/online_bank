@@ -62,10 +62,11 @@ public class UserServiceImpl implements UserService {
                 roleRepository.save(role.getRole());
             }
             user.setUserRoles(roles);
-            //создаем счет для клиента
-            Account account = accountService.createAccount();
+            //создаем клиента и счет для клиента
+            userRepository.save(user);
+            Account account = accountService.createAccount(user);
             user.getAccountList().add(account);
-            return userRepository.save(user);
+            return user;
         }
     }
 

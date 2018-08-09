@@ -28,7 +28,7 @@ public class User {
     private String password;
     private String phone;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Account> accountList = new ArrayList<>();
 

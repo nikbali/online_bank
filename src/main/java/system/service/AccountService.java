@@ -1,14 +1,18 @@
 package system.service;
 
 import system.entity.Account;
+import system.entity.User;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface AccountService {
+
     void save(Account account);
-    Account createAccount();
+    Account createAccount(User user);
     Optional<Account> findById(long id);
+    Account findByAccountNumber(long accountNumber);
+
     boolean existsById(long id);
     void deleteById(long id);
     void delete(Account account);

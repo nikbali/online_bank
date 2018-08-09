@@ -15,7 +15,7 @@ public class Account {
     private double account_balance;
     private long accountNumber;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private User user;
 
