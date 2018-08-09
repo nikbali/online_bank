@@ -1,0 +1,198 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+
+    <title>Account | Bank</title>
+    <meta name="description" content="Neat">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/css/neat.css">
+  </head>
+  <body>
+
+    <div class="o-page">
+      <header class="c-navbar u-mb-large">
+        
+        <!-- Navigation items that will be collaped and toggled in small viewports -->
+        <nav class="c-navbar__nav collapse" id="main-nav">
+          <ul class="c-navbar__nav-list">
+          
+				 <li> 
+					 <a class="c-navbar__brand" href="#">
+					  <img src="/img/sber.png" width="200" height="151" alt="Neatf" title="Neat UI Kit">
+					</a>
+				</li>
+          
+              <li class="c-navbar__nav-item">
+                <a class="c-navbar__nav-link" href="/main/accounts">My Accounts</a>
+              </li>
+              <li class="c-navbar__nav-item">
+                <a class="c-navbar__nav-link" href="/main/transfer">Transfer</a>
+              </li>
+
+              <li class="c-navbar__nav-item">
+                <a class="c-navbar__nav-link" href="/main/deposit">Deposit</a>
+              </li>
+          </ul>
+        </nav>
+        <!-- // Navigation items  -->
+
+     
+          <div class="c-dropdown dropdown u-mr-medium u-ml-auto">
+            <div class="c-notification has-indicator dropdown-toggle" id="dropdownMenuToggle2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+              <i class="c-notification__icon feather icon-bell"></i>
+            </div>
+
+            <div class="c-dropdown__menu c-dropdown__menu--large has-arrow dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuToggle2">
+
+              <span class="c-dropdown__menu-header">
+                Notifications
+              </span>
+              <a class="c-dropdown__item dropdown-item" href="#">
+                <div class="o-media">
+                  <div class="o-media__img u-mr-xsmall">
+                    <span class="c-icon c-icon--info c-icon--xsmall"><i class="feather icon-globe"></i></span>
+                  </div>
+
+                  <div class="o-media__body">
+                    <p>We've updated the Stripe Services agreement and its supporting terms. Your continueduse of Stripe's services.</p>
+                  </div>
+                </div>
+              </a>
+
+              <a class="c-dropdown__item dropdown-item" href="#">
+                <div class="o-media">
+                  <div class="o-media__img u-mr-xsmall">
+                    <span class="c-icon c-icon--danger c-icon--xsmall"><i class="feather icon-x"></i></span>
+                  </div>
+
+                  <div class="o-media__body">
+                    <p>We've updated the Stripe Services agreement and its supporting terms. Your continueduse of Stripe's services.</p>
+                  </div>
+                </div>
+              </a>
+
+              <a class="c-dropdown__item dropdown-item" href="#">
+                <div class="o-media">
+                  <div class="o-media__img u-mr-xsmall">
+                    <span class="c-icon c-icon--success c-icon--xsmall"><i class="feather icon-anchor"></i></span>
+                  </div>
+
+                  <div class="o-media__body">
+                    <p>We've updated the Stripe Services agreement and its supporting terms. Your continueduse of Stripe's services.</p>
+                  </div>
+                </div>
+              </a>
+
+              <a class="c-dropdown__menu-footer">
+                All Notifications
+              </a>
+            </div>
+          </div>
+
+          <div class="c-dropdown dropdown">
+            <div class="c-avatar c-avatar--xsmall dropdown-toggle" id="dropdownMenuAvatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+              <img class="c-avatar__img" src="img/user.jpg" alt="Adam Sandler">
+            </div>
+            
+
+            <div class="c-dropdown__menu has-arrow dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuAvatar">
+              <a class="c-dropdown__item dropdown-item" href="#">Edit Profile</a>
+              <a class="c-dropdown__item dropdown-item" href="#">View Activity</a>
+              <a class="c-dropdown__item dropdown-item" href="/main/logout">Log out</a>
+            </div>
+          </div>
+
+        <button class="c-navbar__nav-toggle" type="button" data-toggle="collapse" data-target="#main-nav">
+            <i class="feather icon-menu"></i>
+        </button><!-- // .c-nav-toggle -->
+      </header>
+
+      <div class="container">
+        <div class="row u-justify-center">
+          <div class="col-lg-6 u-text-center">
+            <h2 class="u-mb-small" th:text="'Welcome, ' + ${user.login} + '!'"></h2>
+
+            <p class="u-text-large u-mb-large">Very intersting text</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-xl-4 u-ml-auto">
+            <div class="c-card is-animated">
+              <span class="c-icon c-icon--large u-mb-small">
+                <i class="feather icon-home"></i>
+              </span>
+
+              <h5 class="u-mb-xsmall">Explore Your Accounts</h5>
+              <p class="u-mb-medium">Просмотр информации об счетах, достпных средствах, истории операций</p>
+              <a class="c-btn c-btn--info has-arrow" href="/main/accounts">
+                Explore<i class="feather icon-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xl-4 u-mr-auto">
+            <div class="c-card is-animated">
+              <span class="c-icon c-icon--large u-mb-small">
+                <i class="feather icon-anchor"></i>
+              </span>
+
+              <h5 class="u-mb-xsmall">Transfer</h5>
+              <p class="u-mb-medium">Переведи средства на счет другому клиенту банка или переведи на счет в другой банк</p>
+              <a class="c-btn c-btn--info has-arrow" href="/main/transfer">Transfer<i class="feather icon-chevron-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-xl-4 u-ml-auto">
+            <div class="c-card is-animated">
+              <span class="c-icon c-icon--large u-mb-small">
+                <i class="feather icon-users"></i>
+              </span>
+
+              <h5 class="u-mb-xsmall">Deposit</h5>
+              <p class="u-mb-medium">Пополни свой счет</p>
+              <a href="/main/deposit" class="c-btn c-btn--info has-arrow">
+                Deposit<i class="feather icon-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xl-4 u-mr-auto">
+            <div class="c-card is-animated">
+              <span class="c-icon c-icon--large u-mb-small">
+                <i class="feather icon-book"></i>
+              </span>
+
+              <h5 class="u-mb-xsmall">Read FAQ</h5>
+              <p class="u-mb-medium">Почитай как пользоваться этим дерьмом</p>
+              <a href="faq.html" class="c-btn c-btn--info has-arrow">Read More<i class="feather icon-chevron-right"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <footer class="c-footer">
+              <p>© 2018 Java School</p>
+              
+            </footer>
+          </div>
+        </div>
+      </div>
+    </div><!-- // .o-page -->
+
+    <!-- Main JavaScript -->
+    <script src="/js/neat.js"></script>
+  </body>
+</html>

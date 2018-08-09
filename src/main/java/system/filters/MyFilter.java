@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 
-@WebFilter(urlPatterns = "/profile")
+@WebFilter(urlPatterns = "/main")
 public class MyFilter implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(system.Application.class);

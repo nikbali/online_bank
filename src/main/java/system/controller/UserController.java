@@ -61,7 +61,7 @@ public class UserController {
                 if (cur_user.getPassword().equals(CryptoUtils.getHash(user.getPassword())))
                 {
                     session.setAttribute("user", cur_user);
-                    return new ModelAndView("redirect:/profile");
+                    return new ModelAndView("redirect:/main");
                 }
             }
         }

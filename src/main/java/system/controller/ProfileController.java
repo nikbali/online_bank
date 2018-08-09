@@ -12,7 +12,7 @@ import system.utils.UserUtils;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/profile")
+@RequestMapping("/main")
 public class ProfileController {
     @Autowired
     private UserService userService;
@@ -22,7 +22,7 @@ public class ProfileController {
     {
         User user = UserUtils.getUserFromSession(session);
         model.addAttribute("user", user);
-        return "profile";
+        return "main";
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
@@ -30,6 +30,32 @@ public class ProfileController {
     {
         UserUtils.deleteUserFromSession(session);
         return "redirect:/";
+
+    }
+
+    @RequestMapping(value = "/accounts", method = RequestMethod.GET)
+    public String toAccounts(HttpSession session, Model model)
+    {
+        User user = UserUtils.getUserFromSession(session);
+        model.addAttribute("user", user);
+        return "accounts";
+
+    }
+
+    @RequestMapping(value = "/deposit", method = RequestMethod.GET)
+    public String toDeposit(HttpSession session, Model model)
+    {
+        User user = UserUtils.getUserFromSession(session);
+        model.addAttribute("user", user);
+        return "deposit";
+
+    }
+    @RequestMapping(value = "/transfer", method = RequestMethod.GET)
+    public String toTransfer(HttpSession session, Model model)
+    {
+        User user = UserUtils.getUserFromSession(session);
+        model.addAttribute("user", user);
+        return "transfer";
 
     }
 
