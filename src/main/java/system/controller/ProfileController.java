@@ -37,7 +37,7 @@ public class ProfileController {
     public String toAccounts(HttpSession session, Model model)
     {
         User user = UserUtils.getUserFromSession(session);
-        model.addAttribute("user", user);
+        model.addAttribute("list", user.getAccountList());
         return "accounts";
 
     }
