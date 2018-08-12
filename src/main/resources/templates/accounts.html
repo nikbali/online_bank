@@ -97,7 +97,7 @@
         </header>
 
         <div class="container">
-          <div class="row">
+          <div id="resultsBlock" class="row">
 		  
             <div th:each="account : ${list}" class="col-md-8">
               <div class="c-state-card c-state-card--info">
@@ -131,18 +131,43 @@
                 </div>
               </div>
             </div>
-            
+				
           </div>
           
           <div>
             <a class="c-btn c-btn--info c-btn--outline" href="/main">Back</a>
-            <a class="c-btn c-btn--info" href="#">Create New Account</a>
+            <button class="c-btn c-btn--info" onclick="retrieveGuests()" type="button">Create New Account</button>
           </div>
           </div>
 
       </main>
     </div>
-    <!-- Main JavaScript -->
+	
+   <!-- Главный скрипт -->
     <script src="/js/neat.js"></script>
+	<script th:inline="javascript">
+			//скрипт по обработке клика по созданию счета и обработки ошибки, если счетов больше 5
+			function retrieveGuests() 
+			{
+				var main = document.getElementById('resultsBlock');				
+				var response = '';				
+				$.ajax(
+				{ 	type: "GET",   
+					url: '/main/add',  
+					async: false,
+					success : function(text)
+						{
+							response = text;
+						},
+					statusCode: {
+						501: function(request) {
+						  alert(request.getResponseHeader('Error'));
+						}
+					}
+		
+				});
+				main.innerHTML += response;				
+			}
+	</script>
   </body>
 </html>
