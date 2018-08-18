@@ -7,11 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import system.entity.Account;
 import system.entity.Transaction;
+import system.entity.User;
 import system.repository.AccountRepository;
 import system.repository.TransactionRepository;
 import system.service.TransactionService;
 import system.service.UserService;
+import system.utils.UserUtils;
 
+import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.Date;
 import java.util.Optional;
 @Service
@@ -33,7 +37,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction deposit(Account account, double amount) {
-        if(amount > 0 && accountRepository.existsByAccountNumber(account.getAccountNumber()))
+        if(amount > 0 && account!=null)
         {
             account.setAccount_balance(amount + account.getAccount_balance());
             accountRepository.save(account);

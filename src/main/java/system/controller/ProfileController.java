@@ -1,5 +1,7 @@
 package system.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +19,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/main")
 public class ProfileController {
-
+    private static final Logger log = LoggerFactory.getLogger(system.Application.class);
     @Autowired
     private UserService userService;
     @Autowired
@@ -36,24 +38,6 @@ public class ProfileController {
     {
         UserUtils.deleteUserFromSession(session);
         return "redirect:/";
-
-    }
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String createNewAccountForClient(HttpSession session, Model model, HttpServletResponse res) {
-        User user = UserUtils.getUserFromSession(session);
-        if(user.getAccountList().size() >= 5)
-        {
-            res.setStatus(501);
-            res.addHeader("Error", "The customer can not create more than 5 accounts");
-            return null;
-        }
-        else {
-            Account account = accountService.createAccount(user);
-            user.getAccountList().add(account);
-            model.addAttribute("acc", account);
-            res.setStatus(201);
-            return "fragments :: account";
-        }
     }
 
     @RequestMapping(value = "/accounts", method = RequestMethod.GET)
@@ -61,8 +45,11 @@ public class ProfileController {
     {
         User user = UserUtils.getUserFromSession(session);
         model.addAttribute("list", user.getAccountList());
+        log.info("---------------------------------------");
+        log.info("Переходим на страницу Acoounts для пользователя: " + user);
+        log.info("Аккаунты: " + user.getAccountList());
+        log.info("---------------------------------------");
         return "accounts";
-
     }
 
     @RequestMapping(value = "/deposit", method = RequestMethod.GET)
@@ -71,15 +58,14 @@ public class ProfileController {
         User user = UserUtils.getUserFromSession(session);
         model.addAttribute("user", user);
         return "deposit";
-
     }
+
     @RequestMapping(value = "/transfer", method = RequestMethod.GET)
     public String toTransfer(HttpSession session, Model model)
     {
         User user = UserUtils.getUserFromSession(session);
         model.addAttribute("user", user);
         return "transfer";
-
     }
 
 

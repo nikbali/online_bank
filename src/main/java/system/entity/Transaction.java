@@ -91,4 +91,18 @@ public class Transaction {
     public void setReciever(Account reciever) {
         this.reciever = reciever;
     }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", date=" + date +
+                ", description='" + description + '\'' +
+                ", status='" + status + '\'' +
+                ", type='" + type + '\'' +
+                ", sender=" + sender.getAccountNumber() +
+                ", reciever=" + reciever.getAccountNumber() +
+                '}';
+    }
 }

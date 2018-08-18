@@ -6,6 +6,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import system.entity.User;
+import system.utils.UserUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -31,7 +32,8 @@ public class MyFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest)servletRequest;
         Enumeration<String> params = servletRequest.getParameterNames();
         HttpSession session = request.getSession();
-        User attr = (User)session.getAttribute("user");
+       // User attr = (User)session.getAttribute("user");
+        User attr = UserUtils.getUserFromSession(session);
 
         if(attr != null)
         {

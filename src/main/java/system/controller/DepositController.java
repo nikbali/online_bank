@@ -18,6 +18,7 @@ import system.service.UserService;
 import system.utils.UserUtils;
 
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/deposit")
@@ -28,26 +29,38 @@ public class DepositController {
     private static final Logger log = LoggerFactory.getLogger(system.Application.class);
 
     @RequestMapping(value="", method=RequestMethod.GET)
-    public ModelAndView openDepositForm(@RequestParam(value="account", required = false) String account_number , HttpSession session)
+    public ModelAndView openDepositForm(HttpSession session)
     {
+        User user = UserUtils.getUserFromSession(session);
         ModelAndView model = new ModelAndView("deposit");
-//        if(account_number != null)
-//        {
-//            model.addObject("account", account_number);
-//        }
+        model.addObject("accountNumber", 0L);
+        model.addObject("amount", "");
+        model.addObject("all", user.getAccountList());
+
         Transaction deposit = new Transaction();
         model.addObject("operation", deposit);
-        User user = UserUtils.getUserFromSession(session);
-        model.addObject("all", user.getAccountList());
         return model;
     }
 
     @RequestMapping(value="", method=RequestMethod.POST)
-    public ModelAndView sendDepositForm(@ModelAttribute("operation") Transaction operation)
+    public ModelAndView sendDepositForm(@ModelAttribute("amount") String amount, @ModelAttribute("accountNumber") String accountNumber, HttpSession session)
     {
-        log.info("Есть инфа об транзакции: " + operation.getAmount() + " Отправитель: " + operation.getSender().getAccountNumber());
-        Transaction transaction = transactionService.deposit(operation.getSender(), operation.getAmount());
-        if(transaction != null) return new ModelAndView("accounts");
+        log.info("Параметры amount: "+amount+" accountNumber: " + accountNumber );
+        User user  = UserUtils.getUserFromSession(session);
+        Account account = null;
+        for (Account acc : user.getAccountList())
+        {
+            if(acc.getAccountNumber() == Long.parseLong(accountNumber))
+            {
+                account = acc;
+                break;
+            }
+        }
+        log.info("Депозит: " + amount + " RUB На Счет: " + accountNumber);
+        Transaction transaction = transactionService.deposit(account, Double.parseDouble(amount));
+        if(transaction != null) return new ModelAndView("redirect:/main/accounts");
         return new ModelAndView("user_list");
     }
+
+
 }

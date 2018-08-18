@@ -84,4 +84,14 @@ public class Account {
     public void setRecieveList(List<Transaction> recieveList) {
         this.recieveList = recieveList;
     }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", account_balance=" + account_balance +
+                ", accountNumber=" + accountNumber +
+                ", user=" + user +
+                '}';
+    }
 }

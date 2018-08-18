@@ -96,15 +96,17 @@
         </header>
 
         <div class="container">
-          <form th:action="@{/deposit}" method="post" th:object="${operation}">
+          <form th:action="@{/deposit}" method="post">
             <p> Выберите счет для пополнения:</p>
-            <select th:field="*{sender.accountNumber}">
+
+            <select th:value="${accountNumber}" name="accountNumber" id="accountNumber">
               <option th:each="acc : ${all}"
                       th:value="${acc.accountNumber}"
                       th:text="${acc.accountNumber}">----</option>
             </select>
+
             <p> Введите сумму пополнения:</p>
-            <input type="text" th:field="*{amount}" />
+            <input th:value="${amount}" type="text" name="amount" aria-label="RUB"/>
             <br>
             <input class="c-btn c-btn--info" type="submit"  value="Deposit"/>
           </form>
