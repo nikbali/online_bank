@@ -29,16 +29,23 @@ public class DepositController {
     private static final Logger log = LoggerFactory.getLogger(system.Application.class);
 
     @RequestMapping(value="", method=RequestMethod.GET)
-    public ModelAndView openDepositForm(HttpSession session)
+    public ModelAndView openDepositFormTest(@ModelAttribute("accountNumber") String accountNumber, HttpSession session)
     {
         User user = UserUtils.getUserFromSession(session);
         ModelAndView model = new ModelAndView("deposit");
-        model.addObject("accountNumber", 0L);
+
+        //если нам передали номер аккаунта для пополнения ставим флаг
+        if(accountNumber != null && !accountNumber.equals("")){
+            model.addObject("accountExist", true);
+            model.addObject("accountNumber", Long.parseLong(accountNumber));
+        }
+        else
+        {
+            model.addObject("accountExist", false);
+            model.addObject("accountNumber", 0L);
+        }
         model.addObject("amount", "");
         model.addObject("all", user.getAccountList());
-
-        Transaction deposit = new Transaction();
-        model.addObject("operation", deposit);
         return model;
     }
 
@@ -61,6 +68,4 @@ public class DepositController {
         if(transaction != null) return new ModelAndView("redirect:/main/accounts");
         return new ModelAndView("user_list");
     }
-
-
 }

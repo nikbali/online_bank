@@ -97,20 +97,31 @@
 
         <div class="container">
           <form th:action="@{/deposit}" method="post">
-            <p> Выберите счет для пополнения:</p>
+            <!-- IF Account Exist -->
+            <div th:if="${accountExist}">
+              <p> Account for the deposit:</p>
+              <div th:text="${accountNumber}">---</div>
+              <input type="hidden"  th:value="${accountNumber}" name="accountNumber"/>
+            </div>
+            <!-- ELSE -->
+            <div th:unless="${accountExist}">
+              <p> Select your account for the deposit:</p>
+              <div>
+                <select th:value="${accountNumber}" name="accountNumber" id="accountNumber">
+                  <option th:each="acc : ${all}"
+                          th:value="${acc.accountNumber}"
+                          th:text="${acc.accountNumber}">----</option>
+                </select>
+              </div>
+            </div>
 
-            <select th:value="${accountNumber}" name="accountNumber" id="accountNumber">
-              <option th:each="acc : ${all}"
-                      th:value="${acc.accountNumber}"
-                      th:text="${acc.accountNumber}">----</option>
-            </select>
-
-            <p> Введите сумму пополнения:</p>
+            <p> Enter the amount (RUB):</p>
             <input th:value="${amount}" type="text" name="amount" aria-label="RUB"/>
             <br>
             <input class="c-btn c-btn--info" type="submit"  value="Deposit"/>
           </form>
-         </div>
+        </div>
+
       </main>
     </div>
     <!-- Main JavaScript -->
