@@ -1,5 +1,7 @@
 package system.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +31,7 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
+    private static final Logger log = LoggerFactory.getLogger(system.Application.class);
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView getAllUsers() {
@@ -90,19 +93,38 @@ public class UserController {
         {
             model.addObject("msg", error_message);
         }
-        User user = new User();
-        model.addObject("user", user);
+        model.addObject("email","");
+        model.addObject("login","");
+        model.addObject("documentNumber","");
+        model.addObject("first_name","");
+        model.addObject("last_name","");
+        model.addObject("middle_name","");
+        model.addObject("password","");
+        model.addObject("phone","");
+
         return model;
     }
 
     @RequestMapping(value="/save", method=RequestMethod.POST)
-    public ModelAndView save(@ModelAttribute("user") User user){
+    public ModelAndView save(@ModelAttribute("email") String email,
+                             @ModelAttribute("login") String login,
+                             @ModelAttribute("documentNumber") String documentNumber,
+                             @ModelAttribute("first_name") String first_name,
+                             @ModelAttribute("last_name") String last_name,
+                             @ModelAttribute("middle_name") String middle_name,
+                             @ModelAttribute("password") String password,
+                             @ModelAttribute("phone") String phone){
 
         try
         {
-            HashSet<UserRole> userRoles = new HashSet<>();
-            userRoles.add(new UserRole(user, roleRepository.findByName("CLIENT")));
-            userService.createUser(user, userRoles);
+            if (userService.checkFieldsBeforeCreate(email, login, documentNumber, first_name, last_name, middle_name, password, phone))
+            {
+                User user = new User(email, Integer.parseInt(documentNumber), login, first_name,  last_name,  middle_name, password, phone);
+                HashSet<UserRole> userRoles = new HashSet<>();
+                userRoles.add(new UserRole(user, roleRepository.findByName("CLIENT")));
+                userService.createUser(user, userRoles);
+            }
+
         }
         catch (Exception ex)
         {
@@ -114,12 +136,13 @@ public class UserController {
                 model.addObject("message", existException.getMessage());
             }
             else {
+                log.info("Error: " + ex.getMessage());
                 model.addObject("message", "Error create User, try again!");
             }
             return model;
         }
 
-        return new ModelAndView("redirect:/list");
+        return new ModelAndView("redirect:/");
     }
 
 }

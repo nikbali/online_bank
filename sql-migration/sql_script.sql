@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS `role`;
 CREATE TABLE `user` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
-  `document_number` int(10) NOT NULL,
+  `document_number` int(20) NOT NULL,
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `middle_name` varchar(255) DEFAULT NULL,

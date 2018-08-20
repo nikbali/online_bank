@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import system.entity.Account;
 import system.entity.User;
 import system.entity.UserRole;
+import system.exceptions.IncorrectedFieldsException;
 import system.exceptions.UserExistException;
 import system.repository.RoleRepository;
 import system.repository.UserRepository;
@@ -70,6 +71,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public boolean checkFieldsBeforeCreate(String email, String login, String documentNumber, String first_name, String last_name, String middle_name, String password, String phone) throws IncorrectedFieldsException {
+
+        //TODO тут написать логику для проверки заполнености и правильности полей
+        return true;
+    }
+
     public void save(User user) {
         userRepository.save(user);
     }
@@ -113,6 +121,7 @@ public class UserServiceImpl implements UserService {
         if(userRepository.findByEmail(email) != null) return true;
         return false;
     }
+
 
 
 }

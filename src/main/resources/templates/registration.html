@@ -27,44 +27,44 @@
           </span>
 
           <h4 class="u-mb-medium">Registration</h4>
-          <form th:action="@{/save}" method="post" th:object="${user}">
+          <form th:action="@{/save}" method="post">
 			<p th:text="${msg}"/>
             <div class="c-field">
               <label class="c-field__label">First Name</label>
-              <input class="c-input u-mb-small" type="text" required th:field="*{first_name}">
+              <input class="c-input u-mb-small" type="text" required th:value="${first_name}" name="first_name">
             </div>
 			<div class="c-field">
               <label class="c-field__label">Last Name</label>
-              <input class="c-input u-mb-small" type="text" th:field="*{last_name}">
+              <input class="c-input u-mb-small" type="text" th:value="${last_name}" name="last_name">
             </div>
 			<div class="c-field">
               <label class="c-field__label">Middle Name</label>
-              <input class="c-input u-mb-small" type="text" th:field="*{middle_name}">
+              <input class="c-input u-mb-small" type="text" th:value="${middle_name}" name="middle_name">
             </div>
 			
 			<div class="c-field">
               <label class="c-field__label">Phone Number</label>
-              <input class="c-input u-mb-small" type="text" placeholder="+79991236312" th:field="*{phone}">
+              <input class="c-input u-mb-small" type="text" placeholder="+79991236312" th:value="${phone}" name="phone">
             </div>
 			
 			<div class="c-field">
               <label class="c-field__label">Login</label>
-              <input class="c-input u-mb-small" type="text" required th:field="*{login}">
+              <input class="c-input u-mb-small" type="text" required th:value="${login}" name="login">
             </div>
 			
 			<div class="c-field">
               <label class="c-field__label">Document Number</label>
-              <input class="c-input u-mb-small" type="text" placeholder="1234567890" required th:field="*{documentNumber}">
+              <input class="c-input u-mb-small" type="text" placeholder="1234567890" required th:value="${documentNumber}" name="documentNumber">
             </div>
 
             <div class="c-field">
               <label class="c-field__label">Email Address</label>
-              <input class="c-input u-mb-small" type="email" placeholder="e.g. adam@sandler.com" required th:field="*{email}">
+              <input class="c-input u-mb-small" type="email" placeholder="e.g. adam@sandler.com" required th:value="${email}" name="email">
             </div>
            
             <div class="c-field u-mb-small">
               <label class="c-field__label">Password</label>
-              <input class="c-input" type="password" placeholder="Numbers, Pharagraphs Only" required th:field="*{password}">
+              <input class="c-input" type="password" placeholder="Numbers, Pharagraphs Only" required th:value="${password}" name="password">
             </div>
 
             <input class="c-btn c-btn--fullwidth c-btn--info" type="submit"  value="Create"/>
