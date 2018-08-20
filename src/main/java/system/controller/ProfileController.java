@@ -52,4 +52,12 @@ public class ProfileController {
         return "accounts";
     }
 
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public String toProfile(HttpSession session, Model model)
+    {
+        User user = UserUtils.getUserFromSession(session);
+        model.addAttribute("user", user);
+        return "profile";
+    }
+
 }
