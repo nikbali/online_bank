@@ -52,21 +52,4 @@ public class ProfileController {
         return "accounts";
     }
 
-    @RequestMapping(value = "/deposit", method = RequestMethod.GET)
-    public String toDeposit(HttpSession session, Model model)
-    {
-        User user = UserUtils.getUserFromSession(session);
-        model.addAttribute("user", user);
-        return "deposit";
-    }
-
-    @RequestMapping(value = "/transfer", method = RequestMethod.GET)
-    public String toTransfer(HttpSession session, Model model)
-    {
-        User user = UserUtils.getUserFromSession(session);
-        model.addAttribute("user", user);
-        return "transfer";
-    }
-
-
 }

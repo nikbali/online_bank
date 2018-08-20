@@ -23,6 +23,14 @@ public class TransferController {
 
     private static final Logger log = LoggerFactory.getLogger(system.Application.class);
 
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public String toTransfer(HttpSession session, Model model)
+    {
+        User user = UserUtils.getUserFromSession(session);
+        model.addAttribute("user", user);
+        return "transfer";
+    }
+
     @RequestMapping(value = "/toMyAccount", method = RequestMethod.GET)
     public String toMyAccount(HttpSession session, Model model)
     {

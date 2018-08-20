@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 
-@WebFilter(urlPatterns = "/main")
+@WebFilter(urlPatterns = "/main/*")
 public class MyFilter implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(system.Application.class);
@@ -42,7 +42,7 @@ public class MyFilter implements Filter {
         else
             {
                 HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-                httpResponse.sendRedirect("index");
+                httpResponse.sendRedirect("/index");
             }
     }
 

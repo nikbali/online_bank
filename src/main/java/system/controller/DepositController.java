@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/deposit")
+@RequestMapping("/main/deposit")
 public class DepositController {
     @Autowired
     private TransactionService transactionService;
