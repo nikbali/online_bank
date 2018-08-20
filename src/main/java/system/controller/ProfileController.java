@@ -44,11 +44,8 @@ public class ProfileController {
     public String toAccounts(HttpSession session, Model model)
     {
         User user = UserUtils.getUserFromSession(session);
+        model.addAttribute("user", user);
         model.addAttribute("list", user.getAccountList());
-        log.info("---------------------------------------");
-        log.info("Переходим на страницу Acoounts для пользователя: " + user);
-        log.info("Аккаунты: " + user.getAccountList());
-        log.info("---------------------------------------");
         return "accounts";
     }
 

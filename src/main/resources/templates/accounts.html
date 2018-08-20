@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 
-  <title>Dashboard Three | Neat</title>
-  <meta name="description" content="Neat">
+  <title>Accounts</title>
+
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Google Font -->
@@ -85,7 +85,12 @@
 
       <div class="c-dropdown dropdown">
         <div class="c-avatar c-avatar--xsmall dropdown-toggle" id="dropdownMenuAvatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
-          <img class="c-avatar__img" src="http://via.placeholder.com/72" alt="Adam Sandler">
+              <span class="user-img">
+                          <span class="user-img"><img class="c-avatar__img" src="/img/user.jpg" width="40">
+                          <span class="status online"></span>
+                          </span>
+              </span>
+          <span th:text="' ' + ${user.login}">User</span>
         </div>
 
         <div class="c-dropdown__menu has-arrow dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuAvatar">
