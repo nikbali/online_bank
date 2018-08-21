@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/main")
 public class ProfileController {
-    private static final Logger log = LoggerFactory.getLogger(system.Application.class);
+    private static final Logger log = LoggerFactory.getLogger(system.ApplicationWar.class);
     @Autowired
     private UserService userService;
     @Autowired

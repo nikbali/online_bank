@@ -31,7 +31,7 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
-    private static final Logger log = LoggerFactory.getLogger(system.Application.class);
+    private static final Logger log = LoggerFactory.getLogger(system.ApplicationWar.class);
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView getAllUsers() {

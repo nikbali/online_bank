@@ -21,7 +21,7 @@ public class TransferController {
     @Autowired
     private TransactionService transactionService;
 
-    private static final Logger log = LoggerFactory.getLogger(system.Application.class);
+    private static final Logger log = LoggerFactory.getLogger(system.ApplicationWar.class);
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String toTransfer(HttpSession session, Model model)

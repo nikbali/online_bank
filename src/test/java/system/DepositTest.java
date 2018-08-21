@@ -26,7 +26,7 @@ import java.util.Date;
 @Transactional
 public class DepositTest extends TestCase {
 
-    private static final Logger log = LoggerFactory.getLogger(system.Application.class);
+    private static final Logger log = LoggerFactory.getLogger(system.ApplicationWar.class);
 
     @Autowired
     private UserService userService;

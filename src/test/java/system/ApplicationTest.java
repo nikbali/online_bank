@@ -21,7 +21,7 @@ import system.service.UserService;
 @SpringBootTest
 public class ApplicationTest extends TestCase {
 
-    private static final Logger log = LoggerFactory.getLogger(system.Application.class);
+    private static final Logger log = LoggerFactory.getLogger(system.ApplicationWar.class);
 
     @Autowired
     private UserService userService;

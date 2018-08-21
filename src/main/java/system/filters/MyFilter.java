@@ -20,7 +20,7 @@ import java.util.Enumeration;
 @WebFilter(urlPatterns = "/main/*")
 public class MyFilter implements Filter {
 
-    private static final Logger log = LoggerFactory.getLogger(system.Application.class);
+    private static final Logger log = LoggerFactory.getLogger(system.ApplicationWar.class);
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
