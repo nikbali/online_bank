@@ -1,6 +1,8 @@
 package system.service;
 
+import org.springframework.data.jpa.repository.Query;
 import system.entity.Account;
+import system.entity.Transaction;
 import system.entity.User;
 
 import java.util.List;
@@ -19,4 +21,5 @@ public interface AccountService {
     void deleteAll();
     long count();
     List<Account> loadAll();
+
 }

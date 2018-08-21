@@ -1,6 +1,7 @@
 package system.service;
 
 
+import system.entity.Action;
 import system.entity.User;
 import system.entity.UserRole;
 import system.exceptions.IncorrectedFieldsException;
@@ -37,5 +38,7 @@ public interface UserService {
                                     String middle_name,
                                     String password,
                                     String phone) throws IncorrectedFieldsException;
+
+    List<Action> findLastActions(User user);
 
 }

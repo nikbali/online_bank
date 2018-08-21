@@ -6,18 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
-import system.entity.Account;
-import system.entity.User;
-import system.entity.UserRole;
+import system.entity.*;
 import system.exceptions.IncorrectedFieldsException;
 import system.exceptions.UserExistException;
 import system.repository.RoleRepository;
+import system.repository.TransactionRepository;
 import system.repository.UserRepository;
 import system.service.AccountService;
 import system.service.UserService;
 import system.utils.CryptoUtils;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 
 @Service
@@ -31,6 +30,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
@@ -78,6 +80,30 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
+    public List<Action> findLastActions(User user) {
+
+        List<Action> actions = new ArrayList<Action>();
+        TreeMap<Date, Transaction > mapa = new TreeMap<Date, Transaction>(Collections.reverseOrder());
+        List<Account> accounts = user.getAccountList();
+        for (Account account : accounts)
+        {
+            for (Transaction oper : transactionRepository.findFirst10Operation(account.getId()))
+            {
+                mapa.put(oper.getDate(), oper);
+            }
+        }
+        int count = 0;
+
+        for (Map.Entry<Date, Transaction> entry : mapa.entrySet()) {
+            if (count >= 8) break;
+            actions.add(new Action(entry.getValue().getType(), entry.getValue().getDescription(), new java.sql.Date(entry.getValue().getDate().getTime()).toLocalDate()));
+            count++;
+        }
+        return actions;
+
+    }
+
     public void save(User user) {
         userRepository.save(user);
     }
@@ -121,6 +147,8 @@ public class UserServiceImpl implements UserService {
         if(userRepository.findByEmail(email) != null) return true;
         return false;
     }
+
+
 
 
 

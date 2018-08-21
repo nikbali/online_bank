@@ -3,8 +3,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>My Profile</title>
-    <meta name="description" content="Neat">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
@@ -24,7 +22,7 @@
         <header class="c-navbar u-mb-medium">
             <nav class="c-navbar__nav collapse" id="main-nav">
                 <ul class="c-navbar__nav-list">
-                    <li> <a href = "/main"><img src="/img/sber.png" width="200" height="151" alt="Neatf" title="Neat UI Kit"></a></li>
+                    <li> <a href = "/main"><img src="/img/sber.png" width="200" height="151" ></a></li>
                     <li><h2 class="c-navbar__title">My Profile</h2></li>
                 </ul>
             </nav>
@@ -85,12 +83,15 @@
 
             <div class="c-dropdown dropdown">
                 <div class="c-avatar c-avatar--xsmall dropdown-toggle" id="dropdownMenuAvatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
-                    <img class="c-avatar__img" src="http://via.placeholder.com/72" alt="Adam Sandler">
+              <span class="user-img">
+                          <span class="user-img"><img class="c-avatar__img" src="/img/user.jpg" width="40">
+                          <span class="status online"></span>
+                          </span>
+              </span>
+                    <span th:text="' ' + ${user.login}">User</span>
                 </div>
-
                 <div class="c-dropdown__menu has-arrow dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuAvatar">
-                    <a class="c-dropdown__item dropdown-item" href="#">Edit Profile</a>
-                    <a class="c-dropdown__item dropdown-item" href="#">View Activity</a>
+                    <a class="c-dropdown__item dropdown-item" href="/main/profile">My Profile</a>
                     <a class="c-dropdown__item dropdown-item" href="/main/logout">Log out</a>
                 </div>
             </div>
@@ -106,23 +107,23 @@
                                 <img class="c-avatar__img" src="http://via.placeholder.com/72" alt="Avatar">
                             </div>
 
-                            <h5>Vasya Pupkin</h5>
+                            <h5 th:text="${user.last_name} + ' '+ ${user.first_name} + ' '+ ${user.middle_name}"/>
                             <p>Client</p>
                         </div>
 
                         <span class="c-divider u-mv-small"></span>
 
                         <span class="c-text--subtitle">Email</span>
-                        <p class="u-mb-small u-text-large">pupkin@gmail.com</p>
+                        <p class="u-mb-small u-text-large" th:text="${user.email}">pupkin@gmail.com</p>
 
                         <span class="c-text--subtitle">Login</span>
-                        <p class="u-mb-small u-text-large">pupkin71</p>
+                        <p class="u-mb-small u-text-large" th:text="${user.login}">pupkin71</p>
 
                         <span class="c-text--subtitle">Phone NUMBER</span>
-                        <p class="u-mb-small u-text-large">+7 921 123 66 11</p>
+                        <p class="u-mb-small u-text-large" th:text="${user.phone}">+7 921 123 66 11</p>
 
                         <span class="c-text--subtitle">Document NUMBER</span>
-                        <p class="u-mb-small u-text-large">191231324</p>
+                        <p class="u-mb-small u-text-large" th:text="${user.documentNumber}">191231324</p>
 
                         <a class="c-badge c-badge--small c-badge--info u-mb-xsmall" href="#">Edit</a>
                     </div>
@@ -136,64 +137,19 @@
                         </div>
                         <div class="c-tabs__content tab-content" id="nav-tabContent">
                             <div class="c-tabs__pane active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                <div class="c-feed">
-                                    <div class="c-feed__item">
-                                        <div class="c-feed__item-content">
-                                            <h6 class="u-text-small">Add new payout method</h6>
-                                            <p>Added paypal as the default payout method</p>
-                                        </div>
-                                        <p class="u-text-xsmall">just now</p>
-                                    </div>
 
-                                    <div class="c-feed__item c-feed__item--success">
-                                        <div class="c-feed__item-content">
-                                            <h6 class="u-text-small">Payment received</h6>
-                                            <p>Cha-ching payment received from <a href="#">@client-22</a></p>
-                                        </div>
-                                        <p class="u-text-xsmall">30 mins ago</p>
-                                    </div>
+                                <div class="c-feed" th:each="action : ${actions}">
 
                                     <div class="c-feed__item">
                                         <div class="c-feed__item-content">
-                                            <h6 class="u-text-small">Project Approved</h6>
-                                            <p>Added landing page design to finished projects</p>
+                                            <h6 class="u-text-small" th:text="${action.title}">----</h6>
+                                            <p th:text="${action.discription}">---</p>
                                         </div>
-
-                                        <p class="u-text-xsmall">6 hours ago</p>
+                                        <p class="u-text-xsmall" th:text="${action.date}">---</p>
                                     </div>
 
-                                    <div class="c-feed__item c-feed__item--fancy">
-                                        <div class="c-feed__item-content">
-                                            <h6 class="u-text-small">Project Approved</h6>
-                                            <p>Moved new charachter design to <a href="#">@adamslandler</a></p>
-                                        </div>
-                                        <p class="u-text-xsmall">2 Days ago</p>
-                                    </div>
-
-                                    <div class="c-feed__item c-feed__item--danger">
-                                        <div class="c-feed__item-content">
-                                            <h6 class="u-text-small">Project Approved</h6>
-                                            <p>Design was approved by Neat company</p>
-                                        </div>
-                                        <p class="u-text-xsmall">2 Days ago</p>
-                                    </div>
-
-                                    <div class="c-feed__item c-feed__item--warning">
-                                        <div class="c-feed__item-content">
-                                            <h6 class="u-text-small">Project Approved</h6>
-                                            <p>New order received from Canada by #49832</p>
-                                        </div>
-                                        <p class="u-text-xsmall">4 Days ago</p>
-                                    </div>
-
-                                    <div class="c-feed__item">
-                                        <div class="c-feed__item-content">
-                                            <h6 class="u-text-small">Project Approved</h6>
-                                            <p>New order received from Canada by #49832</p>
-                                        </div>
-                                        <p class="u-text-xsmall">5 Days ago</p>
-                                    </div>
                                 </div><!-- // .c-feed -->
+
                             </div>
 
                         </div>

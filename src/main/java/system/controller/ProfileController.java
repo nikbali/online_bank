@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import system.entity.Account;
+import system.entity.Action;
 import system.entity.User;
 import system.service.AccountService;
 import system.service.UserService;
@@ -15,6 +16,7 @@ import system.utils.UserUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/main")
@@ -54,6 +56,9 @@ public class ProfileController {
     {
         User user = UserUtils.getUserFromSession(session);
         model.addAttribute("user", user);
+        List<Action> actions = userService.findLastActions(user);
+        model.addAttribute("actions", actions);
+
         return "profile";
     }
 
