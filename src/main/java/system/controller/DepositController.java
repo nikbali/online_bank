@@ -45,6 +45,7 @@ public class DepositController {
             model.addObject("accountNumber", 0L);
         }
         model.addObject("amount", "");
+        model.addObject("user", user);
         model.addObject("all", user.getAccountList());
         return model;
     }
