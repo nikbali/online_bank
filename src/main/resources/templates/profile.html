@@ -1,0 +1,211 @@
+
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Profile</title>
+    <meta name="description" content="Neat">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/css/neat.css">
+</head>
+<body>
+
+<div class="o-page">
+
+    <main class="o-page__content">
+        <header class="c-navbar u-mb-medium">
+            <nav class="c-navbar__nav collapse" id="main-nav">
+                <ul class="c-navbar__nav-list">
+                    <li> <a href = "/main"><img src="/img/sber.png" width="200" height="151" alt="Neatf" title="Neat UI Kit"></a></li>
+                    <li><h2 class="c-navbar__title">My Profile</h2></li>
+                </ul>
+            </nav>
+
+            <div class="c-dropdown dropdown u-mr-medium u-ml-auto">
+                <div class="c-notification has-indicator dropdown-toggle" id="dropdownMenuToggle2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+                    <i class="c-notification__icon feather icon-bell"></i>
+                </div>
+
+                <div class="c-dropdown__menu c-dropdown__menu--large has-arrow dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuToggle2">
+
+              <span class="c-dropdown__menu-header">
+                Notifications
+              </span>
+                    <a class="c-dropdown__item dropdown-item" href="#">
+                        <div class="o-media">
+                            <div class="o-media__img u-mr-xsmall">
+                                <span class="c-icon c-icon--info c-icon--xsmall"><i class="feather icon-globe"></i></span>
+                            </div>
+
+                            <div class="o-media__body">
+                                <p>We've updated the Stripe Services agreement and its supporting terms. Your continueduse of Stripe's services.</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="c-dropdown__item dropdown-item" href="#">
+                        <div class="o-media">
+                            <div class="o-media__img u-mr-xsmall">
+                                <span class="c-icon c-icon--danger c-icon--xsmall"><i class="feather icon-x"></i></span>
+                            </div>
+
+                            <div class="o-media__body">
+                                <p>We've updated the Stripe Services agreement and its supporting terms. Your continueduse of Stripe's services.</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="c-dropdown__item dropdown-item" href="#">
+                        <div class="o-media">
+                            <div class="o-media__img u-mr-xsmall">
+                                <span class="c-icon c-icon--success c-icon--xsmall"><i class="feather icon-anchor"></i></span>
+                            </div>
+
+                            <div class="o-media__body">
+                                <p>We've updated the Stripe Services agreement and its supporting terms. Your continueduse of Stripe's services.</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="c-dropdown__menu-footer">
+                        All Notifications
+                    </a>
+                </div>
+            </div>
+
+
+
+            <div class="c-dropdown dropdown">
+                <div class="c-avatar c-avatar--xsmall dropdown-toggle" id="dropdownMenuAvatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+                    <img class="c-avatar__img" src="http://via.placeholder.com/72" alt="Adam Sandler">
+                </div>
+
+                <div class="c-dropdown__menu has-arrow dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuAvatar">
+                    <a class="c-dropdown__item dropdown-item" href="#">Edit Profile</a>
+                    <a class="c-dropdown__item dropdown-item" href="#">View Activity</a>
+                    <a class="c-dropdown__item dropdown-item" href="/main/logout">Log out</a>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-5">
+                    <div class="c-card">
+                        <div class="u-text-center">
+                            <div class="c-avatar c-avatar--large u-mb-small u-inline-flex">
+                                <img class="c-avatar__img" src="http://via.placeholder.com/72" alt="Avatar">
+                            </div>
+
+                            <h5>Vasya Pupkin</h5>
+                            <p>Client</p>
+                        </div>
+
+                        <span class="c-divider u-mv-small"></span>
+
+                        <span class="c-text--subtitle">Email</span>
+                        <p class="u-mb-small u-text-large">pupkin@gmail.com</p>
+
+                        <span class="c-text--subtitle">Login</span>
+                        <p class="u-mb-small u-text-large">pupkin71</p>
+
+                        <span class="c-text--subtitle">Phone NUMBER</span>
+                        <p class="u-mb-small u-text-large">+7 921 123 66 11</p>
+
+                        <span class="c-text--subtitle">Document NUMBER</span>
+                        <p class="u-mb-small u-text-large">191231324</p>
+
+                        <a class="c-badge c-badge--small c-badge--info u-mb-xsmall" href="#">Edit</a>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+
+                    <nav class="c-tabs">
+                        <div class="c-tabs__list nav nav-tabs" id="myTab" role="tablist">
+                            <a class="c-tabs__link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Activity</a>
+                        </div>
+                        <div class="c-tabs__content tab-content" id="nav-tabContent">
+                            <div class="c-tabs__pane active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="c-feed">
+                                    <div class="c-feed__item">
+                                        <div class="c-feed__item-content">
+                                            <h6 class="u-text-small">Add new payout method</h6>
+                                            <p>Added paypal as the default payout method</p>
+                                        </div>
+                                        <p class="u-text-xsmall">just now</p>
+                                    </div>
+
+                                    <div class="c-feed__item c-feed__item--success">
+                                        <div class="c-feed__item-content">
+                                            <h6 class="u-text-small">Payment received</h6>
+                                            <p>Cha-ching payment received from <a href="#">@client-22</a></p>
+                                        </div>
+                                        <p class="u-text-xsmall">30 mins ago</p>
+                                    </div>
+
+                                    <div class="c-feed__item">
+                                        <div class="c-feed__item-content">
+                                            <h6 class="u-text-small">Project Approved</h6>
+                                            <p>Added landing page design to finished projects</p>
+                                        </div>
+
+                                        <p class="u-text-xsmall">6 hours ago</p>
+                                    </div>
+
+                                    <div class="c-feed__item c-feed__item--fancy">
+                                        <div class="c-feed__item-content">
+                                            <h6 class="u-text-small">Project Approved</h6>
+                                            <p>Moved new charachter design to <a href="#">@adamslandler</a></p>
+                                        </div>
+                                        <p class="u-text-xsmall">2 Days ago</p>
+                                    </div>
+
+                                    <div class="c-feed__item c-feed__item--danger">
+                                        <div class="c-feed__item-content">
+                                            <h6 class="u-text-small">Project Approved</h6>
+                                            <p>Design was approved by Neat company</p>
+                                        </div>
+                                        <p class="u-text-xsmall">2 Days ago</p>
+                                    </div>
+
+                                    <div class="c-feed__item c-feed__item--warning">
+                                        <div class="c-feed__item-content">
+                                            <h6 class="u-text-small">Project Approved</h6>
+                                            <p>New order received from Canada by #49832</p>
+                                        </div>
+                                        <p class="u-text-xsmall">4 Days ago</p>
+                                    </div>
+
+                                    <div class="c-feed__item">
+                                        <div class="c-feed__item-content">
+                                            <h6 class="u-text-small">Project Approved</h6>
+                                            <p>New order received from Canada by #49832</p>
+                                        </div>
+                                        <p class="u-text-xsmall">5 Days ago</p>
+                                    </div>
+                                </div><!-- // .c-feed -->
+                            </div>
+
+                        </div>
+                    </nav>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+</div>
+<!-- Main JavaScript -->
+<script src="/js/neat.js"></script>
+</body>
+</html>
