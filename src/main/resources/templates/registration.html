@@ -28,18 +28,18 @@
 
           <h4 class="u-mb-medium">Registration</h4>
           <form th:action="@{/save}" method="post">
-			<p th:text="${msg}"/>
+			<p th:text="${message}"/>
             <div class="c-field">
               <label class="c-field__label">First Name</label>
-              <input class="c-input u-mb-small" type="text" required th:value="${first_name}" name="first_name">
+              <input class="c-input u-mb-small" type="text" placeholder="Latin or cyrillic characters only." required th:value="${first_name}" name="first_name">
             </div>
 			<div class="c-field">
               <label class="c-field__label">Last Name</label>
-              <input class="c-input u-mb-small" type="text" th:value="${last_name}" name="last_name">
+              <input class="c-input u-mb-small" type="text" placeholder="Latin or cyrillic characters only." th:value="${last_name}" name="last_name">
             </div>
 			<div class="c-field">
               <label class="c-field__label">Middle Name</label>
-              <input class="c-input u-mb-small" type="text" th:value="${middle_name}" name="middle_name">
+              <input class="c-input u-mb-small" type="text" placeholder="Latin or cyrillic characters only." th:value="${middle_name}" name="middle_name">
             </div>
 			
 			<div class="c-field">
@@ -49,7 +49,7 @@
 			
 			<div class="c-field">
               <label class="c-field__label">Login</label>
-              <input class="c-input u-mb-small" type="text" required th:value="${login}" name="login">
+              <input class="c-input u-mb-small" type="text" placeholder="Latin characters and digits only." required th:value="${login}" name="login">
             </div>
 			
 			<div class="c-field">
