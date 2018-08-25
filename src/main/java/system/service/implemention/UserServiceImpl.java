@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import system.entity.*;
-import system.exceptions.IncorrectFieldsException;
+import system.exceptions.IncorrectedFieldsException;
 import system.exceptions.UserExistException;
 import system.repository.RoleRepository;
 import system.repository.TransactionRepository;
@@ -15,8 +15,6 @@ import system.repository.UserRepository;
 import system.service.AccountService;
 import system.service.UserService;
 import system.utils.CryptoUtils;
-import system.utils.FieldInfo;
-import system.utils.ValidationUtils;
 
 import java.util.*;
 
@@ -39,18 +37,26 @@ public class UserServiceImpl implements UserService {
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
 
-    public User createUser(User user, Set<UserRole> roles) throws Exception {
-        if (this.checkLoginExists(user.getLogin())) {
+    public User createUser(User user, Set<UserRole> roles) throws  Exception
+    {
+        if(this.checkLoginExists(user.getLogin()))
+        {
             LOG.info("Error create! User with Login: %s already exists!", user.getLogin());
             throw new UserExistException("User with this Login already exists!", userRepository.findByLogin(user.getLogin()));
-        } else if (this.checkDocumentNumber(user.getDocumentNumber())) {
+        }
+        else if(this.checkDocumentNumber(user.getDocumentNumber()))
+        {
             LOG.info("Error create! User with this Document Number: %d already exists!", user.getDocumentNumber());
             throw new UserExistException("User with this Document Number already exists!", userRepository.findByDocumentNumber(user.getDocumentNumber()));
-        } else if (this.checkEmailExists(user.getEmail())) {
+        }
+        else if (this.checkEmailExists(user.getEmail()))
+        {
             LOG.info("Error create! User with Email: %s already exists!", user.getEmail());
             throw new UserExistException("User with this Email already exists!", userRepository.findByEmail(user.getEmail()));
 
-        } else {
+        }
+        else
+        {
             //шифруем пароль
             String crypt_pass = CryptoUtils.getHash(user.getPassword());
             user.setPassword(crypt_pass);
@@ -68,36 +74,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkFieldsBeforeCreate(String email, String login, String documentNumber, String first_name, String last_name, String middle_name,
-                                           String password, String phone) throws IncorrectFieldsException {
+    public boolean checkFieldsBeforeCreate(String email, String login, String documentNumber, String first_name, String last_name, String middle_name, String password, String phone) throws IncorrectedFieldsException {
 
-        List<FieldInfo> list = new ArrayList<>();
-        list.add(ValidationUtils.isCorrectNamePattern("First name", first_name));
-        list.add(ValidationUtils.isCorrectNamePattern("Last name", last_name));
-        list.add(ValidationUtils.isCorrectNamePattern("Middle name", middle_name));
-        list.add(ValidationUtils.isCorrectPhoneNumberPattern("Phone number",phone));
-        list.add(ValidationUtils.isCorrectLoginPattern("Login",login));
-        list.add(ValidationUtils.isCorrectDocumentPattern("Document number",documentNumber));
-        list.add(ValidationUtils.isCorrectEmailPattern("Email",email));
-        list.add(ValidationUtils.isCorrectPasswordPattern("Password", password));
-
-        for (FieldInfo fieldInfo : list) {
-            if(!fieldInfo.isValid()) {
-                throw new IncorrectFieldsException(fieldInfo.getDescription());
-            }
-        }
+        //TODO тут написать логику для проверки заполнености и правильности полей
         return true;
     }
-
 
     @Override
     public List<Action> findLastActions(User user) {
 
         List<Action> actions = new ArrayList<Action>();
-        TreeMap<Date, Transaction> mapa = new TreeMap<Date, Transaction>(Collections.reverseOrder());
+        TreeMap<Date, Transaction > mapa = new TreeMap<Date, Transaction>(Collections.reverseOrder());
         List<Account> accounts = user.getAccountList();
-        for (Account account : accounts) {
-            for (Transaction oper : transactionRepository.findFirst10Operation(account.getId())) {
+        for (Account account : accounts)
+        {
+            for (Transaction oper : transactionRepository.findFirst10Operation(account.getId()))
+            {
                 mapa.put(oper.getDate(), oper);
             }
         }
@@ -134,26 +126,30 @@ public class UserServiceImpl implements UserService {
 
     public boolean checkUserExists(String login, String email) {
 
-        if ((userRepository.findByEmail(email) != null) || (userRepository.findByLogin(login) != null)) {
+        if((userRepository.findByEmail(email) != null)|| (userRepository.findByLogin(login) != null))
+        {
             return true;
         }
         return false;
     }
 
     public boolean checkLoginExists(String login) {
-        if (userRepository.findByLogin(login) != null) return true;
+        if(userRepository.findByLogin(login) != null) return true;
         return false;
     }
 
     public boolean checkDocumentNumber(int document_number) {
-        if (userRepository.findByDocumentNumber(document_number) != null) return true;
+        if(userRepository.findByDocumentNumber(document_number) != null) return true;
         return false;
     }
 
     public boolean checkEmailExists(String email) {
-        if (userRepository.findByEmail(email) != null) return true;
+        if(userRepository.findByEmail(email) != null) return true;
         return false;
     }
+
+
+
 
 
 }
