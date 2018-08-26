@@ -99,8 +99,47 @@
         </header>
 
         <div class="container">
+            <form th:action="@{/main/transfer/toClient}" method="post">
+                <!--Sender-->
+                <!--IF Account Exist-->
+                <div th:if="${accountsExist}">
+                    <p>Укажите счет списания:</p>
+                    <div th:text="${senderAccountNumber}">---</div>
+                    <input type="hidden"  th:value="${senderAccountNumber}" name="senderAccountNumber"/>
+                </div>
 
+                <!-- ELSE -->
+                <div th:unless="${accountsExist}">
+                    <p>Укажите счет списания:</p>
+                    <div>
+                        <select th:value="${senderAccountNumber}" name="senderAccountNumber" id="senderAccountNumber">
+                            <option th:each="acc : ${all}"
+                                    th:value="${acc.accountNumber}"
+                                    th:text="${acc.accountNumber}">----</option>
+                        </select>
+                    </div>
+                </div>
 
+                <!--Receiver-->
+                <div th:if="${accountsExist}">
+                    <p>Укажите счет для пополнения:</p>
+                    <div th:text="${receiverAccountNumber}">---</div>
+                    <input type="hidden"  th:value="${receiverAccountNumber}" name="receiverAccountNumber"/>
+                </div>
+
+                <!-- ELSE -->
+                <div th:unless="${accountsExist}">
+                    <p>Укажите счет для пополнения:</p>
+                    <div>
+                        <input th:value="${receiverAccountNumber}" th:type="text" pattern="[0-9]{9}" maxlength="9" name="receiverAccountNumber"/>
+                    </div>
+                </div>
+
+                <p>Введите сумму (RUB):</p>
+                <input th:value="${amount}" th:type="text" pattern="^[ 0-9]+$" name="amount" aria-label="RUB" required/>
+                <br>
+                <input class="c-btn c-btn--info" type="submit"  value="Transfer"/>
+            </form>
         </div>
 
     </main>

@@ -103,14 +103,14 @@
                 <!--Sender-->
                 <!-- IF Account Exist -->
                 <div th:if="${accountsExist}">
-                    <p> From which account to make the transfer:</p>
+                    <p>Счет списания средств:</p>
                     <div th:text="${senderAccountNumber}">---</div>
                     <input type="hidden"  th:value="${senderAccountNumber}" name="senderAccountNumber"/>
                 </div>
 
                 <!-- ELSE -->
                 <div th:unless="${accountsExist}">
-                    <p> From which account to make the transfer:</p>
+                    <p>Счет списания средств:</p>
                     <div>
                         <select th:value="${senderAccountNumber}" name="senderAccountNumber" id="senderAccountNumber">
                             <option th:each="acc : ${all}"
@@ -122,14 +122,14 @@
 
                 <!--Receiver-->
                 <div th:if="${accountsExist}">
-                    <p> On which account to make the transfer:</p>
+                    <p>Укажите счет для пополнения:</p>
                     <div th:text="${receiverAccountNumber}">---</div>
                     <input type="hidden"  th:value="${receiverAccountNumber}" name="receiverAccountNumber"/>
                 </div>
 
                 <!-- ELSE -->
                 <div th:unless="${accountsExist}">
-                    <p> On which account to make the transfer:</p>
+                    <p>Укажите счет для пополнения:</p>
                     <div>
                         <select th:value="${receiverAccountNumber}" name="receiverAccountNumber" id="receiverAccountNumber">
                             <option th:each="acc : ${all}"
@@ -139,7 +139,7 @@
                     </div>
                 </div>
 
-                <p> Enter the amount (RUB):</p>
+                <p>Введите сумму (RUB):</p>
                 <input th:value="${amount}" type="text" name="amount" aria-label="RUB"/>
                 <br>
                 <input class="c-btn c-btn--info" type="submit"  value="Transfer"/>
