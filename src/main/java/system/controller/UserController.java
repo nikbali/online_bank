@@ -99,7 +99,6 @@ public class UserController {
     }
 
     //изменения внесены для того, чтобы при внесении юзером инвалидых данных или др ошибках данные в форме регистрации не теряются и их не надо вносить полностью заново
-    //TODO при регистрации часто возникает ошибка сохранения номера паспорта "Error: For input string: номер документа" пока не понимаю откуда это тянется
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ModelAndView save(@RequestParam Map<String, String> dataToSave) {
 
@@ -107,7 +106,7 @@ public class UserController {
             if (userService.checkFieldsBeforeCreate(dataToSave.get("email"), dataToSave.get("login"), dataToSave.get("documentNumber"), dataToSave.get("first_name"),
                     dataToSave.get("last_name"), dataToSave.get("middle_name"), dataToSave.get("password"), dataToSave.get("phone"))) {
 
-                User user = new User(dataToSave.get("email"), Integer.parseInt(dataToSave.get("documentNumber")), dataToSave.get("login"), dataToSave.get("first_name"),
+                User user = new User(dataToSave.get("email"), Integer.parseInt(dataToSave.get("documentNumber").replace(" ","")), dataToSave.get("login"), dataToSave.get("first_name"),
                         dataToSave.get("last_name"), dataToSave.get("middle_name"), dataToSave.get("password"), dataToSave.get("phone"));
                 HashSet<UserRole> userRoles = new HashSet<>();
                 userRoles.add(new UserRole(user, roleRepository.findByName("CLIENT")));
@@ -116,10 +115,11 @@ public class UserController {
         } catch (Exception ex) {
             ModelAndView model = new ModelAndView("redirect:/registration");
             if (ex instanceof UserExistException) {
+                log.error("Failed to save user, user already exists : ", ex);
                 UserExistException existException = (UserExistException) ex;
-                dataToSave.put("message", existException.getMessage());
+                model.addObject("message", existException.getMessage());
             } else {
-                log.info("Error: " + ex.getMessage());
+                log.error("Failed to save user.", ex);
                 dataToSave.put("message", ex.getMessage());
                 for (Map.Entry<String, String> entry : dataToSave.entrySet()) {
                     model.addObject(entry.getKey(), entry.getValue());

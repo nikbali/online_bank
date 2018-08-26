@@ -2,182 +2,208 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 
-  <title>Accounts</title>
+    <title>Accounts</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 
-  <!-- Favicon -->
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="/css/neat.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/css/neat.css">
 </head>
 <body>
 
 <div class="o-page">
 
-  <main class="o-page__content">
-    <header class="c-navbar u-mb-medium">
-      <nav class="c-navbar__nav collapse" id="main-nav">
-        <ul class="c-navbar__nav-list">
-          <li> <a href = "/main"><img src="/img/sber.png" width="200" height="151" alt="Neatf" title="Neat UI Kit"></a></li>
-          <li><h2 class="c-navbar__title">My Accounts</h2></li>
-        </ul>
-      </nav>
+    <main class="o-page__content">
+        <header class="c-navbar u-mb-medium">
+            <nav class="c-navbar__nav collapse" id="main-nav">
+                <ul class="c-navbar__nav-list">
+                    <li><a href="/main"><img src="/img/sber.png" width="200" height="151" alt="Neatf"
+                                             title="Neat UI Kit"></a></li>
+                    <li><h2 class="c-navbar__title">My Accounts</h2></li>
+                </ul>
+            </nav>
 
-      <div class="c-dropdown dropdown u-mr-medium u-ml-auto">
-        <div class="c-notification has-indicator dropdown-toggle" id="dropdownMenuToggle2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
-          <i class="c-notification__icon feather icon-bell"></i>
-        </div>
+            <div class="c-dropdown dropdown u-mr-medium u-ml-auto">
+                <div class="c-notification has-indicator dropdown-toggle" id="dropdownMenuToggle2"
+                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+                    <i class="c-notification__icon feather icon-bell"></i>
+                </div>
 
-        <div class="c-dropdown__menu c-dropdown__menu--large has-arrow dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuToggle2">
+                <div class="c-dropdown__menu c-dropdown__menu--large has-arrow dropdown-menu dropdown-menu-right"
+                     aria-labelledby="dropdownMenuToggle2">
 
               <span class="c-dropdown__menu-header">
                 Notifications
               </span>
-          <a class="c-dropdown__item dropdown-item" href="#">
-            <div class="o-media">
-              <div class="o-media__img u-mr-xsmall">
-                <span class="c-icon c-icon--info c-icon--xsmall"><i class="feather icon-globe"></i></span>
-              </div>
+                    <a class="c-dropdown__item dropdown-item" href="#">
+                        <div class="o-media">
+                            <div class="o-media__img u-mr-xsmall">
+                                <span class="c-icon c-icon--info c-icon--xsmall"><i
+                                        class="feather icon-globe"></i></span>
+                            </div>
 
-              <div class="o-media__body">
-                <p>Добро пожаловать в Сбербанк!</p>
-              </div>
+                            <div class="o-media__body">
+                                <p>Добро пожаловать в Сбербанк!</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="c-dropdown__item dropdown-item" href="#">
+                        <div class="o-media">
+                            <div class="o-media__img u-mr-xsmall">
+                                <span class="c-icon c-icon--danger c-icon--xsmall"><i class="feather icon-x"></i></span>
+                            </div>
+
+                            <div class="o-media__body">
+                                <p>Вася777 отправил Вам 1300 RUB</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="c-dropdown__item dropdown-item" href="#">
+                        <div class="o-media">
+                            <div class="o-media__img u-mr-xsmall">
+                                <span class="c-icon c-icon--success c-icon--xsmall"><i class="feather icon-anchor"></i></span>
+                            </div>
+
+                            <div class="o-media__body">
+                                <p>Вы перевели 1200 RUB на счет №24346356456 </p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="c-dropdown__menu-footer">
+                        All Notifications
+                    </a>
+                </div>
             </div>
-          </a>
-
-          <a class="c-dropdown__item dropdown-item" href="#">
-            <div class="o-media">
-              <div class="o-media__img u-mr-xsmall">
-                <span class="c-icon c-icon--danger c-icon--xsmall"><i class="feather icon-x"></i></span>
-              </div>
-
-              <div class="o-media__body">
-                <p>Вася777 отправил Вам 1300 RUB</p>
-              </div>
-            </div>
-          </a>
-
-          <a class="c-dropdown__item dropdown-item" href="#">
-            <div class="o-media">
-              <div class="o-media__img u-mr-xsmall">
-                <span class="c-icon c-icon--success c-icon--xsmall"><i class="feather icon-anchor"></i></span>
-              </div>
-
-              <div class="o-media__body">
-                <p>Вы перевели 1200 RUB на счет №24346356456 </p>
-              </div>
-            </div>
-          </a>
-
-          <a class="c-dropdown__menu-footer">
-            All Notifications
-          </a>
-        </div>
-      </div>
 
 
-
-      <div class="c-dropdown dropdown">
-        <div class="c-avatar c-avatar--xsmall dropdown-toggle" id="dropdownMenuAvatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+            <div class="c-dropdown dropdown">
+                <div class="c-avatar c-avatar--xsmall dropdown-toggle" id="dropdownMenuAvatar" data-toggle="dropdown"
+                     aria-haspopup="true" aria-expanded="false" role="button">
               <span class="user-img">
                           <span class="user-img"><img class="c-avatar__img" src="/img/user.jpg" width="40">
                           <span class="status online"></span>
                           </span>
               </span>
-          <span th:text="' ' + ${user.login}">User</span>
-        </div>
+                    <span th:text="' ' + ${user.login}">User</span>
+                </div>
 
-        <div class="c-dropdown__menu has-arrow dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuAvatar">
-          <a class="c-dropdown__item dropdown-item" href="/main/profile">My Profile</a>
-          <a class="c-dropdown__item dropdown-item" href="/main/logout">Log out</a>
-        </div>
-      </div>
-    </header>
-
-    <div class="container">
-      <div id="resultsBlock" class="row">
-
-        <div th:each="account : ${list}" class="col-md-8">
-          <div class="c-state-card c-state-card--info">
-            <h4 class="c-state-card__title">№ <span th:text="${account.accountNumber}"/></h4>
-            <span class="c-state-card__number">Balance: <span th:text="${account.account_balance}"/> RUB</span>
-
-            <div class="dropdown">
-              <a class="c-btn c-btn--secondary c-btn--outline "  id="dropdownDownload" data-toggle="dropdown">
-                <i class="feather icon-download"></i>
-              </a>
-
-              <div class="c-dropdown__menu dropdown-menu dropdown-menu-right" aria-labelledby="dropdownDownload">
-                <a class="c-dropdown__item dropdown-item" href="#">CSV</a>
-                <a class="c-dropdown__item dropdown-item" href="#">XML</a>
-                <a class="c-dropdown__item dropdown-item" href="#">JSON</a>
-              </div>
+                <div class="c-dropdown__menu has-arrow dropdown-menu dropdown-menu-right"
+                     aria-labelledby="dropdownMenuAvatar">
+                    <a class="c-dropdown__item dropdown-item" href="/main/profile">My Profile</a>
+                    <a class="c-dropdown__item dropdown-item" href="/main/logout">Log out</a>
+                </div>
             </div>
+        </header>
+
+        <div class="container">
+            <div id="resultsBlock" class="row">
+
+                <div th:each="account : ${list}" class="col-md-8">
+                    <div class="c-state-card c-state-card--info">
+                        <h4 class="c-state-card__title">№ <span th:text="${account.accountNumber}"/></h4>
+                        <span class="c-state-card__number">Balance: <span
+                                th:text="${account.account_balance}"/> RUB</span>
+
+                        <div class="dropdown">
+                            <a class="c-btn c-btn--secondary c-btn--outline " id="dropdownDownload"
+                               data-toggle="dropdown">
+                                <i class="feather icon-download"></i>
+                            </a>
+
+                            <div th:id="${account.accountNumber}"
+                                 class="c-dropdown__menu dropdown-menu dropdown-menu-right"
+                                 aria-labelledby="dropdownDownload">
+                                <a class="c-dropdown__item dropdown-item" href="#">CSV</a>
+                                <a class="c-dropdown__item dropdown-item" onclick="exportXML(this)" href="#">XML</a>
+                                <a class="c-dropdown__item dropdown-item" href="#">JSON</a>
+                            </div>
+                        </div>
 
 
-
-            <div class="c-state-card__actions dropdown">
-                  <span class="dropdown-toggle" id="dropdownMenuState2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+                        <div class="c-state-card__actions dropdown">
+                  <span class="dropdown-toggle" id="dropdownMenuState2" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false" role="button">
                     <i class="feather icon-more-vertical"></i>
                   </span>
 
-              <div th:id="${account.accountNumber}" class="c-dropdown__menu dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuState2">
-                <a class="c-dropdown__item dropdown-item" href="/main/transfer">Transfer</a>
-                <a class="c-dropdown__item dropdown-item" onclick="toDeposit(this)"  href="#">Deposit</a>
-                <a class="c-dropdown__item dropdown-item" href="#">History Operation</a>
-              </div>
+                            <div th:id="${account.accountNumber}"
+                                 class="c-dropdown__menu dropdown-menu dropdown-menu-right"
+                                 aria-labelledby="dropdownMenuState2">
+                                <a class="c-dropdown__item dropdown-item" href="/main/transfer">Transfer</a>
+                                <a class="c-dropdown__item dropdown-item" onclick="toDeposit(this)" href="#">Deposit</a>
+                                <a class="c-dropdown__item dropdown-item" href="#">History Operation</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-          </div>
+
+            <div>
+                <a class="c-btn c-btn--info c-btn--outline" href="/main">Back</a>
+                <button class="c-btn c-btn--info" onclick="craeteNewAccount()" type="button">Create New Account</button>
+            </div>
         </div>
 
-      </div>
-
-      <div>
-        <a class="c-btn c-btn--info c-btn--outline" href="/main">Back</a>
-        <button class="c-btn c-btn--info" onclick="craeteNewAccount()" type="button">Create New Account</button>
-      </div>
-    </div>
-
-  </main>
+    </main>
 </div>
 
 <!-- Главный скрипт -->
 <script src="/js/neat.js"></script>
 <script th:inline="javascript">
-			//скрипт по обработке клика по созданию счета и обработки ошибки, если счетов больше 5
-			function craeteNewAccount()
-			{
-				var main = document.getElementById('resultsBlock');
-				var response = '';
-				$.ajax(
-				{ 	type: "GET",
-					url: '/accounts/add',
-					async: false,
-					success : function(text)
-						{
-							response = text;
-						},
-					statusCode: {
-						501: function(request) {
-						  alert(request.getResponseHeader('Error'));
-						}
-					}
-
-				});
-				main.innerHTML += response;
-			}
-
-            function toDeposit(element)
+    //скрипт по обработке клика по созданию счета и обработки ошибки, если счетов больше 5
+    function craeteNewAccount() {
+        var main = document.getElementById('resultsBlock');
+        var response = '';
+        $.ajax(
             {
-                var id = element.parentElement.id;
-                location.href = "/main/deposit?accountNumber="+id;
-            }
-	</script>
+                type: "GET",
+                url: '/accounts/add',
+                async: false,
+                success: function (text) {
+                    response = text;
+                },
+                statusCode: {
+                    501: function (request) {
+                        alert(request.getResponseHeader('Error'));
+                    }
+                }
+
+            });
+        main.innerHTML += response;
+    }
+
+    function toDeposit(element) {
+        var id = element.parentElement.id;
+        location.href = "/main/deposit?accountNumber=" + id;
+    }
+
+    function exportXML(element) {
+        var id = element.parentElement.id;
+        $.ajax(
+            {
+                type: "GET",
+                url: "/accounts/export?accountNumber=" + id,
+                async: false,
+
+                statusCode: {
+                    501: function (request) {
+                        alert(request.getResponseHeader('Error'));
+                    }
+                }
+
+            });
+    }
+</script>
 </body>
 </html>

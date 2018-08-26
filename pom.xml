@@ -63,6 +63,13 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.5</version>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -90,6 +97,8 @@
           <target>1.8</target>
         </configuration>
       </plugin>
+
+      <!--Plugins for JAXB-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
@@ -98,6 +107,27 @@
           <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jaxb2-maven-plugin</artifactId>
+        <version>2.4</version>
+        <executions>
+          <execution>
+            <id>xjc</id>
+            <goals>
+              <goal>xjc</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <packageName>history.generated</packageName>
+          <sources>
+            <source>src/main/resources/schemas/export_history.xsd</source>
+          </sources>
+          <!--<xjbSources>${basedir}/src/main/resources/person.xjb</xjbSources>-->
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
 </project>

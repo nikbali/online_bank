@@ -8,4 +8,6 @@ public class UserExistException  extends Exception{
         super(message);
         this.user=user;
     }
+
+
 }
