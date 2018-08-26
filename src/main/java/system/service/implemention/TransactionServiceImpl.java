@@ -49,6 +49,21 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public Transaction transfer(Account sender, Account receiver, double amount){
+        if(amount > 0 && sender!=null && receiver!=null && sender.getAccount_balance() >= amount && sender != receiver)
+        {
+            sender.setAccount_balance(sender.getAccount_balance() - amount);
+            accountRepository.save(sender);
+            receiver.setAccount_balance(receiver.getAccount_balance() + amount);
+            accountRepository.save(receiver);
+            Transaction transaction = new Transaction(amount, new Date(), "Transfer "+ amount+ " RUB", "Done", "Transfer", sender, receiver);
+            transactionRepository.save(transaction);
+            return transaction;
+        }
+        return null;
+    }
+
+    @Override
     public Optional<Transaction> findById(long id) {
         return Optional.empty();
     }
