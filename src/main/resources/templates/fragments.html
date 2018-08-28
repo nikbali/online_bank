@@ -11,9 +11,9 @@
                     <i class="feather icon-download"></i>
                 </a>
 
-                <div class="c-dropdown__menu dropdown-menu dropdown-menu-right" aria-labelledby="dropdownDownload">
+                <div th:id="${account.accountNumber}" class="c-dropdown__menu dropdown-menu dropdown-menu-right" aria-labelledby="dropdownDownload">
                     <a class="c-dropdown__item dropdown-item" href="#">CSV</a>
-                    <a class="c-dropdown__item dropdown-item" href="#">XML</a>
+                    <a class="c-dropdown__item dropdown-item" onclick="exportXML(this)" href="#">XML</a>
                     <a class="c-dropdown__item dropdown-item" href="#">JSON</a>
                 </div>
             </div>

@@ -1,15 +1,14 @@
 package system.controller;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import system.entity.Account;
 import system.entity.Transaction;
 import system.entity.User;
@@ -24,7 +23,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @Controller
@@ -55,22 +53,28 @@ public class AccountsController {
         }
     }
 
-    @RequestMapping(value = "/export", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public void exportAccountHistory(@ModelAttribute("accountNumber") String accountNumber, HttpSession session, HttpServletResponse response) {
+    //produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
+    @RequestMapping(value = "/exportXML", method = RequestMethod.GET, produces = {"application/xml"})
+    @ResponseBody
+    public String exportAccountHistory(@ModelAttribute("accountNumber") String accountNumber/*, HttpServletResponse response*/) {
         Account account = accountService.findByAccountNumber(Long.parseLong(accountNumber));
         User user = account.getUser();
         LOGGER.info("Start exporting data for user {} {}, account number {}.", user.getFirst_name(), user.getLast_name(), account.getAccountNumber());
         AccountExporterService accountExporterService = new AccountExporterImpl();
         List<Transaction> transactionList = accountExporterService.exportAccountHistory(account);
-        String xml = JaxbUtils.marshalToXml(user, transactionList);
-        InputStream inputStream = IOUtils.toInputStream(xml);
-        try {
-            IOUtils.copy(inputStream, response.getOutputStream());
-            ServletOutputStream out = response.getOutputStream();
+
+     //   InputStream inputStream = IOUtils.toInputStream(xml);
+      //  response.setContentType("application/xml");
+
+
+        return JaxbUtils.marshalToXml(transactionList);
+        /*try (ServletOutputStream out = response.getOutputStream()){
+            JaxbUtils.marshalToXml(transactionList);
             out.flush();
-            out.close();
+            LOGGER.info("XML created.");
         } catch (IOException e) {
-           LOGGER.error("Error during convert and transfer data to xml.",e);
-        }
+            LOGGER.error("Error during convert and transfer data to xml.", e);
+            throw new IllegalStateException(e);
+        }*/
     }
 }

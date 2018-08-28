@@ -1,17 +1,20 @@
 package system.utils.jaxb;
 
 import history.generated.ObjectFactory;
+import history.generated.TransactionsList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import system.entity.Transaction;
 import system.entity.User;
 
+import javax.servlet.ServletOutputStream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -19,26 +22,25 @@ import java.util.List;
 public final class JaxbUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(system.ApplicationWar.class);
 
-    public static String marshalToXml(User user, List<Transaction> transactionList) {
+    public static String marshalToXml(List<Transaction> transactionList) {
         try {
-            //TODO маршал одного объекта переделать, создается userTrans - Trans- User
-            JAXBContext jaxbContext = JAXBContext.newInstance();
+            JAXBContext jaxbContext = JAXBContext.newInstance("history.generated");
             Marshaller marshaller = jaxbContext.createMarshaller();
             StringWriter stringWriter = new StringWriter();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
             ObjectFactory objectFactory = new ObjectFactory();
-            history.generated.User userGenerated = generateUserForXml(user, objectFactory);
-            marshaller.marshal(userGenerated, stringWriter);
+            TransactionsList generatedTransactionList = objectFactory.createTransactionsList();
 
             for (Transaction transaction : transactionList) {
-                history.generated.Transaction transactionGenerated = generateTransactionForXml(objectFactory, transaction);
-                marshaller.marshal(transactionGenerated,stringWriter);
+                generatedTransactionList.getTransaction().add(generateTransactionForXml(objectFactory, transaction));
             }
+            marshaller.marshal(generatedTransactionList, stringWriter);
             return stringWriter.toString();
         } catch (JAXBException e) {
             LOGGER.error("Error during marshalling to XML.", e);
-            return "Error during export data to XML.";
+            throw new IllegalStateException(e);
+            //return "Error during export data to XML.";
         }
     }
 
@@ -47,7 +49,7 @@ public final class JaxbUtils {
         if (isSender) {
             accountGenerated.setAccountNumber(transaction.getSender().getAccountNumber());
             accountGenerated.setUser(generateUserForXml(transaction.getSender().getUser(), objectFactory));
-        }else {
+        } else {
             accountGenerated.setAccountNumber(transaction.getReciever().getAccountNumber());
             accountGenerated.setUser(generateUserForXml(transaction.getReciever().getUser(), objectFactory));
         }
@@ -61,8 +63,8 @@ public final class JaxbUtils {
         transactionGenerated.setDescription(transaction.getDescription());
         transactionGenerated.setStatus(transaction.getStatus());
         transactionGenerated.setType(transaction.getType());
-        transactionGenerated.setSender(generateAccountForXml(objectFactory,transaction,true));
-        transactionGenerated.setReciever(generateAccountForXml(objectFactory,transaction,false));
+        transactionGenerated.setSender(generateAccountForXml(objectFactory, transaction, true));
+        transactionGenerated.setReciever(generateAccountForXml(objectFactory, transaction, false));
         return transactionGenerated;
     }
 
@@ -86,6 +88,4 @@ public final class JaxbUtils {
         }
         return xmlGregorianCalendarDate;
     }
-
-
 }

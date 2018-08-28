@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="userTransactions" type="UserTransactions"/>
+    <xs:element name="transactionsList">
 
-    <xs:complexType name="UserTransactions">
+    <xs:complexType >
         <xs:sequence>
-            <xs:element name="user" type="User"/>
             <xs:element name="transaction" type="Transaction" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
-
-
-    <xs:complexType name="User">
-        <xs:sequence>
-            <xs:element name="first_name" type="xs:string"/>
-            <xs:element name="last_name" type="xs:string"/>
-            <xs:element name="middle_name" type="xs:string"/>
-        </xs:sequence>
-    </xs:complexType>
+    </xs:element>
 
     <xs:complexType name="Transaction">
         <xs:sequence>
@@ -36,6 +27,14 @@
             <xs:element name="user" type="User"/>
         </xs:sequence>
     </xs:complexType>
+    <xs:complexType name="User">
+        <xs:sequence>
+            <xs:element name="first_name" type="xs:string"/>
+            <xs:element name="last_name" type="xs:string"/>
+            <xs:element name="middle_name" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
 </xs:schema>
 
 

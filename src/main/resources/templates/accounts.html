@@ -190,10 +190,12 @@
 
     function exportXML(element) {
         var id = element.parentElement.id;
+        location.href="/accounts/exportXML?accountNumber="+id;
+/*
         $.ajax(
             {
                 type: "GET",
-                url: "/accounts/export?accountNumber=" + id,
+                url: "/accounts/exportXML?accountNumber=" + id,
                 async: false,
 
                 statusCode: {
@@ -202,7 +204,7 @@
                     }
                 }
 
-            });
+            });*/
     }
 </script>
 </body>
