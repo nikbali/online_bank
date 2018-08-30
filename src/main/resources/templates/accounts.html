@@ -123,9 +123,9 @@
                             <div th:id="${account.accountNumber}"
                                  class="c-dropdown__menu dropdown-menu dropdown-menu-right"
                                  aria-labelledby="dropdownDownload">
-                                <a class="c-dropdown__item dropdown-item" href="#">CSV</a>
+                                <a class="c-dropdown__item dropdown-item" onclick="exportCSV(this)" href="#">CSV</a>
                                 <a class="c-dropdown__item dropdown-item" onclick="exportXML(this)" href="#">XML</a>
-                                <a class="c-dropdown__item dropdown-item" href="#">JSON</a>
+                                <a class="c-dropdown__item dropdown-item" onclick="exportJSON(this)" href="#">JSON</a>
                             </div>
                         </div>
 
@@ -190,13 +190,21 @@
 
     function exportXML(element) {
         var id = element.parentElement.id;
-        location.href="/accounts/exportXML?accountNumber="+id;
-/*
         $.ajax(
             {
                 type: "GET",
                 url: "/accounts/exportXML?accountNumber=" + id,
                 async: false,
+                success: function (text,textstatus,xhr) {
+
+                    var a = window.document.createElement('a');
+                    a.href = window.URL.createObjectURL(new Blob([xhr.responseText], {type: 'text/xml'}));
+                    a.download = 'transactions.xml';
+
+                    // Append anchor to body.
+                    document.body.appendChild(a);
+                    a.click();
+                },
 
                 statusCode: {
                     501: function (request) {
@@ -204,7 +212,60 @@
                     }
                 }
 
-            });*/
+            });
+    }
+
+    function exportCSV(element) {
+        var id = element.parentElement.id;
+        $.ajax(
+            {
+                type: "GET",
+                url: "/accounts/export?accountNumber=" + id,
+                async: false,
+                success: function (text,textstatus,xhr) {
+
+                    var a = window.document.createElement('a');
+                    a.href = window.URL.createObjectURL(new Blob([xhr.responseText], {type: 'text/csv'}));
+                    a.download = 'transactions.csv';
+
+                    // Append anchor to body.
+                    document.body.appendChild(a);
+                    a.click();
+                },
+
+                statusCode: {
+                    501: function (request) {
+                        alert(request.getResponseHeader('Error'));
+                    }
+                }
+
+            });
+    }
+    function exportJSON(element) {
+        var id = element.parentElement.id;
+        $.ajax(
+            {
+                type: "GET",
+                url: "/accounts/exportJSON?accountNumber=" + id,
+                async: false,
+                success: function (text,textstatus,xhr) {
+
+                    var a = window.document.createElement('a');
+                    a.href = window.URL.createObjectURL(new Blob([xhr.responseText], {type: 'text/json'}));
+                    a.download = 'transactions.json';
+
+                    // Append anchor to body.
+                    document.body.appendChild(a);
+                    a.click();
+                },
+
+                statusCode: {
+                    501: function (request) {
+                        alert(request.getResponseHeader('Error'));
+                    }
+                }
+
+            });
     }
 </script>
 </body>

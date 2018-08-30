@@ -93,8 +93,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Action> findLastActions(User user) {
 
-        List<Action> actions = new ArrayList<Action>();
-        TreeMap<Date, Transaction> mapa = new TreeMap<Date, Transaction>(Collections.reverseOrder());
+        List<Action> actions = new ArrayList<>();
+        TreeMap<Date, Transaction> mapa = new TreeMap<>(Collections.reverseOrder());
         List<Account> accounts = user.getAccountList();
         for (Account account : accounts) {
             for (Transaction oper : transactionRepository.findFirst10Operation(account.getId())) {

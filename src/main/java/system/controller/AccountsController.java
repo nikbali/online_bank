@@ -1,8 +1,11 @@
 package system.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,10 +22,8 @@ import system.service.implemention.AccountExporterImpl;
 import system.utils.UserUtils;
 import system.utils.jaxb.JaxbUtils;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -53,28 +54,44 @@ public class AccountsController {
         }
     }
 
-    //produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
     @RequestMapping(value = "/exportXML", method = RequestMethod.GET, produces = {"application/xml"})
-    @ResponseBody
-    public String exportAccountHistory(@ModelAttribute("accountNumber") String accountNumber/*, HttpServletResponse response*/) {
+    public @ResponseBody String exportAccountHistoryXml(@ModelAttribute("accountNumber") String accountNumber) {
+        List<Transaction> transactionList = getTransactionsList(accountNumber);
+        String xml = JaxbUtils.marshalToXml(transactionList);
+        LOGGER.info("XML created.");
+        return xml;
+    }
+
+
+    @RequestMapping(value = "/exportJSON", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public @ResponseBody String exportAccountHistoryJson(@ModelAttribute("accountNumber") String accountNumber) {
+        List<Transaction> transactionList = getTransactionsList(accountNumber);
+        String json = "";
+        try {
+            json = new ObjectMapper()
+                    .writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(transactionList);
+            LOGGER.info("Json string is created.");
+        } catch (JsonProcessingException e) {
+            LOGGER.error("Json string is created with error.",e);
+        }
+        return json;
+    }
+
+    //TODO сделать красивый вывод в csv
+    @RequestMapping(value = "/exportCSV", method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
+    public @ResponseBody String exportAccountHistoryCsv(@ModelAttribute("accountNumber") String accountNumber) {
+        List<Transaction> transactionList = getTransactionsList(accountNumber);
+
+        return null;
+    }
+
+
+    private List<Transaction> getTransactionsList(String accountNumber) {
         Account account = accountService.findByAccountNumber(Long.parseLong(accountNumber));
         User user = account.getUser();
         LOGGER.info("Start exporting data for user {} {}, account number {}.", user.getFirst_name(), user.getLast_name(), account.getAccountNumber());
         AccountExporterService accountExporterService = new AccountExporterImpl();
-        List<Transaction> transactionList = accountExporterService.exportAccountHistory(account);
-
-     //   InputStream inputStream = IOUtils.toInputStream(xml);
-      //  response.setContentType("application/xml");
-
-
-        return JaxbUtils.marshalToXml(transactionList);
-        /*try (ServletOutputStream out = response.getOutputStream()){
-            JaxbUtils.marshalToXml(transactionList);
-            out.flush();
-            LOGGER.info("XML created.");
-        } catch (IOException e) {
-            LOGGER.error("Error during convert and transfer data to xml.", e);
-            throw new IllegalStateException(e);
-        }*/
+        return accountExporterService.exportAccountHistory(account);
     }
 }
