@@ -4,7 +4,7 @@ package system.service;
 import system.entity.Action;
 import system.entity.User;
 import system.entity.UserRole;
-import system.exceptions.IncorrectedFieldsException;
+import system.exceptions.IncorrectFieldsException;
 
 import java.util.List;
 import java.util.Set;
@@ -37,7 +37,7 @@ public interface UserService {
                                     String last_name,
                                     String middle_name,
                                     String password,
-                                    String phone) throws IncorrectedFieldsException;
+                                    String phone) throws IncorrectFieldsException;
 
     List<Action> findLastActions(User user);
 
