@@ -15,6 +15,7 @@ import system.exceptions.UserExistException;
 import system.repository.RoleRepository;
 import system.service.UserService;
 import system.utils.CryptoUtils;
+import system.utils.UserUtils;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
@@ -53,27 +54,31 @@ public class UserController {
         return model;
     }
 
-    @RequestMapping(params = "sign-in", value = "/signin", method = RequestMethod.POST)
-    public ModelAndView auth(@ModelAttribute("user") User user, HttpSession session) {
+    @RequestMapping(params = "sign-in", value="/signin", method=RequestMethod.POST)
+    public ModelAndView auth(@ModelAttribute("user") User user, HttpSession session)
+    {
 
         try {
             if (userService.checkLoginExists(user.getLogin())) {
                 User cur_user = userService.findByLogin(user.getLogin());
-                if (cur_user.getPassword().equals(CryptoUtils.getHash(user.getPassword()))) {
+                if (cur_user.getPassword().equals(CryptoUtils.getHash(user.getPassword())))
+                {
                     session.setAttribute("user", cur_user);
                     return new ModelAndView("redirect:/main");
                 }
             }
-        } catch (Exception ex) {
-            log.info("Error during signing in.", ex);
+        }
+        catch (Exception ex)
+        {
             return new ModelAndView("redirect:/").addObject("error", true);
         }
         log.info("Error during signing in.");
         return new ModelAndView("redirect:/").addObject("error", true);
     }
 
-    @RequestMapping(params = "sign-up", value = "/signin", method = RequestMethod.POST)
-    public ModelAndView redir(@ModelAttribute("user") User user) {
+    @RequestMapping(params = "sign-up", value="/signin", method=RequestMethod.POST)
+    public ModelAndView redir(@ModelAttribute("user") User user)
+    {
         ModelAndView mv = new ModelAndView("redirect:/registration");
         return mv;
     }
