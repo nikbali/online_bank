@@ -1,7 +1,12 @@
 package system.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import system.utils.json.CustomDateSerializer;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "transaction")
@@ -11,6 +16,8 @@ public class Transaction {
     @Column(name = "id")
     private long id;
     private double amount;
+
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date date;
     private String description;
     private String status;
@@ -23,6 +30,9 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "receiver_account_id")
     private Account reciever;
+
+    public static final String[] COLUMNS = new String[]{"amount","date","description","status","type","sender","reciever"};
+    public static final String[] NAMES = new String[]{"Amount","Date","Description","Status","Type","Sender","Reciever"};
 
     public Transaction(){}
 
@@ -104,5 +114,25 @@ public class Transaction {
                 ", sender=" + sender.getAccountNumber() +
                 ", reciever=" + reciever.getAccountNumber() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return id == that.id &&
+                Double.compare(that.amount, amount) == 0 &&
+                Objects.equals(date, that.date) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(status, that.status) &&
+                Objects.equals(type, that.type) &&
+                Objects.equals(sender, that.sender) &&
+                Objects.equals(reciever, that.reciever);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, amount, date, description, status, type, sender, reciever);
     }
 }

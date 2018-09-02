@@ -196,7 +196,6 @@
                 url: "/accounts/exportXML?accountNumber=" + id,
                 async: false,
                 success: function (text,textstatus,xhr) {
-
                     var a = window.document.createElement('a');
                     a.href = window.URL.createObjectURL(new Blob([xhr.responseText], {type: 'text/xml'}));
                     a.download = 'transactions.xml';
@@ -205,7 +204,6 @@
                     document.body.appendChild(a);
                     a.click();
                 },
-
                 statusCode: {
                     501: function (request) {
                         alert(request.getResponseHeader('Error'));
@@ -220,10 +218,9 @@
         $.ajax(
             {
                 type: "GET",
-                url: "/accounts/export?accountNumber=" + id,
+                url: "/accounts/exportCSV?accountNumber=" + id,
                 async: false,
                 success: function (text,textstatus,xhr) {
-
                     var a = window.document.createElement('a');
                     a.href = window.URL.createObjectURL(new Blob([xhr.responseText], {type: 'text/csv'}));
                     a.download = 'transactions.csv';
@@ -232,7 +229,6 @@
                     document.body.appendChild(a);
                     a.click();
                 },
-
                 statusCode: {
                     501: function (request) {
                         alert(request.getResponseHeader('Error'));
@@ -249,7 +245,6 @@
                 url: "/accounts/exportJSON?accountNumber=" + id,
                 async: false,
                 success: function (text,textstatus,xhr) {
-
                     var a = window.document.createElement('a');
                     a.href = window.URL.createObjectURL(new Blob([xhr.responseText], {type: 'text/json'}));
                     a.download = 'transactions.json';
@@ -258,7 +253,6 @@
                     document.body.appendChild(a);
                     a.click();
                 },
-
                 statusCode: {
                     501: function (request) {
                         alert(request.getResponseHeader('Error'));

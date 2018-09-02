@@ -50,6 +50,12 @@ public class User {
         this.phone = phone;
     }
 
+    public User(String first_name, String last_name, String middle_name) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.middle_name = middle_name;
+    }
+
     public int getDocumentNumber() {
         return documentNumber;
     }
