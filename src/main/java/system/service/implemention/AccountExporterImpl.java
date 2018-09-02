@@ -4,8 +4,7 @@ import system.entity.Account;
 import system.entity.Transaction;
 import system.service.AccountExporterService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class AccountExporterImpl implements AccountExporterService {
 
@@ -13,7 +12,13 @@ public class AccountExporterImpl implements AccountExporterService {
     public List<Transaction> exportAccountHistory(Account account) {
         List<Transaction> history = new ArrayList<>();
         history.addAll(account.getSendList());
-        history.addAll(account.getRecieveList());
+
+        for (Transaction transaction : account.getRecieveList()) {
+            if(!history.contains(transaction)){
+                history.add(transaction);
+            }
+        }
         return history;
     }
+
 }

@@ -1,6 +1,5 @@
 package system.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +11,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 import system.entity.Account;
 import system.entity.Transaction;
 import system.entity.User;
@@ -24,6 +26,9 @@ import system.utils.jaxb.JaxbUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -54,8 +59,9 @@ public class AccountsController {
         }
     }
 
-    @RequestMapping(value = "/exportXML", method = RequestMethod.GET, produces = {"application/xml"})
-    public @ResponseBody String exportAccountHistoryXml(@ModelAttribute("accountNumber") String accountNumber) {
+    @RequestMapping(value = "/exportXML", method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
+    public @ResponseBody
+    String exportAccountHistoryXml(@ModelAttribute("accountNumber") String accountNumber) {
         List<Transaction> transactionList = getTransactionsList(accountNumber);
         String xml = JaxbUtils.marshalToXml(transactionList);
         LOGGER.info("XML created.");
@@ -64,7 +70,8 @@ public class AccountsController {
 
 
     @RequestMapping(value = "/exportJSON", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody String exportAccountHistoryJson(@ModelAttribute("accountNumber") String accountNumber) {
+    public @ResponseBody
+    String exportAccountHistoryJson(@ModelAttribute("accountNumber") String accountNumber) {
         List<Transaction> transactionList = getTransactionsList(accountNumber);
         String json = "";
         try {
@@ -72,18 +79,26 @@ public class AccountsController {
                     .writerWithDefaultPrettyPrinter()
                     .writeValueAsString(transactionList);
             LOGGER.info("Json string is created.");
-        } catch (JsonProcessingException e) {
-            LOGGER.error("Json string is created with error.",e);
+        } catch (Exception e) {
+            LOGGER.error("Json string is created with error.", e);
         }
         return json;
     }
 
-    //TODO сделать красивый вывод в csv
-    @RequestMapping(value = "/exportCSV", method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
+    @RequestMapping(value = "/exportCSV", method = RequestMethod.GET)
     public @ResponseBody String exportAccountHistoryCsv(@ModelAttribute("accountNumber") String accountNumber) {
         List<Transaction> transactionList = getTransactionsList(accountNumber);
-
-        return null;
+        StringWriter stringWriter = new StringWriter();
+        try (ICsvBeanWriter beanWriter = new CsvBeanWriter(stringWriter, CsvPreference.STANDARD_PREFERENCE)) {
+            beanWriter.writeHeader(Transaction.NAMES);
+            for (final Transaction transaction : transactionList) {
+                beanWriter.write(transaction,Transaction.COLUMNS);
+            }
+        } catch (IOException e) {
+            LOGGER.error("CSV string is created with error.", e);
+        }
+        LOGGER.info("CSV is created {}.",stringWriter.toString());
+        return stringWriter.toString();
     }
 
 

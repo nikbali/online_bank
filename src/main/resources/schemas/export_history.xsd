@@ -11,7 +11,7 @@
 
     <xs:complexType name="Transaction">
         <xs:sequence>
-            <xs:element name="date" type="xs:date"/>
+            <xs:element name="date" type="xs:dateTime"/>
             <xs:element name="sender" type="Account"/>
             <xs:element name="reciever" type="Account"/>
             <xs:element name="amount" type="xs:double"/>

@@ -16,6 +16,8 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -40,7 +42,6 @@ public final class JaxbUtils {
         } catch (JAXBException e) {
             LOGGER.error("Error during marshalling to XML.", e);
             throw new IllegalStateException(e);
-            //return "Error during export data to XML.";
         }
     }
 
@@ -80,9 +81,8 @@ public final class JaxbUtils {
     private static XMLGregorianCalendar dateToXmlGregorianDate(Transaction transaction) {
         XMLGregorianCalendar xmlGregorianCalendarDate = null;
         try {
-            GregorianCalendar gregorianDate = new GregorianCalendar();
-            gregorianDate.setTime(transaction.getDate());
-            xmlGregorianCalendarDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianDate);
+            String formatter = "yyyy-MM-dd'T'HH:mm:ss";
+            xmlGregorianCalendarDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(new SimpleDateFormat(formatter).format(transaction.getDate()));
         } catch (DatatypeConfigurationException e) {
             LOGGER.error("Error during conversion from date to xml date");
         }

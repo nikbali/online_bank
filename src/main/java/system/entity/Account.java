@@ -11,6 +11,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "id")
+    @JsonIgnore
     private long id;
     private double account_balance;
     private long accountNumber;
@@ -19,12 +20,12 @@ public class Account {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> sendList;
 
-    @OneToMany(mappedBy = "reciever", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
+    @OneToMany(mappedBy = "reciever", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> recieveList;
 
     public Account(){
