@@ -72,7 +72,7 @@ public class AccountsController {
     @RequestMapping(value = "/exportJSON", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody
     String exportAccountHistoryJson(@ModelAttribute("accountNumber") String accountNumber) {
-        List<Transaction> transactionList = getTransactionListForJson(getTransactionsList(accountNumber));
+        List<Transaction> transactionList = getTransactionsList(accountNumber);
         String json = "";
         try {
             json = new ObjectMapper()
@@ -85,10 +85,9 @@ public class AccountsController {
         return json;
     }
 
-    //TODO сделать красивый вывод в csv
-    @RequestMapping(value = "/exportCSV", method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
+    @RequestMapping(value = "/exportCSV", method = RequestMethod.GET)
     public @ResponseBody String exportAccountHistoryCsv(@ModelAttribute("accountNumber") String accountNumber) {
-        List<Transaction> transactionList = getTransactionListForJson(getTransactionsList(accountNumber));
+        List<Transaction> transactionList = getTransactionsList(accountNumber);
         StringWriter stringWriter = new StringWriter();
         try (ICsvBeanWriter beanWriter = new CsvBeanWriter(stringWriter, CsvPreference.STANDARD_PREFERENCE)) {
             beanWriter.writeHeader(Transaction.NAMES);
@@ -109,28 +108,5 @@ public class AccountsController {
         LOGGER.info("Start exporting data for user {} {}, account number {}.", user.getFirst_name(), user.getLast_name(), account.getAccountNumber());
         AccountExporterService accountExporterService = new AccountExporterImpl();
         return accountExporterService.exportAccountHistory(account);
-    }
-
-    //список транзакций для вывода клиенту
-    public List<Transaction> getTransactionListForJson(List<Transaction> list) {
-        List<Transaction> transactions = new ArrayList<>();
-        for (Transaction transaction : list) {
-            transactions.add(new Transaction(transaction.getAmount(),
-                    transaction.getDate(),
-                    transaction.getDescription(),
-                    transaction.getStatus(),
-                    transaction.getType(),
-                    new Account(transaction.getSender().getAccount_balance(),
-                            transaction.getSender().getAccountNumber(),
-                            new User(transaction.getSender().getUser().getFirst_name(),
-                                    transaction.getSender().getUser().getLast_name(),
-                                    transaction.getSender().getUser().getMiddle_name())),
-                    new Account(transaction.getReciever().getAccount_balance(),
-                            transaction.getReciever().getAccountNumber(),
-                            new User(transaction.getReciever().getUser().getFirst_name(),
-                                    transaction.getReciever().getUser().getLast_name(),
-                                    transaction.getReciever().getUser().getMiddle_name()))));
-        }
-        return transactions;
     }
 }

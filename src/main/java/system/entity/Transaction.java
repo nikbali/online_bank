@@ -1,6 +1,7 @@
 package system.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import system.utils.json.CustomDateSerializer;
 
@@ -14,6 +15,7 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "id")
+    @JsonIgnore
     private long id;
     private double amount;
 
