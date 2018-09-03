@@ -3,6 +3,7 @@ package system.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import system.enums.Сurrency;
 import java.util.List;
 
 @Entity
@@ -15,6 +16,11 @@ public class Account {
     private long id;
     private double account_balance;
     private long accountNumber;
+
+    @Column(name = "currency")
+    @Enumerated(EnumType.STRING)
+    private Сurrency currency;
+
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")

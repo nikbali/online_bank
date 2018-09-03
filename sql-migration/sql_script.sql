@@ -30,6 +30,7 @@ CREATE TABLE `account` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `account_balance` decimal(19,2) DEFAULT NULL,
   `account_number` int(11) NOT NULL,
+  `currency` VARCHAR(255) NOT NULL DEFAULT 'RUB';
   `user_id` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_NUMBER` (`account_number`),

@@ -28,22 +28,21 @@ public class MyFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        log.info("MyFilter doFilter() is invoked.");
         HttpServletRequest request = (HttpServletRequest)servletRequest;
         Enumeration<String> params = servletRequest.getParameterNames();
         HttpSession session = request.getSession();
-       // User attr = (User)session.getAttribute("user");
-        User attr = UserUtils.getUserFromSession(session);
+        User user = UserUtils.getUserFromSession(session);
 
-        if(attr != null)
+        if(user != null)
         {
             filterChain.doFilter(servletRequest, servletResponse);
         }
         else
-            {
-                HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-                httpResponse.sendRedirect("/index");
-            }
+        {
+            log.info("WebFilter is invoked .");
+            HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
+            httpResponse.sendRedirect("/index");
+        }
     }
 
     @Override
