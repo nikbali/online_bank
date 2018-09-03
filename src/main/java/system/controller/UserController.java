@@ -122,10 +122,10 @@ public class UserController {
             if (ex instanceof UserExistException) {
                 log.error("Failed to save user, user already exists : ", ex);
                 UserExistException existException = (UserExistException) ex;
-                model.addObject("message", existException.getMessage());
+                model.addObject("msg", existException.getMessage());
             } else {
                 log.error("Failed to save user.", ex);
-                dataToSave.put("message", ex.getMessage());
+                dataToSave.put("msg", ex.getMessage());
                 for (Map.Entry<String, String> entry : dataToSave.entrySet()) {
                     model.addObject(entry.getKey(), entry.getValue());
                 }

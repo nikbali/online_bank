@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
+<head>
     <meta charset="utf-8">
 
     <title>Registration | Sberbank</title>
@@ -16,64 +16,77 @@
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="/css/neat.css">
-  </head>
-  <body>
+</head>
+<body>
 
-    <div class="o-page o-page--center">
-      <div class="o-page__card">
+<div class="o-page o-page--center">
+    <div class="o-page__card">
         <div class="c-card c-card--center">
           <span class="c-icon c-icon--large u-mb-small">
             <img src="/img/sber_log.png" alt="Sberbank">
           </span>
 
-          <h4 class="u-mb-medium">Registration</h4>
-          <form th:action="@{/save}" method="post">
-			<p th:text="${msg}"/>
-            <div class="c-field">
-              <label class="c-field__label">First Name</label>
-              <input class="c-input u-mb-small" type="text" required th:value="${first_name}" name="first_name">
-            </div>
-			<div class="c-field">
-              <label class="c-field__label">Last Name</label>
-              <input class="c-input u-mb-small" type="text" th:value="${last_name}" name="last_name">
-            </div>
-			<div class="c-field">
-              <label class="c-field__label">Middle Name</label>
-              <input class="c-input u-mb-small" type="text" th:value="${middle_name}" name="middle_name">
-            </div>
-			
-			<div class="c-field">
-              <label class="c-field__label">Phone Number</label>
-              <input class="c-input u-mb-small" type="text" placeholder="+79991236312" th:value="${phone}" name="phone">
-            </div>
-			
-			<div class="c-field">
-              <label class="c-field__label">Login</label>
-              <input class="c-input u-mb-small" type="text" required th:value="${login}" name="login">
-            </div>
-			
-			<div class="c-field">
-              <label class="c-field__label">Document Number</label>
-              <input class="c-input u-mb-small" type="text" placeholder="1234567890" required th:value="${documentNumber}" name="documentNumber">
-            </div>
+            <h4 class="u-mb-medium">Registration</h4>
+            <form th:action="@{/save}" method="post">
+                    <p class="ex1" th:text="${msg}"/>
+                        <div align="left" th:class="ex1" class="c-field">
+                            <label class="c-field__label">First Name</label>
+                            <input class="c-input u-mb-small" type="text" required th:value="${first_name}" name="first_name">
+                        </div>
+                        <div class="c-field">
+                            <label class="c-field__label">Last Name</label>
+                            <input class="c-input u-mb-small" type="text" th:value="${last_name}" name="last_name">
+                        </div>
+                        <div class="c-field">
+                            <label class="c-field__label">Middle Name</label>
+                            <input class="c-input u-mb-small" type="text" th:value="${middle_name}" name="middle_name">
+                        </div>
 
-            <div class="c-field">
-              <label class="c-field__label">Email Address</label>
-              <input class="c-input u-mb-small" type="email" placeholder="e.g. adam@sandler.com" required th:value="${email}" name="email">
-            </div>
-           
-            <div class="c-field u-mb-small">
-              <label class="c-field__label">Password</label>
-              <input class="c-input" type="password" placeholder="Numbers, Pharagraphs Only" required th:value="${password}" name="password">
-            </div>
+                        <div class="c-field">
+                            <label class="c-field__label">Phone Number</label>
+                            <input class="c-input u-mb-small" type="text" placeholder="+79991236312" th:value="${phone}"
+                                   name="phone">
+                        </div>
 
-            <input class="c-btn c-btn--fullwidth c-btn--info" type="submit"  value="Create"/>
-          </form>
+                        <div class="c-field">
+                            <label class="c-field__label">Login</label>
+                            <input class="c-input u-mb-small" type="text" required th:value="${login}" name="login">
+                        </div>
+
+                        <div class="c-field">
+                            <label class="c-field__label">Document Number</label>
+                            <input class="c-input u-mb-small" type="text" placeholder="1234567890" required th:value="${documentNumber}" name="documentNumber">
+                        </div>
+
+                        <div class="c-field">
+                            <label class="c-field__label">Email Address</label>
+                            <input class="c-input u-mb-small" type="email" placeholder="e.g. adam@sandler.com" required th:value="${email}" name="email">
+                        </div>
+
+                        <div class="c-field u-mb-small">
+                            <label class="c-field__label">Password</label>
+                            <input class="c-input" type="password" placeholder="Numbers, Pharagraphs Only" required th:value="${password}" name="password">
+                        </div>
+
+                        <input class="c-btn c-btn--fullwidth c-btn--info" type="submit" value="Create"/>
+            </form>
         </div>
-      </div>
     </div>
+</div>
 
-    <!-- Main JavaScript -->
-    <script src="/js/neat.js"></script>
-  </body>
+<style>
+    p.ex1 {
+        padding: 7px;
+        background-color: #F6CECE;
+        color: #3B0B0B;
+    }
+    div.ex1{
+        margin-top: 7%
+    }
+</style>
+
+
+<!-- Main JavaScript -->
+<script src="/js/neat.js"></script>
+</body>
 </html>

@@ -33,8 +33,8 @@ public class Transaction {
     @JoinColumn(name = "receiver_account_id")
     private Account reciever;
 
-    public static final String[] COLUMNS = new String[]{"amount","date","description","status","type","sender","reciever"};
-    public static final String[] NAMES = new String[]{"Amount","Date","Description","Status","Type","Sender","Reciever"};
+    public static final String[] COLUMNS = new String[]{"amount","date","description","status","type"};
+    public static final String[] NAMES = new String[]{"Amount","Date","Description","Status","Type"};
 
     public Transaction(){}
 
