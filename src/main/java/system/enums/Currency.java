@@ -1,8 +1,9 @@
 package system.enums;
 
-public enum Сurrency {
+public enum Currency {
     RUB, USD, EUR;
 
-    Сurrency() {
+    Currency() {
     }
+
 }

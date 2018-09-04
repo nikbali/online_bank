@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import system.entity.Account;
 import system.entity.User;
+import system.enums.AccountType;
+import system.enums.Currency;
 import system.service.AccountService;
 import system.service.UserService;
 
@@ -42,7 +44,7 @@ public class ApplicationTest extends TestCase {
     @Transactional(rollbackFor={Exception.class})
     public String someTransactionalMethod(String email, String login, long acc){
         User user = new User(email,RandomUtils.nextInt(10000000,20000000), login, "first_name", "last_name", "middle_name", "password", "phone");
-        Account account = new Account(0.0, acc, user);
+        Account account = new Account(0.0, acc, user, Currency.RUB, AccountType.DEBIT, 100);
 
         userService.save(user);
         accountService.save(account);

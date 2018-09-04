@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import system.entity.Account;
 import system.entity.Transaction;
 import system.entity.User;
+import system.enums.Bank;
 import system.repository.AccountRepository;
 import system.repository.TransactionRepository;
 import system.service.TransactionService;
@@ -56,9 +57,25 @@ public class TransactionServiceImpl implements TransactionService {
             accountRepository.save(sender);
             receiver.setAccount_balance(receiver.getAccount_balance() + amount);
             accountRepository.save(receiver);
-            Transaction transaction = new Transaction(amount, new Date(), "Transfer "+ amount+ " RUB", "Done", "Transfer", sender, receiver);
+            Transaction transaction = new Transaction(amount, new Date(), "Transfer "+ amount+ " "+receiver.getCurrency(), "Done", "TransferToOurBank", sender, receiver);
             transactionRepository.save(transaction);
             return transaction;
+        }
+        return null;
+    }
+
+
+    @Override
+    public Transaction transferToOtherBank(Account sender, Account receiver, double amount, String comment) {
+        if(amount > 0 && sender!=null && receiver!=null && sender != receiver && receiver.getCurrency() == sender.getCurrency() )
+        {
+            receiver.setAccount_balance(receiver.getAccount_balance() + amount);
+            accountRepository.save(receiver);
+            accountRepository.save(sender);
+            Transaction transaction = new Transaction(amount, new Date(), comment, "Done", "TransferToOtherBank", sender, receiver);
+            transactionRepository.save(transaction);
+            return transaction;
+
         }
         return null;
     }

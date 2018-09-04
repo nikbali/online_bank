@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import system.entity.Account;
 import system.entity.Transaction;
 import system.entity.User;
+import system.enums.AccountType;
+import system.enums.Currency;
 import system.service.AccountService;
 import system.service.TransactionService;
 import system.service.UserService;
@@ -53,7 +55,7 @@ public class DepositTest extends TestCase {
                 "unit_test"
         );
         log.info("Create User: " + user);
-        account = new Account(0.0, RandomUtils.nextLong(100000, 1000000), user);
+        account = new Account(0.0, RandomUtils.nextLong(100000, 1000000), user, Currency.RUB, AccountType.DEBIT, 100);
         log.info("Create Account: " + account);
         userService.save(user);
         accountService.save(account);

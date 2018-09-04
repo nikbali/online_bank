@@ -3,7 +3,9 @@ package system.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import system.enums.Сurrency;
+
+import system.enums.AccountType;
+import system.enums.Currency;
 import java.util.List;
 
 @Entity
@@ -16,11 +18,15 @@ public class Account {
     private long id;
     private double account_balance;
     private long accountNumber;
+    private int bic;
 
     @Column(name = "currency")
     @Enumerated(EnumType.STRING)
-    private Сurrency currency;
+    private Currency currency;
 
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private AccountType type;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
@@ -38,10 +44,13 @@ public class Account {
 
     }
 
-    public Account(double account_balance, long accountNumber, User user) {
+    public Account(double account_balance, long accountNumber, User user, Currency currency, AccountType type, int bic) {
         this.account_balance = account_balance;
         this.accountNumber = accountNumber;
         this.user = user;
+        this.currency = currency;
+        this.bic = bic;
+        this.type = type;
     }
 
     public long getId() {
@@ -92,6 +101,30 @@ public class Account {
         this.recieveList = recieveList;
     }
 
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public int getBic() {
+        return bic;
+    }
+
+    public void setBic(int bic) {
+        this.bic = bic;
+    }
+
+    public AccountType getType() {
+        return type;
+    }
+
+    public void setType(AccountType type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
@@ -99,6 +132,9 @@ public class Account {
                 ", account_balance=" + account_balance +
                 ", accountNumber=" + accountNumber +
                 ", user=" + user +
+                ", BIC=" + bic +
+                ", currency=" + currency +
+                ", type=" + type +
                 '}';
     }
 }

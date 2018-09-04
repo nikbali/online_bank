@@ -2,17 +2,22 @@ package system.rest_controller;
 
 public class Operation {
     private long id;
-    private String from;
-    private String to;
+    private String fromAccount;
+    private String toAccount;
+    private String bic;
+    private String currency;
+    private String comment;
     private double amount;
 
     public Operation(){
-        id=0;
     }
-    public Operation(long id, String from, String to, double amount) {
+    public Operation(long id, String fromAccount, String toAccount, String bic, String currency, String comment, double amount) {
         this.id = id;
-        this.from = from;
-        this.to = to;
+        this.fromAccount = fromAccount;
+        this.toAccount = toAccount;
+        this.bic = bic;
+        this.comment = comment;
+        this.currency = currency;
         this.amount = amount;
     }
 
@@ -24,22 +29,6 @@ public class Operation {
         this.id = id;
     }
 
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
-    }
-
     public double getAmount() {
         return amount;
     }
@@ -47,4 +36,45 @@ public class Operation {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
+    public String getFromAccount() {
+        return fromAccount;
+    }
+
+    public void setFromAccount(String fromAccount) {
+        this.fromAccount = fromAccount;
+    }
+
+    public String getToAccount() {
+        return toAccount;
+    }
+
+    public void setToAccount(String toAccount) {
+        this.toAccount = toAccount;
+    }
+
+    public String getBic() {
+        return bic;
+    }
+
+    public void setBic(String bic) {
+        this.bic = bic;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 }
+

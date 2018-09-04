@@ -13,6 +13,8 @@ public interface TransactionService {
     void save(Transaction transaction);
     Transaction deposit(Account account , double amount);
     Transaction transfer(Account sender, Account receiver, double amount);
+    Transaction transferToOtherBank(Account sender, Account receiver, double amount, String comment);
+
     Optional<Transaction> findById(long id);
     boolean existsById(long id);
     void deleteById(long id);
