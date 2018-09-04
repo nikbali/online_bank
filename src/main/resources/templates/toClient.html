@@ -102,6 +102,7 @@
             <form th:action="@{/main/transfer/toClient}" method="post">
                 <!--Sender-->
                 <!--IF Account Exist-->
+                <p th:text="${accountsNumberErrorMsg}"/>
                 <div th:if="${accountsExist}">
                     <p>Укажите счет списания:</p>
                     <div th:text="${senderAccountNumber}">---</div>
@@ -121,6 +122,7 @@
                 </div>
 
                 <!--Receiver-->
+                <p th:text="${receiverErrorMsg}"/>
                 <div th:if="${accountsExist}">
                     <p>Укажите счет для пополнения:</p>
                     <div th:text="${receiverAccountNumber}">---</div>
@@ -129,6 +131,7 @@
 
                 <!-- ELSE -->
                 <div th:unless="${accountsExist}">
+
                     <p>Укажите счет для пополнения:</p>
                     <div>
                         <input th:value="${receiverAccountNumber}" th:type="text" pattern="[0-9]{9}" maxlength="9" name="receiverAccountNumber"/>
@@ -136,6 +139,8 @@
                 </div>
 
                 <p>Введите сумму (RUB):</p>
+                <p th:text="${amountErrorMsg}"/>
+                <p th:text="${moneyErrorMsg}"/>
                 <input th:value="${amount}" th:type="text" pattern="^[ 0-9]+$" name="amount" aria-label="RUB" required/>
                 <br>
                 <input class="c-btn c-btn--info" type="submit"  value="Transfer"/>

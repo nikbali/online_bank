@@ -50,7 +50,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction transfer(Account sender, Account receiver, double amount){
-        if(amount > 0 && sender!=null && receiver!=null && sender.getAccount_balance() >= amount && sender != receiver)
+        if(amount > 0 && sender!=null && receiver!=null && sender.getAccount_balance() >= amount && sender.getAccountNumber() != receiver.getAccountNumber() )
         {
             sender.setAccount_balance(sender.getAccount_balance() - amount);
             accountRepository.save(sender);
