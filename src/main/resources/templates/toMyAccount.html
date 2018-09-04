@@ -102,6 +102,7 @@
             <form th:action="@{/main/transfer/toMyAccount}" method="post">
                 <!--Sender-->
                 <!-- IF Account Exist -->
+                <p th:text="${accountsNumberErrorMsg}"/>
                 <div th:if="${accountsExist}">
                     <p>Счет списания средств:</p>
                     <div th:text="${senderAccountNumber}">---</div>
@@ -140,6 +141,8 @@
                 </div>
 
                 <p>Введите сумму (RUB):</p>
+                <p th:text="${amountErrorMsg}"/>
+                <p th:text="${moneyErrorMsg}"/>
                 <input th:value="${amount}" type="text" name="amount" aria-label="RUB"/>
                 <br>
                 <input class="c-btn c-btn--info" type="submit"  value="Transfer"/>
@@ -148,6 +151,8 @@
 
     </main>
 </div>
+
+
 <!-- Main JavaScript -->
 <script src="/js/neat.js"></script>
 </body>
