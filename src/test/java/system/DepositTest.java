@@ -21,6 +21,8 @@ import system.service.AccountService;
 import system.service.TransactionService;
 import system.service.UserService;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Date;
 
 @RunWith(SpringRunner.class)
@@ -55,7 +57,7 @@ public class DepositTest extends TestCase {
                 "unit_test"
         );
         log.info("Create User: " + user);
-        account = new Account(0.0, RandomUtils.nextLong(100000, 1000000), user, Currency.RUB, AccountType.DEBIT, 100);
+        account = new Account(BigDecimal.ZERO, RandomUtils.nextLong(100000, 1000000), user, Currency.RUB, AccountType.DEBIT, 100);
         log.info("Create Account: " + account);
         userService.save(user);
         accountService.save(account);
@@ -64,10 +66,10 @@ public class DepositTest extends TestCase {
     //ПОЛОЖИТЕЛЬНЫЕ ТЕСТ-КЕЙСЫ
     @Test
     public void successDepositToAccount(){
-        Transaction transaction = transactionService.deposit(account, amount);
+        Transaction transaction = transactionService.deposit(account, BigDecimal.valueOf(amount));
             log.info("Make Deposit: " + transaction);
-        Assert.assertEquals("Неправильное значение баланса на Аккаунте", amount, accountService.findById(account.getId()).get().getAccount_balance(),0.1);
-        Assert.assertEquals("Неправильное значение Даты на Transaction",new Date().getTime(), transaction.getDate().getTime(),100);
+        Assert.assertEquals("Неправильное значение баланса на Аккаунте", BigDecimal.valueOf(amount), accountService.findById(account.getId()).get().getAccount_balance());
+        Assert.assertEquals("Неправильное значение Даты на Transaction", Instant.now(), transaction.getDate());
         Assert.assertEquals("Неправильное значение поля Status на Transaction","Done", transaction.getStatus());
         Assert.assertEquals("Неправильное значение поля Type на Transaction","Deposit", transaction.getType());
         Assert.assertEquals("Неправильный отправитель на Transaction",account.getAccountNumber(), transaction.getSender().getAccountNumber());

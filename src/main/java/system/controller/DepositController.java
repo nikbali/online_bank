@@ -18,6 +18,7 @@ import system.service.UserService;
 import system.utils.UserUtils;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.security.Principal;
 
 @Controller
@@ -65,7 +66,7 @@ public class DepositController {
             }
         }
         log.info("Депозит: " + amount + " RUB На Счет: " + accountNumber);
-        Transaction transaction = transactionService.deposit(account, Double.parseDouble(amount));
+        Transaction transaction = transactionService.deposit(account, BigDecimal.valueOf(Double.parseDouble(amount)));
         if(transaction != null) return new ModelAndView("redirect:/main/accounts");
         return new ModelAndView("user_list");
     }

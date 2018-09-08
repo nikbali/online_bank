@@ -18,6 +18,7 @@ import system.utils.CryptoUtils;
 import system.utils.FieldInfo;
 import system.utils.ValidationUtils;
 
+import java.time.Instant;
 import java.util.*;
 
 
@@ -94,7 +95,7 @@ public class UserServiceImpl implements UserService {
     public List<Action> findLastActions(User user) {
 
         List<Action> actions = new ArrayList<Action>();
-        TreeMap<Date, Transaction> mapa = new TreeMap<Date, Transaction>(Collections.reverseOrder());
+        TreeMap<Instant, Transaction> mapa = new TreeMap<Instant, Transaction>(Collections.reverseOrder());
         List<Account> accounts = user.getAccountList();
         for (Account account : accounts) {
             for (Transaction oper : transactionRepository.findFirst10Operation(account.getId())) {
@@ -103,9 +104,9 @@ public class UserServiceImpl implements UserService {
         }
         int count = 0;
 
-        for (Map.Entry<Date, Transaction> entry : mapa.entrySet()) {
+        for (Map.Entry<Instant, Transaction> entry : mapa.entrySet()) {
             if (count >= 8) break;
-            actions.add(new Action(entry.getValue().getType(), entry.getValue().getDescription(), new java.sql.Date(entry.getValue().getDate().getTime()).toLocalDate()));
+            actions.add(new Action(entry.getValue().getType().getName(), entry.getValue().getDescription(), entry.getValue().getDate()));
             count++;
         }
         return actions;

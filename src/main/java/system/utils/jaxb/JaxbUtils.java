@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -59,11 +60,11 @@ public final class JaxbUtils {
 
     private static history.generated.Transaction generateTransactionForXml(ObjectFactory objectFactory, Transaction transaction) {
         history.generated.Transaction transactionGenerated = objectFactory.createTransaction();
-        transactionGenerated.setAmount(transaction.getAmount());
+        transactionGenerated.setAmount(transaction.getAmount().doubleValue());
         transactionGenerated.setDate(dateToXmlGregorianDate(transaction));
         transactionGenerated.setDescription(transaction.getDescription());
-        transactionGenerated.setStatus(transaction.getStatus());
-        transactionGenerated.setType(transaction.getType());
+        transactionGenerated.setStatus(transaction.getStatus().getName());
+        transactionGenerated.setType(transaction.getType().getName());
         transactionGenerated.setSender(generateAccountForXml(objectFactory, transaction, true));
         transactionGenerated.setReciever(generateAccountForXml(objectFactory, transaction, false));
         return transactionGenerated;
@@ -82,7 +83,7 @@ public final class JaxbUtils {
         XMLGregorianCalendar xmlGregorianCalendarDate = null;
         try {
             String formatter = "yyyy-MM-dd'T'HH:mm:ss";
-            xmlGregorianCalendarDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(new SimpleDateFormat(formatter).format(transaction.getDate()));
+            xmlGregorianCalendarDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(new SimpleDateFormat(formatter).format(Date.from(transaction.getDate())));
         } catch (DatatypeConfigurationException e) {
             LOGGER.error("Error during conversion from date to xml date");
         }

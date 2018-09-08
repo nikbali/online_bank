@@ -6,6 +6,8 @@ import javax.persistence.*;
 
 import system.enums.AccountType;
 import system.enums.Currency;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -16,7 +18,7 @@ public class Account {
     @Column(name = "id")
     @JsonIgnore
     private long id;
-    private double account_balance;
+    private BigDecimal account_balance;
     private long accountNumber;
     private int bic;
 
@@ -44,7 +46,7 @@ public class Account {
 
     }
 
-    public Account(double account_balance, long accountNumber, User user, Currency currency, AccountType type, int bic) {
+    public Account(BigDecimal account_balance, long accountNumber, User user, Currency currency, AccountType type, int bic) {
         this.account_balance = account_balance;
         this.accountNumber = accountNumber;
         this.user = user;
@@ -61,11 +63,11 @@ public class Account {
         this.id = id;
     }
 
-    public double getAccount_balance() {
+    public BigDecimal getAccount_balance() {
         return account_balance;
     }
 
-    public void setAccount_balance(double account_balance) {
+    public void setAccount_balance(BigDecimal account_balance) {
         this.account_balance = account_balance;
     }
 

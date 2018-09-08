@@ -18,6 +18,7 @@ import system.service.TransactionService;
 import system.utils.UserUtils;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 
 @Controller
 @RequestMapping("/main/transfer")
@@ -96,7 +97,7 @@ public class TransferController {
         }
 
         log.info("Перервод: " + amount + " RUB со счета: " + senderAccountNumber + " на счет: " + receiverAccountNumber);
-        Transaction transaction = transactionService.transfer(senderAccount, receiverAccount, Double.parseDouble(amount));
+        Transaction transaction = transactionService.transfer(senderAccount, receiverAccount, BigDecimal.valueOf(Double.parseDouble(amount)));
         if(transaction != null) {
             return new ModelAndView("redirect:/main/accounts");
         }else{
@@ -104,7 +105,7 @@ public class TransferController {
                 model.addObject("amountErrorMsg", "Сумма должна быть больше нуля");
                 log.error("Ошибка при перерводе между своими счетами, нулевая или отрицательная сумма {}", amount);
             }
-            if(senderAccount.getAccount_balance() < Double.parseDouble(amount)){
+            if(senderAccount.getAccount_balance().compareTo(BigDecimal.valueOf(Double.parseDouble(amount))) < 0){
                 model.addObject("moneyErrorMsg", "У Вас недостаточно средств");
                 log.error("Ошибка при перерводе между своими счетами, недостаточно средств, баланс {}, сумма {}", senderAccount.getAccount_balance(), amount);
             }
@@ -175,7 +176,7 @@ public class TransferController {
             return model;
         }
         log.info("Перервод: " + amount + " RUB со счета: " + senderAccountNumber + " на счет: " + receiverAccountNumber);
-        Transaction transaction = transactionService.transfer(senderAccount, receiverAccount, Double.parseDouble(amount));
+        Transaction transaction = transactionService.transfer(senderAccount, receiverAccount, BigDecimal.valueOf(Double.parseDouble(amount)));
         if(transaction != null) {
             return new ModelAndView("redirect:/main/accounts");
         }else{
@@ -183,7 +184,7 @@ public class TransferController {
                 model.addObject("amountErrorMsg", "Сумма должна быть больше нуля");
                 log.error("Ошибка при перерводе между клиентами, нулевая или отрицательная сумма {}", amount);
             }
-            if(senderAccount.getAccount_balance() < Double.parseDouble(amount)){
+            if(senderAccount.getAccount_balance().compareTo(BigDecimal.valueOf(Double.parseDouble(amount))) < 0){
                 model.addObject("moneyErrorMsg", "У Вас недостаточно средств");
                 log.error("Ошибка при перерводе между клиентами, недостаточно средств, баланс {}, сумма {}", senderAccount.getAccount_balance(), amount);
             }

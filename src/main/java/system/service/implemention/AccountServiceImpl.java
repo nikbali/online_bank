@@ -13,6 +13,7 @@ import system.repository.AccountRepository;
 import system.service.AccountService;
 import system.service.UserService;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +39,7 @@ public class AccountServiceImpl implements AccountService {
         {
             accountNumber = RandomUtils.nextLong(1000000, 1000000000);
         }
-        account.setAccount_balance(0.0);
+        account.setAccount_balance(BigDecimal.ZERO);
         account.setAccountNumber(accountNumber);
         account.setUser(user);
         account.setCurrency(Currency.RUB);

@@ -2,10 +2,15 @@ package system.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import system.enums.StatusOperation;
+import system.enums.TypeOperation;
 import system.utils.json.CustomDateSerializer;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
 
@@ -17,13 +22,21 @@ public class Transaction {
     @Column(name = "id")
     @JsonIgnore
     private long id;
-    private double amount;
+    private BigDecimal amount;
+
 
     @JsonSerialize(using = CustomDateSerializer.class)
-    private Date date;
+    private Instant date;
+
     private String description;
-    private String status;
-    private String type;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private StatusOperation status;
+
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private TypeOperation type;
 
     @ManyToOne
     @JoinColumn(name = "sender_account_id")
@@ -38,7 +51,13 @@ public class Transaction {
 
     public Transaction(){}
 
-    public Transaction(double amount, Date date, String description, String status, String type, Account sender, Account reciever) {
+    public Transaction(BigDecimal amount,
+                       Instant date,
+                       String description,
+                       StatusOperation status,
+                       TypeOperation type,
+                       Account sender,
+                       Account reciever) {
         this.amount = amount;
         this.date = date;
         this.description = description;
@@ -48,19 +67,19 @@ public class Transaction {
         this.reciever = reciever;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public Date getDate() {
+    public Instant getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 
@@ -72,19 +91,19 @@ public class Transaction {
         this.description = description;
     }
 
-    public String getStatus() {
+    public StatusOperation getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusOperation status) {
         this.status = status;
     }
 
-    public String getType() {
+    public TypeOperation getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TypeOperation type) {
         this.type = type;
     }
 
@@ -109,10 +128,10 @@ public class Transaction {
         return "Transaction{" +
                 "id=" + id +
                 ", amount=" + amount +
-                ", date=" + date +
+                ", date=" + date.toString() +
                 ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                ", type='" + type + '\'' +
+                ", status='" + status.getName() + '\'' +
+                ", type='" + type.getName() + '\'' +
                 ", sender=" + sender.getAccountNumber() +
                 ", reciever=" + reciever.getAccountNumber() +
                 '}';
@@ -124,7 +143,7 @@ public class Transaction {
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
         return id == that.id &&
-                Double.compare(that.amount, amount) == 0 &&
+                Double.compare(that.amount.doubleValue(), amount.doubleValue()) == 0 &&
                 Objects.equals(date, that.date) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(status, that.status) &&

@@ -12,6 +12,8 @@ import system.enums.Currency;
 import system.service.AccountService;
 import system.service.TransactionService;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/api")
 public class RestApiController {
@@ -47,7 +49,7 @@ public class RestApiController {
                     {
                         if (Bank.existBankByBic(Integer.parseInt(operation.getBic())))
                         {
-                            Transaction transaction = transactionService.transferToOtherBank(senderAccount, receiverAccount, operation.getAmount(), operation.getComment());
+                            Transaction transaction = transactionService.transferFromOtherBank(senderAccount, receiverAccount, BigDecimal.valueOf(operation.getAmount()), operation.getComment());
                             if (transaction != null) {
                                 responseEntity = new ResponseEntity(new Response(0, "Success!"), HttpStatus.OK);
                             } else
