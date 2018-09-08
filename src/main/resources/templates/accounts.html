@@ -112,7 +112,12 @@
                     <div class="c-state-card c-state-card--info">
                         <h4 class="c-state-card__title">№ <span th:text="${account.accountNumber}"/></h4>
                         <span class="c-state-card__number">Balance: <span
-                                th:text="${account.account_balance}"/> RUB</span>
+                                th:text="${account.account_balance}"/>  <span
+                                th:text="${account.currency}"/></span>
+                        <span class="c-state-card__number">Type: <span
+                                th:text="${account.type}"/></span>
+                        <span class="c-state-card__number">BIC: <span
+                                th:text="${account.bic}"/></span>
 
                         <div class="dropdown">
                             <a class="c-btn c-btn--secondary c-btn--outline " id="dropdownDownload"

@@ -34,15 +34,6 @@ public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(system.ApplicationWar.class);
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ModelAndView getAllUsers() {
-        ModelAndView model = new ModelAndView("user_list");
-        Iterable<User> list = userService.loadAll();
-        model.addObject("list", list);
-        return model;
-    }
-
-
     @RequestMapping(value = {"/", "index"}, method = RequestMethod.GET)
     public ModelAndView home(@RequestParam(value = "error", required = false) String error) {
         ModelAndView model = new ModelAndView("index");

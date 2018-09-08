@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import system.entity.Account;
 import system.entity.User;
+import system.enums.AccountType;
 import system.enums.Currency;
 import system.repository.AccountRepository;
 import system.service.AccountService;
@@ -43,6 +44,8 @@ public class AccountServiceImpl implements AccountService {
         account.setAccountNumber(accountNumber);
         account.setUser(user);
         account.setCurrency(Currency.RUB);
+        account.setType(AccountType.DEBIT);
+        account.setBic(100);
         accountRepository.save(account);
         return accountRepository.findByAccountNumber(account.getAccountNumber());
     }

@@ -61,5 +61,14 @@ public class ProfileController {
 
         return "profile";
     }
+    @RequestMapping(value = "/profile/edit", method = RequestMethod.GET)
+    public String toProfileEdit(HttpSession session, Model model)
+    {
+        User user = UserUtils.getUserFromSession(session);
+        model.addAttribute("user", user);
+        List<Action> actions = userService.findLastActions(user);
+        model.addAttribute("actions", actions);
+        return "profile_edit";
+    }
 
 }
