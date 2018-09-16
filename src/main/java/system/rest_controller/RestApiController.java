@@ -39,7 +39,7 @@ public class RestApiController {
         LOGGER.info("Received GET request for transfer funds from another bank to {}", operation.getToAccount());
         ResponseEntity responseEntity = null;
         //здесь будем проверять api_key, пока просто от балды написал
-        if(!api_key.equals("qwerty")) {
+        if(!api_key.equals("hello")) {
             LOGGER.error("Error API_KEY!");
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
@@ -57,7 +57,7 @@ public class RestApiController {
         Account senderAccount = accountService.findByAccountNumber(Long.parseLong(operation.getFromAccount()));
         if (receiverAccount == null) {
             LOGGER.error("Error! That Account Not Exist in our Bank.");
-            return   ResponseEntity
+            return  ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body(new Response(HttpStatus.NOT_ACCEPTABLE, "Error! That Account Not Exist in our Bank."));
         }
@@ -65,7 +65,8 @@ public class RestApiController {
         if(senderAccount == null){
             senderAccount = new Account();
             senderAccount.setCurrency(currency);
-            senderAccount.setBic(Integer.parseInt(operation.getBic()));
+            operation.getFromAccount().substring(0,2);
+            senderAccount.setBic(Integer.parseInt(operation.getFromAccount().substring(0,2)));
             senderAccount.setAccountNumber(Long.parseLong(operation.getFromAccount()));
         }
         if(currency != receiverAccount.getCurrency()) {
@@ -75,7 +76,7 @@ public class RestApiController {
                     .body(new Response(HttpStatus.NOT_ACCEPTABLE, "Error! Currency is incorrectly specified!"));
         }
 
-        if (!Bank.existBankByBic(Integer.parseInt(operation.getBic()))) {
+        if (!Bank.existBankByBic(Integer.parseInt(operation.getFromAccount().substring(0,2)))) {
             LOGGER.error("Error! Unknown BIC for transfer to {}", operation.getToAccount());
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
@@ -122,7 +123,6 @@ public class RestApiController {
             try {
                 Long.parseLong(operation.getFromAccount());
                 Long.parseLong(operation.getToAccount());
-                Integer.parseInt(operation.getBic());
                 Currency.valueOf(operation.getCurrency());
                 //ВСЕ ОК
                 return true;

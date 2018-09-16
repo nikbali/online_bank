@@ -4,7 +4,14 @@ package system.enums;
  * Enum в котором будем хранить информацию о сторонних банках
  */
 public enum Bank {
-    FIRST_BANK("http://localhost:8080/", 200);
+    OUR_BANK("http://localhost:8080/", 10),
+    BANK2("http://localhost:8080/", 20),
+    BANK3("http://localhost:8080/", 30),
+    BANK4("http://localhost:8080/", 40),
+    BANK5("http://localhost:8080/", 50),
+    BANK6("http://localhost:8080/", 60),
+    BANK7("http://localhost:8080/", 70);
+
 
     private String url;
     private int bic;

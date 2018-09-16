@@ -4,18 +4,16 @@ public class Operation {
     private long id;
     private String fromAccount;
     private String toAccount;
-    private String bic;
     private String currency;
     private String comment;
     private double amount;
 
     public Operation(){
     }
-    public Operation(long id, String fromAccount, String toAccount, String bic, String currency, String comment, double amount) {
+    public Operation(long id, String fromAccount, String toAccount, String currency, String comment, double amount) {
         this.id = id;
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
-        this.bic = bic;
         this.comment = comment;
         this.currency = currency;
         this.amount = amount;
@@ -51,14 +49,6 @@ public class Operation {
 
     public void setToAccount(String toAccount) {
         this.toAccount = toAccount;
-    }
-
-    public String getBic() {
-        return bic;
-    }
-
-    public void setBic(String bic) {
-        this.bic = bic;
     }
 
     public String getCurrency() {
