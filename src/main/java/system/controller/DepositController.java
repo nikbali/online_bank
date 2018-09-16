@@ -56,6 +56,28 @@ public class DepositController {
     {
         log.info("Параметры amount: "+amount+" accountNumber: " + accountNumber );
         User user  = UserUtils.getUserFromSession(session);
+        ModelAndView model = new ModelAndView("deposit");
+        model.addObject("user", user);
+        model.addObject("accountExist", true);
+        model.addObject("accountNumber", Long.parseLong(accountNumber));
+
+        String error_message = "";
+
+        try{
+            if(BigDecimal.valueOf(Double.parseDouble(amount)).compareTo(BigDecimal.ZERO) <= 0)
+            {
+                error_message = "Сумма пополнения должна быть больше нуля";
+                log.info("Ошибка при пополнении  "+amount+" на  accountNumber: " + accountNumber + " :" + error_message);
+                return model.addObject("errorTrue", true).addObject("textError", error_message);
+            }
+        }
+        catch (NumberFormatException ex)
+        {
+            error_message = "Введенно некорректное значение в поле Amount";
+            log.info("Ошибка при пополнении  "+amount+" на  accountNumber: " + accountNumber + " :" + error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
+        }
+
         Account account = null;
         for (Account acc : user.getAccountList())
         {
@@ -65,9 +87,20 @@ public class DepositController {
                 break;
             }
         }
-        log.info("Депозит: " + amount + " RUB На Счет: " + accountNumber);
+        if(account == null) {
+            error_message = "У вас нет Счета с таким номером, попробуйте снова";
+            log.info("Ошибка при пополнении  "+amount+" на  accountNumber: " + accountNumber + " :" + error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
+        }
         Transaction transaction = transactionService.deposit(account, BigDecimal.valueOf(Double.parseDouble(amount)));
-        if(transaction != null) return new ModelAndView("redirect:/main/accounts");
-        return new ModelAndView("user_list");
+        if(transaction == null) {
+            error_message = "Ошибка на сервере, попробуйте позже";
+            log.info("Ошибка при пополнении  "+amount+" на  accountNumber: " + accountNumber + " :" + error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
+        }
+
+        log.info("Пополнение  "+amount+" на  accountNumber: " + accountNumber );
+        return model.addObject("errorFalse", true);
+
     }
 }
