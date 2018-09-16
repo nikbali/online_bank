@@ -17,6 +17,8 @@ import system.entity.Transaction;
 import system.entity.User;
 import system.enums.AccountType;
 import system.enums.Currency;
+import system.enums.StatusOperation;
+import system.enums.TypeOperation;
 import system.service.AccountService;
 import system.service.TransactionService;
 import system.service.UserService;
@@ -69,9 +71,8 @@ public class DepositTest extends TestCase {
         Transaction transaction = transactionService.deposit(account, BigDecimal.valueOf(amount));
             log.info("Make Deposit: " + transaction);
         Assert.assertEquals("Неправильное значение баланса на Аккаунте", BigDecimal.valueOf(amount), accountService.findById(account.getId()).get().getAccount_balance());
-        Assert.assertEquals("Неправильное значение Даты на Transaction", Instant.now(), transaction.getDate());
-        Assert.assertEquals("Неправильное значение поля Status на Transaction","Done", transaction.getStatus());
-        Assert.assertEquals("Неправильное значение поля Type на Transaction","Deposit", transaction.getType());
+        Assert.assertEquals("Неправильное значение поля Status на Transaction",StatusOperation.DONE, transaction.getStatus());
+        Assert.assertEquals("Неправильное значение поля Type на Transaction",TypeOperation.DEPOSIT, transaction.getType());
         Assert.assertEquals("Неправильный отправитель на Transaction",account.getAccountNumber(), transaction.getSender().getAccountNumber());
         Assert.assertEquals("Неправильный получатель на Transaction",account.getAccountNumber(), transaction.getReciever().getAccountNumber());
 
