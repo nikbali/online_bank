@@ -3,8 +3,12 @@
 <body>
 <div th:fragment="account" class="col-md-8">
         <div class="c-state-card c-state-card--info">
-            <h4 class="c-state-card__title">№ <span th:text="${acc.accountNumber}"/></h4>
-            <span class="c-state-card__number">Balance: <span th:text="${acc.account_balance}"/> RUB</span>
+            <h4 class="c-state-card__title">№ <span th:text="${account.accountNumber}"/></h4>
+            <span class="c-state-card__number">Balance: <span
+                    th:text="${account.account_balance}"/>  <span
+                    th:text="${account.currency}"/></span>
+            <span class="c-state-card__number">Type: <span
+                    th:text="${account.type}"/></span>
 
             <div class="dropdown">
                 <a class="c-btn c-btn--secondary c-btn--outline "  id="dropdownDownload" data-toggle="dropdown">

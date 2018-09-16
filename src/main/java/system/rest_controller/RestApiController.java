@@ -55,7 +55,9 @@ public class RestApiController {
         Currency currency = Currency.valueOf(operation.getCurrency());
         Account receiverAccount = accountService.findByAccountNumber(Long.parseLong(operation.getToAccount()));
         Account senderAccount = accountService.findByAccountNumber(Long.parseLong(operation.getFromAccount()));
-        if (receiverAccount == null) {
+
+        //здесь на всякий еще проверяем первые разряды, чтобы наверянка перевод был на нужные счета
+        if (receiverAccount == null || !operation.getToAccount().substring(0,2).equals(String.valueOf(Bank.OUR_BANK.getBic()))) {
             LOGGER.error("Error! That Account Not Exist in our Bank.");
             return  ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
@@ -77,10 +79,10 @@ public class RestApiController {
         }
 
         if (!Bank.existBankByBic(Integer.parseInt(operation.getFromAccount().substring(0,2)))) {
-            LOGGER.error("Error! Unknown BIC for transfer to {}", operation.getToAccount());
+            LOGGER.error("Error! Unknown Identificator Bank for transfer to Account {}", operation.getToAccount());
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
-                    .body(new Response(HttpStatus.NOT_ACCEPTABLE, "Error! BIC is not acceptable!"));
+                    .body(new Response(HttpStatus.NOT_ACCEPTABLE, "Error! Unknown Identificator Bank(first two digits in your Account Number)!"));
         }
         Transaction transaction = transactionService.transferFromOtherBank(senderAccount, receiverAccount, BigDecimal.valueOf(operation.getAmount()), operation.getComment());
         if (transaction == null) {
@@ -105,7 +107,7 @@ public class RestApiController {
     public ResponseEntity<?> getUser(@PathVariable("account_number") long account_number) {
         LOGGER.info("Fetching Account with account_number {}", account_number);
         Account account = accountService.findByAccountNumber(account_number);
-        if (account == null) {
+        if (account == null || !String.valueOf(account_number).substring(0,2).equals(String.valueOf(Bank.OUR_BANK.getBic()))) {
             LOGGER.error("Account with account_number: {} not found.", account_number);
             return new ResponseEntity(new Response(HttpStatus.NOT_FOUND,"Account with account_number: " + account_number
                     + " not found"), HttpStatus.NOT_FOUND);
