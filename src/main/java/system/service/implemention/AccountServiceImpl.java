@@ -35,10 +35,15 @@ public class AccountServiceImpl implements AccountService {
     public Account createAccount(User user) {
         Account account = new Account();
 
-        long accountNumber = RandomUtils.nextLong(1000000, 1000000000);
+        long accountNumber = RandomUtils.nextLong(10000000, 100000000);
+        String accountNumberString = "10" + Long.toString(accountNumber);
+        accountNumber = Long.parseLong(accountNumberString);
+
         while (accountRepository.existsByAccountNumber(accountNumber))
         {
-            accountNumber = RandomUtils.nextLong(1000000, 1000000000);
+            accountNumber = RandomUtils.nextLong(10000000, 100000000);
+            accountNumberString = "10" + Long.toString(accountNumber);
+            accountNumber = Long.parseLong(accountNumberString);
         }
         account.setAccount_balance(BigDecimal.ZERO);
         account.setAccountNumber(accountNumber);
