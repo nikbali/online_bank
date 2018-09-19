@@ -31,24 +31,22 @@ public class UserFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest)servletRequest;
-        Enumeration<String> params = servletRequest.getParameterNames();
         HttpSession session = request.getSession();
         User user = UserUtils.getUserFromSession(session);
-
-        if(user != null)
-        {
+        boolean accses = false;
+        if(user != null ) {
             Set<UserRole> roles = user.getUserRoles();
-            for (UserRole ur : roles)
-            {
-                if(ur.getRole().getName().equals("CLIENT"))filterChain.doFilter(servletRequest, servletResponse);
+            for (UserRole ur : roles) {
+                if(ur.getRole().getName().equals("CLIENT"))accses = true;
             }
-
         }
-
-        log.info("WebFilter is invoked .");
-        HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-        httpResponse.sendRedirect("/index");
-
+        if(accses){
+            filterChain.doFilter(servletRequest, servletResponse);
+        } else {
+            log.info("User WebFilter is invoked .");
+            HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
+            httpResponse.sendRedirect("/index");
+        }
     }
 
     @Override

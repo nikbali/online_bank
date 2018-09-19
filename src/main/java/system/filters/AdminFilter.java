@@ -2,6 +2,7 @@ package system.filters;
 
 import org.slf4j.LoggerFactory;
 import system.entity.User;
+import system.entity.UserRole;
 import system.utils.UserUtils;
 
 import javax.servlet.*;
@@ -10,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-
+import java.util.Set;
 
 
 @WebFilter(urlPatterns = "/admin/*")
@@ -27,14 +28,17 @@ public class AdminFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest)servletRequest;
         HttpSession session = request.getSession();
         User user = UserUtils.getUserFromSession(session);
-
-        if(user != null)
-        {
-            filterChain.doFilter(servletRequest, servletResponse);
+        boolean accses = false;
+        if(user != null ) {
+            Set<UserRole> roles = user.getUserRoles();
+            for (UserRole ur : roles) {
+                if(ur.getRole().getName().equals("ADMIN"))accses = true;
+            }
         }
-        else
-        {
-            log.info("AdminFilter is invoked .");
+        if(accses){
+            filterChain.doFilter(servletRequest, servletResponse);
+        } else {
+            log.info("Admin WebFilter is invoked .");
             HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
             httpResponse.sendRedirect("/index");
         }
