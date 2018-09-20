@@ -18,7 +18,6 @@
 <body>
 
 <div class="o-page">
-
     <main class="o-page__content">
         <header class="c-navbar u-mb-medium">
             <nav class="c-navbar__nav collapse" id="main-nav">
@@ -80,14 +79,12 @@
                 </div>
             </div>
 
-
-
             <div class="c-dropdown dropdown">
                 <div class="c-avatar c-avatar--xsmall dropdown-toggle" id="dropdownMenuAvatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
               <span class="user-img">
-                          <span class="user-img"><img class="c-avatar__img" src="/img/user.jpg" width="40">
-                          <span class="status online"></span>
-                          </span>
+                  <span class="user-img"><img class="c-avatar__img" src="/img/user.jpg" width="40">
+                      <span class="status online"></span>
+                  </span>
               </span>
                     <span th:text="' ' + ${user.login}">User</span>
                 </div>
@@ -99,54 +96,81 @@
         </header>
 
         <div class="container">
-            <form th:action="@{/main/transfer/toMyAccount}" method="post">
-                <!--Sender-->
-                <!-- IF Account Exist -->
-                <p th:text="${accountsNumberErrorMsg}"/>
-                <div th:if="${accountsExist}">
-                    <p>Счет списания средств:</p>
-                    <div th:text="${senderAccountNumber}">---</div>
-                    <input type="hidden"  th:value="${senderAccountNumber}" name="senderAccountNumber"/>
-                </div>
-
-                <!-- ELSE -->
-                <div th:unless="${accountsExist}">
-                    <p>Счет списания средств:</p>
-                    <div>
-                        <select th:value="${senderAccountNumber}" name="senderAccountNumber" id="senderAccountNumber">
-                            <option th:each="acc : ${all}"
-                                    th:value="${acc.accountNumber}"
-                                    th:text="${acc.accountNumber}">----</option>
-                        </select>
+            <div class="col-md-4">
+                <div class="c-card">
+                    <h4 class="u-mb-small">Deposit</h4>
+                    <!-- IF Success transfer-->
+                    <div th:if="${errorFalse}" class="c-alert c-alert--success u-mb-medium">
+                            <span class="c-alert__icon">
+                              <i class="feather icon-check"></i>
+                            </span>
+                        <div class="c-alert__content">
+                            <h4 class="c-alert__title">Success!</h4>
+                        </div>
                     </div>
-                </div>
+                    <!-- IF Error transfer-->
+                    <div th:if="${errorTrue}" class="c-alert c-alert--danger">
+                            <span class="c-alert__icon">
+                              <i class="feather icon-slash"></i>
+                            </span>
 
-                <!--Receiver-->
-                <div th:if="${accountsExist}">
-                    <p>Укажите счет для пополнения:</p>
-                    <div th:text="${receiverAccountNumber}">---</div>
-                    <input type="hidden"  th:value="${receiverAccountNumber}" name="receiverAccountNumber"/>
-                </div>
-
-                <!-- ELSE -->
-                <div th:unless="${accountsExist}">
-                    <p>Укажите счет для пополнения:</p>
-                    <div>
-                        <select th:value="${receiverAccountNumber}" name="receiverAccountNumber" id="receiverAccountNumber">
-                            <option th:each="acc : ${all}"
-                                    th:value="${acc.accountNumber}"
-                                    th:text="${acc.accountNumber}">----</option>
-                        </select>
+                        <div class="c-alert__content">
+                            <h4 class="c-alert__title">Error!</h4>
+                            <p th:text="${textError}">Текст ошибки</p>
+                        </div>
                     </div>
-                </div>
+                    <form th:action="@{/main/transfer/toMyAccount}" method="post">
+                        <!--Sender-->
+                        <!-- IF Account Exist -->
+                        <div th:if="${accountsExist}" class="c-field">
+                            <label class="c-field__label" for="senderAccount">Счет списания средств:</label>
+                            <div th:text="${accountsExist}">---</div>
+                            <input th:value="${senderAccountNumber}" type="hidden" id="senderAccount"  name="senderAccountNumber">
+                        </div>
 
-                <p>Введите сумму (RUB):</p>
-                <p th:text="${amountErrorMsg}"/>
-                <p th:text="${moneyErrorMsg}"/>
-                <input th:value="${amount}" type="text" name="amount" aria-label="RUB"/>
-                <br>
-                <input class="c-btn c-btn--info" type="submit"  value="Transfer"/>
-            </form>
+                        <!-- ELSE -->
+                        <div class="c-field" th:unless="${accountsExist}">
+                            <label class="c-field__label" for="account_select">Счет списания средств:</label>
+                            <div class="c-select">
+                                <select class="c-select__input" th:value="${senderAccountNumber}" name="senderAccountNumber" id="account_select">
+                                    <option th:each="acc : ${all}"
+                                            th:value="${acc.accountNumber}"
+                                            th:text="${acc.accountNumber}">----</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!--Receiver-->
+                        <!-- IF Account Exist -->
+                        <div th:if="${accountsExist}" class="c-field">
+                            <label class="c-field__label" for="receiverAccount">Счет для пополнения:</label>
+                            <div th:text="${receiverAccountNumber}">---</div>
+                            <input th:value="${receiverAccountNumber}" type="hidden" id="receiverAccount"  name="receiverAccountNumber">
+                        </div>
+
+                        <!-- ELSE -->
+                        <div class="c-field" th:unless="${accountsExist}">
+                            <label class="c-field__label" for="receiver_account_select">Счет для пополнения:</label>
+                            <div class="c-select">
+                                <select class="c-select__input" th:value="${receiverAccountNumber}" name="receiverAccountNumber" id="receiver_account_select">
+                                    <option th:each="acc : ${all}"
+                                            th:value="${acc.accountNumber}"
+                                            th:text="${acc.accountNumber}">----</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="c-field">
+                            <label class="c-field__label" for="amount">Amount:</label>
+                            <input th:value="${amount}" name="amount" class="c-input" type="text" id="amount" placeholder="Enter here amount for deposit">
+                        </div>
+                        <div class="c-field">
+                            <br>
+                            <input class="c-btn c-btn--info" type="submit"  value="Transfer"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
     </main>
