@@ -67,7 +67,7 @@ public class TransferController {
         }else{
             model.addAttribute("accountsExist", false);
         }
-        model.addAttribute("amount", "0");
+        model.addAttribute("amount", "");
         model.addAttribute("user", user);
         model.addAttribute("all", user.getAccountList());
         return "toMyAccount";
@@ -79,7 +79,6 @@ public class TransferController {
                                          @ModelAttribute("receiverAccountNumber") String receiverAccountNumber,
                                          HttpSession session){
         ModelAndView model = new ModelAndView("redirect:/main/transfer/toMyAccount");
-        log.info("Параметры amount: " + amount + " senderAccountNumber: " + senderAccountNumber + " receiverAccountNumber: " + receiverAccountNumber);
         User user  = UserUtils.getUserFromSession(session);
         model.addObject("user", user);
         String error_message = "";
@@ -117,12 +116,12 @@ public class TransferController {
         }
 
         if(senderAccount == null) {
-            error_message = "У вас нет счета с таким номером, попробуйте снова";
+            error_message = "У вас нет cчета с номером " + senderAccountNumber + ", попробуйте снова";
             log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
             return model.addObject("errorTrue", true).addObject("textError", error_message);
         }
         if(receiverAccount == null) {
-            error_message = "У вас нет счета с таким номером, попробуйте снова";
+            error_message = "У вас нет cчета с номером " + receiverAccountNumber + ", попробуйте снова";
             log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
             return model.addObject("errorTrue", true).addObject("textError", error_message);
         }
@@ -148,30 +147,26 @@ public class TransferController {
             log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
             return model.addObject("errorTrue", true).addObject("textError", error_message);
         }
-        log.info("Перервод: " + amount + " RUB со счета: " + senderAccountNumber + " на счет: " + receiverAccountNumber);
+        log.info("Перевод: {} RUB со счета: {} на счет: {}", amount, senderAccountNumber, receiverAccountNumber);
         return model.addObject("errorFalse", true);
     }
 
     @RequestMapping(value= "/toClient", method=RequestMethod.GET)
     public String openTransferFormTest1(HttpSession session, Model model,
-                @RequestParam(value = "amountErrorMsg", required = false) String amountErrorMsg,
-                @RequestParam(value = "moneyErrorMsg", required = false) String moneyErrorMsg,
-                @RequestParam(value = "accountsNumberErrorMsg", required = false) String accountsNumberErrorMsg,
-                @RequestParam(value = "receiverErrorMsg", required = false) String receiverErrorMsg){
+                                        @RequestParam(value = "errorTrue", required = false) Boolean errorTrue,
+                                        @RequestParam(value = "errorFalse", required = false) Boolean errorFalse,
+                                        @RequestParam(value = "textError", required = false) String textError){
         User user = UserUtils.getUserFromSession(session);
         String senderAccountNumber = "";
         String receiverAccountNumber = "";
-        if (amountErrorMsg != null) {
-            model.addAttribute("amountErrorMsg", amountErrorMsg);
+        if (errorTrue != null) {
+            model.addAttribute("errorTrue", errorTrue);
         }
-        if (moneyErrorMsg != null) {
-            model.addAttribute("moneyErrorMsg", moneyErrorMsg);
+        if (errorFalse != null) {
+            model.addAttribute("errorFalse", errorFalse);
         }
-        if (accountsNumberErrorMsg != null) {
-            model.addAttribute("accountsNumberErrorMsg", accountsNumberErrorMsg);
-        }
-        if (receiverErrorMsg != null) {
-            model.addAttribute("receiverErrorMsg", receiverErrorMsg);
+        if (textError != null) {
+            model.addAttribute("textError", textError);
         }
         model.addAttribute("user", user);
         model.addAttribute("senderAccountNumber", senderAccountNumber);
@@ -182,7 +177,7 @@ public class TransferController {
         }else{
             model.addAttribute("accountsExist", false);
         }
-        model.addAttribute("amount", "0");
+        model.addAttribute("amount", "");
         model.addAttribute("user", user);
         model.addAttribute("all", user.getAccountList());
         return "toClient";
@@ -194,8 +189,25 @@ public class TransferController {
                                           @ModelAttribute("receiverAccountNumber") String receiverAccountNumber,
                                           HttpSession session){
         ModelAndView model = new ModelAndView("redirect:/main/transfer/toClient");
-        log.info("Параметры amount: " + amount + " senderAccountNumber: " + senderAccountNumber + " receiverAccountNumber: " + receiverAccountNumber);
         User user  = UserUtils.getUserFromSession(session);
+        //model.addObject("user", user);
+        String error_message = "";
+
+        try{
+            if(BigDecimal.valueOf(Double.parseDouble(amount)).compareTo(BigDecimal.ZERO) <= 0)
+            {
+                error_message = "Сумма перевода должна быть больше нуля";
+                log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+                return model.addObject("errorTrue", true).addObject("textError", error_message);
+            }
+        }
+        catch (NumberFormatException ex)
+        {
+            error_message = "Введенно некорректное значение в поле Amount";
+            log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
+        }
+
         Account senderAccount = null;
         for (Account acc : user.getAccountList()){
             if(acc.getAccountNumber() == Long.parseLong(senderAccountNumber)){
@@ -203,33 +215,43 @@ public class TransferController {
                 break;
             }
         }
-        Account receiverAccount = null;
-        receiverAccount = accountService.findByAccountNumber(Long.parseLong(receiverAccountNumber));
-        if(receiverAccount == null){
-            model.addObject("receiverErrorMsg", "Такого счета не существует");
-            log.error("Ошибка при перерводе между клиентами, получателя не существует; receiverAccountNumber == {}", receiverAccountNumber);
-            return model;
+
+        Account receiverAccount = accountService.findByAccountNumber(Long.parseLong(receiverAccountNumber));
+
+        if(senderAccount == null) {
+            error_message = "У вас нет cчета с номером " + senderAccountNumber + ", попробуйте снова";
+            log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
         }
-        log.info("Перервод: " + amount + " RUB со счета: " + senderAccountNumber + " на счет: " + receiverAccountNumber);
+        if(receiverAccount == null) {
+            error_message = "Cчета с номером " + receiverAccountNumber + " не существует, попробуйте снова";
+            log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
+        }
+        if(Double.parseDouble(amount) <= 0){
+            error_message = "Amount должен быть больше нуля";
+            log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
+        }
+        if(senderAccount.getAccount_balance().compareTo(BigDecimal.valueOf(Double.parseDouble(amount))) < 0){
+            error_message = "На счете " + senderAccountNumber + "  недостаточно средств";
+            log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
+        }
+        if(senderAccount == receiverAccount){
+            error_message = "Счета не должны совпадать";
+            log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
+        }
+
         Transaction transaction = transactionService.transfer(senderAccount, receiverAccount, BigDecimal.valueOf(Double.parseDouble(amount)));
-        if(transaction != null) {
-            return new ModelAndView("redirect:/main/accounts");
-        }else{
-            if(Double.parseDouble(amount) <= 0){
-                model.addObject("amountErrorMsg", "Сумма должна быть больше нуля");
-                log.error("Ошибка при перерводе между клиентами, нулевая или отрицательная сумма {}", amount);
-            }
-            if(senderAccount.getAccount_balance().compareTo(BigDecimal.valueOf(Double.parseDouble(amount))) < 0){
-                model.addObject("moneyErrorMsg", "У Вас недостаточно средств");
-                log.error("Ошибка при перерводе между клиентами, недостаточно средств, баланс {}, сумма {}", senderAccount.getAccount_balance(), amount);
-            }
-            if(senderAccount.getAccountNumber() == receiverAccount.getAccountNumber()){
-                model.addObject("accountsNumberErrorMsg", "Аккаунты не должны совпадать");
-                log.error("Ошибка при перерводе между клиентами, senderAccount {} == receiverAccount {}", senderAccount.getAccountNumber(), receiverAccount.getAccountNumber());
-            }
-            log.error("номер получателя: {}", receiverAccount.getAccountNumber());
-            return model;
+        if(transaction == null) {
+            error_message = "Ошибка на сервере, попробуйте позже";
+            log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
         }
+        log.info("Перевод: {} RUB со счета: {} на счет: {}", amount, senderAccountNumber, receiverAccountNumber);
+        return model.addObject("errorFalse", true);
     }
 
     @RequestMapping(value = "/toAnotherBank", method = RequestMethod.GET)

@@ -98,7 +98,7 @@
         <div class="container">
             <div class="col-md-4">
                 <div class="c-card">
-                    <h4 class="u-mb-small">Deposit</h4>
+                    <h4 class="u-mb-small">Перевод между своими счетами</h4>
                     <!-- IF Success transfer-->
                     <div th:if="${errorFalse}" class="c-alert c-alert--success u-mb-medium">
                             <span class="c-alert__icon">
@@ -161,12 +161,12 @@
                         </div>
 
                         <div class="c-field">
-                            <label class="c-field__label" for="amount">Amount:</label>
-                            <input th:value="${amount}" name="amount" class="c-input" type="text" id="amount" placeholder="Enter here amount for deposit">
+                            <label class="c-field__label" for="amount">Сумма:</label>
+                            <input th:value="${amount}" name="amount" class="c-input" type="text" id="amount" placeholder="Введите здесь сумму для перевода">
                         </div>
                         <div class="c-field">
                             <br>
-                            <input class="c-btn c-btn--info" type="submit"  value="Transfer"/>
+                            <input class="c-btn c-btn--info" type="submit"  value="Перевод"/>
                         </div>
                     </form>
                 </div>
