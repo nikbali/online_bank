@@ -20,7 +20,11 @@ import system.utils.UserUtils;
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+/**
+ * Контроллер для Регистрации и Авторизации в систему
+ */
 
 @Controller
 @RequestMapping("/")
@@ -48,23 +52,39 @@ public class UserController {
     @RequestMapping(params = "sign-in", value="/signin", method=RequestMethod.POST)
     public ModelAndView auth(@ModelAttribute("user") User user, HttpSession session)
     {
+        try{
+            User cur_user = userService.findByLogin(user.getLogin());
+            //проверка логина
+            if (cur_user == null) {
+                log.error(String.format("Ошибка при авторизации! Не найден пользователь с логином: %s! ", cur_user.getLogin()));
+                return new ModelAndView("redirect:/").addObject("error", true);
+            }
+            //проверка пароля
+            if (!cur_user.getPassword().equals(CryptoUtils.getHash(user.getPassword())))
+            {
+                log.error(String.format("Ошибка при авторизации пользователя: %s! Введен неверный пароль", cur_user.getLogin()));
+                return new ModelAndView("redirect:/").addObject("error", true);
+            }
 
-        try {
-            if (userService.checkLoginExists(user.getLogin())) {
-                User cur_user = userService.findByLogin(user.getLogin());
-                if (cur_user.getPassword().equals(CryptoUtils.getHash(user.getPassword())))
-                {
+            //проверка админской роли
+            Set<UserRole> roles = cur_user.getUserRoles();
+            for (UserRole ur : roles) {
+                if(ur.getRole().getName().equals("ADMIN")){
+                    log.info(String.format("Пользователь: %s! Вошел в систему как Администратор", cur_user.getLogin()));
                     session.setAttribute("user", cur_user);
-                    return new ModelAndView("redirect:/main");
+                    return new ModelAndView("redirect:/admin");
                 }
             }
+            log.info(String.format("Пользователь: %s! Вошел в систему как Клиент", cur_user.getLogin()));
+            session.setAttribute("user", cur_user);
+            return new ModelAndView("redirect:/main");
         }
         catch (Exception ex)
         {
+            log.error("Возникла исключительная ситуация при попытке авторизации.",ex);
+            UserUtils.deleteUserFromSession(session);
             return new ModelAndView("redirect:/").addObject("error", true);
         }
-        log.info("Error during signing in.");
-        return new ModelAndView("redirect:/").addObject("error", true);
     }
 
     @RequestMapping(params = "sign-up", value="/signin", method=RequestMethod.POST)
