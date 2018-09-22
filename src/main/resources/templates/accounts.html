@@ -110,7 +110,7 @@
         $.ajax(
             {
                 type: "GET",
-                url: '/accounts/add',
+                url: '/main/accounts/add',
                 async: false,
                 success: function (text) {
                     response = text;
@@ -135,7 +135,7 @@
         $.ajax(
             {
                 type: "GET",
-                url: "/accounts/exportXML?accountNumber=" + id,
+                url: "/main/accounts/exportXML?accountNumber=" + id,
                 async: false,
                 success: function (text,textstatus,xhr) {
                     var a = window.document.createElement('a');
@@ -156,7 +156,7 @@
     }
     function toHistory(element) {
         var id = element.parentElement.id;
-        location.href = "/accounts/history?account_number="+ id;
+        location.href = "/main/accounts/history?account_number="+ id;
     }
 
     function exportCSV(element) {
@@ -164,7 +164,7 @@
         $.ajax(
             {
                 type: "GET",
-                url: "/accounts/exportCSV?accountNumber=" + id,
+                url: "/main/accounts/exportCSV?accountNumber=" + id,
                 async: false,
                 success: function (text,textstatus,xhr) {
                     var a = window.document.createElement('a');
@@ -188,7 +188,7 @@
         $.ajax(
             {
                 type: "GET",
-                url: "/accounts/exportJSON?accountNumber=" + id,
+                url: "/main/accounts/exportJSON?accountNumber=" + id,
                 async: false,
                 success: function (text,textstatus,xhr) {
                     var a = window.document.createElement('a');

@@ -68,7 +68,7 @@
                             </thead>
 
                             <tbody>
-                            <tr class="c-table__row" th:each="operation : ${operations}">
+                            <tr class="c-table__row" th:each="operation : ${page.content}">
                                 <td class="c-table__cell" th:text="${operation.date}">===</td>
                                 <td class="c-table__cell" th:text="${operation.sender.accountNumber}">===</td>
                                 <td class="c-table__cell" th:text="${operation.reciever.accountNumber}">===</td>
@@ -80,13 +80,22 @@
                             </tbody>
                         </table>
                     </div>
-
+                    <!-- ======================= PAGGINATION =======================-->
                     <ul class="c-pagination u-mb-medium">
-                        <li><a class="c-pagination__link" onclick="alert('Разработчики пока не сделали, но они трудятся не покладая рук! Поверь!');"><i class="feather icon-chevron-left"></i> </a></li>
-                        <li><a class="c-pagination__link is-active" onclick="alert('Разработчики пока не сделали, но они трудятся не покладая рук! Поверь!');">1</a></li>
-                        <li><a class="c-pagination__link" onclick="alert('Разработчики пока не сделали, но они трудятся не покладая рук! Поверь!');">2</a></li>
-                        <li><a class="c-pagination__link" onclick="alert('Разработчики пока не сделали, но они трудятся не покладая рук! Поверь!');"> <i class="feather icon-chevron-right"></i> </a></li>
+                        <li th:if="${page.hasPrevious()}">
+                            <a th:href="@{/accounts/history(account_number=${account.accountNumber}, page=${page.number-1},size=${page.size})}" class="c-pagination__link"><i class="feather icon-chevron-left"></i> </a>
+                        </li>
+
+                        <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
+                            <li th:if="${page.number == i}"><a class="c-pagination__link is-active">[[${i}+1]]</a></li>
+                            <li th:unless="${page.number == i}"><a class="c-pagination__link" th:href="@{/accounts/history(account_number=${account.accountNumber},page=${i},size=${page.size})}">[[${i}+1]]</a></li>
+                        </th:block>
+
+                        <li th:if="${page.hasNext()}">
+                            <a th:href="@{/accounts/history(account_number=${account.accountNumber}, page=${page.number+1},size=${page.size})}" class="c-pagination__link"><i class="feather icon-chevron-right"></i> </a>
+                        </li>
                     </ul>
+
                 </div>
             </div>
 

@@ -5,6 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +19,7 @@ import org.supercsv.prefs.CsvPreference;
 import system.entity.Account;
 import system.entity.Transaction;
 import system.entity.User;
+import system.exceptions.AccountNotFoundException;
 import system.repository.TransactionRepository;
 import system.service.AccountExporterService;
 import system.service.AccountService;
@@ -24,6 +28,7 @@ import system.service.implemention.AccountExporterImpl;
 import system.utils.UserUtils;
 import system.utils.jaxb.JaxbUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -32,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/accounts")
+@RequestMapping("/main/accounts")
 public class AccountsController {
 
     @Autowired
@@ -54,7 +59,7 @@ public class AccountsController {
             Account account = accountService.createAccount(user);
             user.getAccountList().add(account);
             model.addAttribute("acc", account);
-            res.setStatus(201);
+            res.setStatus(200);
             return "fragments :: account";
         }
     }
@@ -128,9 +133,17 @@ public class AccountsController {
         Account account = accountService.findByAccountNumber(Long.parseLong(accountNumber));
         return transactionRepository.findOperationsForPaddination(account.getId(), pageNumber*10, 10);
     }
+    private long  getTransactionsCount(String accountNumber) {
+        Account account = accountService.findByAccountNumber(Long.parseLong(accountNumber));
+        return transactionRepository.countOperations(account.getId());
+    }
+
 
     @RequestMapping(value = {"/history"}, method = RequestMethod.GET)
-    public ModelAndView getHistoryOperationView(@RequestParam(value = "account_number", required = false) String account_number, HttpSession session, @RequestParam(value = "pageNumber", defaultValue = "0")String pageNumber) {
+    public ModelAndView getHistoryOperationView(@RequestParam(value = "account_number", required = false) String account_number,
+                                                @PageableDefault(size = 10) Pageable pageable,
+                                                HttpSession session )
+    {
         ModelAndView model = new ModelAndView("history_operations");
         if (StringUtils.isEmpty(account_number)) {
             throw new RuntimeException("Обязательный параметр account_number не заполнен!");
@@ -139,17 +152,23 @@ public class AccountsController {
         Account account = accountService.findByAccountNumber(Long.parseLong(account_number));
         if(account == null)
         {
-            throw new RuntimeException("Такой account_number не найден!");
+            throw new AccountNotFoundException("Такой account_number не найден!");
         }
+
+        Page<Transaction> page = transactionRepository.findAllOperationForAccount(account.getId(), pageable);
+
         for(Account acc : user.getAccountList()){
             if (acc.getAccountNumber() == account.getAccountNumber()) {
                 model.addObject("user", user);
                 model.addObject("account", account);
-                model.addObject("operations", this.getTransactionsListForPaggination(account_number,Integer.parseInt(pageNumber)));
+                model.addObject("page", page);
+                LOGGER.info("Переход на стрницу %s с историей операций для аккаунта = %s.", page.getNumber(), account_number);
                 return model;
             }
         }
+        LOGGER.error("Страница истории операций для заданного аккаунта недоступна.");
         return new ModelAndView("redirect:/");
     }
+
 
 }
