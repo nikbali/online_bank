@@ -18,8 +18,13 @@ public class Account {
     @Column(name = "id")
     @JsonIgnore
     private long id;
+
+    @JsonIgnore
     private BigDecimal account_balance;
+
     private long accountNumber;
+
+    @JsonIgnore
     private int bic;
 
     @Column(name = "currency")

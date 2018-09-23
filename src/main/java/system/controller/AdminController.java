@@ -1,5 +1,6 @@
 package system.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
@@ -9,6 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 import system.entity.Account;
 import system.entity.Transaction;
 import system.entity.User;
@@ -22,10 +26,7 @@ import system.utils.jaxb.JaxbUtils;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -100,41 +101,61 @@ public class AdminController {
      * @param response ServletResponse
      * @param fromDate дата в формате ДД.ММ.ГГГГ начало диапозона
      * @param toDate дата в формате ДД.ММ.ГГГГ конца диапозона
+     * @param convertType тип в который конвертируем (XML, JSON, CSV)
      */
     @RequestMapping(value = "/export", method = RequestMethod.POST)
     public @ResponseBody
     ModelAndView export(@ModelAttribute("login")    String login,
                 @ModelAttribute("fromDate") String fromDate,
                 @ModelAttribute("toDate")   String toDate,
+                @ModelAttribute("convertType") String convertType,
                 HttpServletResponse response) {
-        User user = userService.findByLogin(login);
-        Date from, to;
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-        try {
+        try{
+            User user = userService.findByLogin(login);
+             Date from, to;
+            SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
             from = fromDate.equals("")? new Date(0):format.parse(fromDate);
             to =   toDate.equals("")? new Date():format.parse(toDate);
-        }catch (ParseException ex) {
-            return new ModelAndView("redirect:/admin");
-        }
-        List<Transaction> transactionList;
-        if (user == null) {
-            transactionList = transactionService.loadAllTransactionsForRangeDate(from, to);
-        } else {
-            transactionList = transactionService.loadAllTransactionsForRangeDateByUser(user, from, to);
-        }
+            List<Transaction> transactionList;
+            if (user == null) {
+                transactionList = transactionService.loadAllTransactionsForRangeDate(from, to);
+            } else {
+                transactionList = transactionService.loadAllTransactionsForRangeDateByUser(user, from, to);
+            }
+            String outputFile = "";
+            switch (convertType)
+            {
+                case "xml":
+                   outputFile = JaxbUtils.marshalToXml(transactionList);
+                   response.setContentType("application/xml");
+                   response.setHeader("Content-Disposition", "attachment;filename=export_"+LocalDate.now().toString() +".xml");
+                   break;
+                case "json":
+                    outputFile = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(transactionList);
+                    response.setContentType("application/json");
+                    response.setHeader("Content-Disposition", "attachment;filename=export_"+LocalDate.now().toString() +".json");
+                    break;
+                case "csv":
+                    StringWriter stringWriter = new StringWriter();
+                    ICsvBeanWriter beanWriter = new CsvBeanWriter(stringWriter, CsvPreference.STANDARD_PREFERENCE);
+                    beanWriter.writeHeader(Transaction.NAMES);
+                    for (final Transaction transaction : transactionList) {
+                        beanWriter.write(transaction,Transaction.COLUMNS);
+                    }
+                    outputFile = stringWriter.toString();
+                    response.setContentType("application/csv");
+                    response.setHeader("Content-Disposition", "attachment;filename=export_"+LocalDate.now().toString() +".csv");
+                    break;
+            }
 
-        String xml = JaxbUtils.marshalToXml(transactionList);
-        response.setContentType("application/xml");
-        response.setHeader("Content-Disposition", "attachment;filename=export_"+LocalDate.now().toString() +".xml");
-        try {
-            ServletOutputStream outStream = response.getOutputStream();
-            outStream.write(xml.getBytes());
-            outStream.flush();
-            outStream.close();
-        }catch (IOException e){
-           response.setStatus(501);
-           return new ModelAndView("redirect:/admin");
-        }
+                ServletOutputStream outStream = response.getOutputStream();
+                outStream.write(outputFile.getBytes());
+                outStream.flush();
+                outStream.close();
+            }catch (Exception e){
+               response.setStatus(501);
+               return new ModelAndView("redirect:/admin");
+            }
         return new ModelAndView("redirect:/admin/reports");
     }
 }
