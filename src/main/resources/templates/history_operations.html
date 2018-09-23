@@ -68,13 +68,13 @@
                             </thead>
 
                             <tbody>
-                            <tr class="c-table__row" th:each="operation : ${page.content}">
-                                <td class="c-table__cell" th:text="${operation.date}">===</td>
-                                <td class="c-table__cell" th:text="${operation.sender.accountNumber}">===</td>
-                                <td class="c-table__cell" th:text="${operation.reciever.accountNumber}">===</td>
-                                <td class="c-table__cell" th:text="${operation.type}">===</td>
-                                <td class="c-table__cell" th:text="${operation.status}">===</td>
-                                <td class="c-table__cell" th:text="${operation.amount}">===</td>
+                            <tr class="c-table__row" th:each="transactionDTO : ${page.content}">
+                                <td class="c-table__cell" th:text="${transactionDTO.date}">===</td>
+                                <td class="c-table__cell" th:text="${transactionDTO.sender.accountNumber}">===</td>
+                                <td class="c-table__cell" th:text="${transactionDTO.reciever.accountNumber}">===</td>
+                                <td class="c-table__cell" th:text="${transactionDTO.type}">===</td>
+                                <td class="c-table__cell" th:text="${transactionDTO.status}">===</td>
+                                <td class="c-table__cell" th:text="${transactionDTO.amount}">===</td>
                             </tr>
 
                             </tbody>

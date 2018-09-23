@@ -22,7 +22,7 @@
         <nav class="c-navbar__nav collapse" id="main-nav">
           <ul class="c-navbar__nav-list">
             <li> <a href = "/main"><img src="/img/sber.png" width="200" height="151" ></a></li>
-            <li><h2 class="c-navbar__title">Deposit</h2></li>
+            <li><h2 class="c-navbar__title">Пополнить</h2></li>
           </ul>
         </nav>
 
@@ -51,14 +51,14 @@
         <div class="col-md-4">
 
           <div class="c-card">
-            <h4 class="u-mb-small">Deposit</h4>
+            <h4 class="u-mb-small">Пополнить счет</h4>
             <!-- IF Success Deposit-->
             <div th:if="${errorFalse}" class="c-alert c-alert--success u-mb-medium">
                             <span class="c-alert__icon">
                               <i class="feather icon-check"></i>
                             </span>
               <div class="c-alert__content">
-                <h4 class="c-alert__title">Success!</h4>
+                <h4 class="c-alert__title">Успешно!</h4>
               </div>
             </div>
             <!-- IF Error Deposit-->
@@ -68,20 +68,20 @@
                             </span>
 
               <div class="c-alert__content">
-                <h4 class="c-alert__title">Error!</h4>
+                <h4 class="c-alert__title">Ошибка!</h4>
                 <p th:text="${textError}">Текст ошибки</p>
               </div>
             </div>
             <form th:action="@{/main/deposit}" method="post">
               <!-- IF Account Exist -->
               <div th:if="${accountExist}" class="c-field">
-                <label class="c-field__label" for="account">Account for the deposit:</label>
+                <label class="c-field__label" for="account">Счет для пополнения:</label>
                 <div th:text="${accountNumber}">---</div>
                 <input th:value="${accountNumber}" type="hidden" id="account"  name="accountNumber">
               </div>
               <!-- ELSE -->
               <div class="c-field" th:unless="${accountExist}">
-                <label class="c-field__label" for="account_select">Select your account for the deposit:</label>
+                <label class="c-field__label" for="account_select">Выберите счет для пополнения:</label>
                 <div class="c-select">
                   <select class="c-select__input" th:value="${accountNumber}" name="accountNumber" id="account_select">
                     <option th:each="acc : ${all}" th:value="${acc.accountNumber}" th:text="${acc.accountNumber}">----</option>
@@ -89,12 +89,12 @@
                 </div>
               </div>
               <div class="c-field">
-                <label class="c-field__label" for="amount">Amount:</label>
+                <label class="c-field__label" for="amount">Сумма:</label>
                 <input th:value="${amount}" name="amount" class="c-input" type="text" id="amount" placeholder="Enter here amount for deposit">
               </div>
               <div class="c-field">
                 <br>
-                <input class="c-btn c-btn--info" type="submit"  value="Deposit"/>
+                <input class="c-btn c-btn--info" type="submit"  value="Пополнить"/>
               </div>
             </form>
           </div>

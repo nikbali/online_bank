@@ -254,11 +254,37 @@ public class TransferController {
         return model.addObject("errorFalse", true);
     }
 
-    @RequestMapping(value = "/toAnotherBank", method = RequestMethod.GET)
-    public String toOtherBank(HttpSession session, Model model)
-    {
+
+    @RequestMapping(value= "/toAnotherBank", method=RequestMethod.GET)
+    public ModelAndView transferToAnotherBank(HttpSession session,
+                                        @RequestParam(value = "errorTrue", required = false) Boolean errorTrue,
+                                        @RequestParam(value = "errorFalse", required = false) Boolean errorFalse,
+                                        @RequestParam(value = "textError", required = false) String textError){
+        ModelAndView model = new ModelAndView("toAnotherBank");
         User user = UserUtils.getUserFromSession(session);
-        model.addAttribute("user", user);
-        return "toAnotherBank";
+        String senderAccountNumber = "";
+        String receiverAccountNumber = "";
+        if (errorTrue != null) {
+            model.addObject("errorTrue", errorTrue);
+        }
+        if (errorFalse != null) {
+            model.addObject("errorFalse", errorFalse);
+        }
+        if (textError != null) {
+            model.addObject("textError", textError);
+        }
+        model.addObject("user", user);
+        model.addObject("senderAccountNumber", senderAccountNumber);
+        model.addObject("receiverAccountNumber", receiverAccountNumber);
+
+        if(senderAccountNumber != null && !senderAccountNumber.equals("") && receiverAccountNumber != null && !receiverAccountNumber.equals("")){
+            model.addObject("accountsExist", true);
+        }else{
+            model.addObject("accountsExist", false);
+        }
+        model.addObject("amount", "");
+        model.addObject("user", user);
+        model.addObject("all", user.getAccountList());
+        return model;
     }
 }

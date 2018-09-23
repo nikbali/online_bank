@@ -1,17 +1,20 @@
 package system.rest_controller;
 
-public class Operation {
-    private long id;
-    private String fromAccount;
-    private String toAccount;
-    private String currency;
-    private String comment;
-    private double amount;
+/**
+ * DTO - объект Операции. Необходим ля перевода и обработки переводов средств сторонних банков.
+ */
+public class TransactionDTO {
+    private  String fromAccount;
+    private  String toAccount;
+    private  String currency;
+    private  String comment;
+    private  double amount;
 
-    public Operation(){
-    }
-    public Operation(long id, String fromAccount, String toAccount, String currency, String comment, double amount) {
-        this.id = id;
+    public TransactionDTO(String fromAccount,
+                          String toAccount,
+                          String currency,
+                          String comment,
+                          double amount) {
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
         this.comment = comment;
@@ -19,13 +22,6 @@ public class Operation {
         this.amount = amount;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public double getAmount() {
         return amount;

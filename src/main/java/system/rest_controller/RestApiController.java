@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import system.entity.Account;
 import system.entity.Transaction;
 import system.enums.Bank;
@@ -21,22 +20,22 @@ import java.math.BigDecimal;
 public class RestApiController {
 
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
     @Autowired
-    TransactionService transactionService;
+    private TransactionService transactionService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(system.ApplicationWar.class);
 
     /**
      * Метод обрабатывает Post запрос для передачи средств со счета с внешнего банка на счет в наш банк
-     * @param operation Тело запроса содержит информацию о переводе
+     * @param transactionDTO Тело запроса содержит информацию о переводе
      * @param api_key Уникальный ключ передается в header параметре x-api-key
      * @return ответ в виде Json объекта, с результатом операции
      */
     @RequestMapping(value = "/transfer/", method = RequestMethod.POST)
-    public ResponseEntity<?> transferFromOtherBank(@RequestBody Operation operation, @RequestHeader(value="x-api-key") String api_key) {
+    public ResponseEntity<?> transferFromOtherBank(@RequestBody TransactionDTO transactionDTO, @RequestHeader(value="x-api-key") String api_key) {
 
-        LOGGER.info("Received GET request for transfer funds from another bank to {}", operation.getToAccount());
+        LOGGER.info("Received GET request for transfer funds from another bank to {}", transactionDTO.getToAccount());
         ResponseEntity responseEntity = null;
         //здесь будем проверять api_key, пока просто от балды написал
         if(!api_key.equals("hello")) {
@@ -45,19 +44,19 @@ public class RestApiController {
                     .status(HttpStatus.FORBIDDEN)
                     .body(new Response(HttpStatus.FORBIDDEN,"Error API_KEY"));
         }
-        if(!validateInputParams(operation)) {
+        if(!validateInputParams(transactionDTO)) {
             LOGGER.error("Error! Incorrect request params!");
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body(new Response(HttpStatus.NOT_ACCEPTABLE, "Error! Incorrect request params!"));
 
         }
-        Currency currency = Currency.valueOf(operation.getCurrency());
-        Account receiverAccount = accountService.findByAccountNumber(Long.parseLong(operation.getToAccount()));
-        Account senderAccount = accountService.findByAccountNumber(Long.parseLong(operation.getFromAccount()));
+        Currency currency = Currency.valueOf(transactionDTO.getCurrency());
+        Account receiverAccount = accountService.findByAccountNumber(Long.parseLong(transactionDTO.getToAccount()));
+        Account senderAccount = accountService.findByAccountNumber(Long.parseLong(transactionDTO.getFromAccount()));
 
         //здесь на всякий еще проверяем первые разряды, чтобы наверянка перевод был на нужные счета
-        if (receiverAccount == null || !operation.getToAccount().substring(0,2).equals(String.valueOf(Bank.OUR_BANK.getBic()))) {
+        if (receiverAccount == null || !transactionDTO.getToAccount().substring(0,2).equals(String.valueOf(Bank.OUR_BANK.getBic()))) {
             LOGGER.error("Error! That Account Not Exist in our Bank.");
             return  ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
@@ -67,32 +66,32 @@ public class RestApiController {
         if(senderAccount == null){
             senderAccount = new Account();
             senderAccount.setCurrency(currency);
-            operation.getFromAccount().substring(0,2);
-            senderAccount.setBic(Integer.parseInt(operation.getFromAccount().substring(0,2)));
-            senderAccount.setAccountNumber(Long.parseLong(operation.getFromAccount()));
+            transactionDTO.getFromAccount().substring(0,2);
+            senderAccount.setBic(Integer.parseInt(transactionDTO.getFromAccount().substring(0,2)));
+            senderAccount.setAccountNumber(Long.parseLong(transactionDTO.getFromAccount()));
         }
         if(currency != receiverAccount.getCurrency()) {
-            LOGGER.error("Error! Currency is incorrectly specified for transfer to {}", operation.getToAccount());
+            LOGGER.error("Error! Currency is incorrectly specified for transfer to {}", transactionDTO.getToAccount());
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body(new Response(HttpStatus.NOT_ACCEPTABLE, "Error! Currency is incorrectly specified!"));
         }
 
-        if (!Bank.existBankByBic(Integer.parseInt(operation.getFromAccount().substring(0,2)))) {
-            LOGGER.error("Error! Unknown Identificator Bank for transfer to Account {}", operation.getToAccount());
+        if (!Bank.existBankByBic(Integer.parseInt(transactionDTO.getFromAccount().substring(0,2)))) {
+            LOGGER.error("Error! Unknown Identificator Bank for transfer to Account {}", transactionDTO.getToAccount());
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body(new Response(HttpStatus.NOT_ACCEPTABLE, "Error! Unknown Identificator Bank(first two digits in your Account Number)!"));
         }
-        Transaction transaction = transactionService.transferFromOtherBank(senderAccount, receiverAccount, BigDecimal.valueOf(operation.getAmount()), operation.getComment());
+        Transaction transaction = transactionService.transferFromOtherBank(senderAccount, receiverAccount, BigDecimal.valueOf(transactionDTO.getAmount()), transactionDTO.getComment());
         if (transaction == null) {
-            LOGGER.error("Error Server transaction for transfer to {}", operation.getToAccount());
+            LOGGER.error("Error Server transaction for transfer to {}", transactionDTO.getToAccount());
             return ResponseEntity
                     .status(HttpStatus.NOT_IMPLEMENTED)
                     .body(new Response(HttpStatus.NOT_IMPLEMENTED, "Error Server transaction!"));
         }
 
-        LOGGER.info("Success transfer to {}", operation.getToAccount());
+        LOGGER.info("Success transfer to {}", transactionDTO.getToAccount());
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(new Response(HttpStatus.OK, "Success!"));
@@ -115,17 +114,17 @@ public class RestApiController {
         return  new ResponseEntity(new Response(HttpStatus.OK, "Success! Account with account_number: " + account_number + " exist."), HttpStatus.OK);
     }
 
-    public  static boolean validateInputParams(Operation operation) {
-        if (operation.getFromAccount() != null &&
-                operation.getToAccount() != null &&
-                !operation.getFromAccount().equals("") &&
-                !operation.getToAccount().equals("") &&
-                operation.getAmount() > 0 &&
-                operation.getId() > 0) {
+    public  static boolean validateInputParams(TransactionDTO transactionDTO) {
+        if (transactionDTO.getFromAccount() != null &&
+                transactionDTO.getToAccount() != null &&
+                !transactionDTO.getFromAccount().equals("") &&
+                !transactionDTO.getToAccount().equals("") &&
+                transactionDTO.getAmount() > 0)
+                 {
             try {
-                Long.parseLong(operation.getFromAccount());
-                Long.parseLong(operation.getToAccount());
-                Currency.valueOf(operation.getCurrency());
+                Long.parseLong(transactionDTO.getFromAccount());
+                Long.parseLong(transactionDTO.getToAccount());
+                Currency.valueOf(transactionDTO.getCurrency());
                 //ВСЕ ОК
                 return true;
             } catch (IllegalArgumentException e) {
