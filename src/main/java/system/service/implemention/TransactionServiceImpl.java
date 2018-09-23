@@ -40,10 +40,12 @@ public class TransactionServiceImpl implements TransactionService {
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     @Override
+    @Transactional
     public void save(Transaction transaction) {
     }
 
     @Override
+    @Transactional
     public Transaction deposit(Account account, BigDecimal amount) {
         LOG.info("Пополнение счета {} на {} {}  Status: {}", account.getAccountNumber(), amount, account.getCurrency() , StatusOperation.IN_PROGRESS.getName());
         if(amount.compareTo(BigDecimal.ZERO) > 0 && account != null)
@@ -67,6 +69,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional
     public Transaction transfer(Account sender, Account receiver, BigDecimal amount){
         LOG.info("Перевод {} {} от {} к {} Status: {}", amount, sender.getCurrency(), sender.getAccountNumber(), receiver.getAccountNumber(), StatusOperation.IN_PROGRESS.getName());
         if(amount.compareTo(BigDecimal.ZERO) > 0 &&
@@ -96,6 +99,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional
     public Transaction transferFromOtherBank(Account sender, Account receiver, BigDecimal amount, String comment) {
         LOG.info("Перевод из другого банка {} {} от {} к {} Status: {}", amount, sender.getCurrency(), sender.getAccountNumber(), receiver.getAccountNumber(), StatusOperation.IN_PROGRESS.getName());
         if(amount.compareTo(BigDecimal.ZERO) > 0 &&
@@ -139,11 +143,13 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Transaction> loadAllTransactions() {
         return  Lists.newArrayList(transactionRepository.findAll());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Transaction> loadAllTransactionsForRangeDate(Date from, Date to) {
         NavigableMap<Instant, Transaction> mapa = new TreeMap<Instant, Transaction>();
         for (Transaction oper : transactionRepository.findAll()) {
@@ -155,6 +161,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Transaction> loadAllTransactionsForRangeDateByUser(User user, Date from, Date to) {
         NavigableMap<Instant, Transaction> mapa = new TreeMap<Instant, Transaction>();
         for (Transaction oper : loadAllTransactionByUser(user)) {

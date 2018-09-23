@@ -26,12 +26,11 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
-
-
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
 
     @Override
+    @Transactional
     public Account createAccount(User user) {
         Account account = new Account();
 
@@ -56,6 +55,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public void save(Account account) {
         accountRepository.save(account);
     }
@@ -74,14 +74,19 @@ public class AccountServiceImpl implements AccountService {
     public boolean existsById(long id) {
         return accountRepository.existsById(id);
     }
+
     @Override
+    @Transactional
     public void deleteById(long id) {
         accountRepository.deleteById(id);
     }
+
     @Override
+    @Transactional
     public void delete(Account account) {
         accountRepository.delete(account);
     }
+
     @Override
     public void deleteAll() {
         accountRepository.deleteAll();
@@ -91,6 +96,8 @@ public class AccountServiceImpl implements AccountService {
     public long count() {
         return accountRepository.count();
     }
+
+
     @Override
     public List<Account> loadAll() {
         return accountRepository.findAll();

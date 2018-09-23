@@ -26,49 +26,49 @@
             <img src="/img/sber_log.png" alt="Sberbank">
           </span>
 
-            <h4 class="u-mb-medium">Registration</h4>
+            <h4 class="u-mb-medium">Регистрация</h4>
             <form th:action="@{/save}" method="post">
                     <p class="ex1" th:text="${msg}"/>
                         <div align="left" th:class="ex1" class="c-field">
-                            <label class="c-field__label">First Name</label>
+                            <label class="c-field__label">Имя</label>
                             <input class="c-input u-mb-small" type="text" required th:value="${first_name}" name="first_name">
                         </div>
                         <div class="c-field">
-                            <label class="c-field__label">Last Name</label>
+                            <label class="c-field__label">Фамилия</label>
                             <input class="c-input u-mb-small" type="text" th:value="${last_name}" name="last_name">
                         </div>
                         <div class="c-field">
-                            <label class="c-field__label">Middle Name</label>
+                            <label class="c-field__label">Отчество</label>
                             <input class="c-input u-mb-small" type="text" th:value="${middle_name}" name="middle_name">
                         </div>
 
                         <div class="c-field">
-                            <label class="c-field__label">Phone Number</label>
+                            <label class="c-field__label">Телефон</label>
                             <input class="c-input u-mb-small" type="text" placeholder="+79991236312" th:value="${phone}"
                                    name="phone">
                         </div>
 
                         <div class="c-field">
-                            <label class="c-field__label">Login</label>
+                            <label class="c-field__label">Логин</label>
                             <input class="c-input u-mb-small" type="text" required th:value="${login}" name="login">
                         </div>
 
                         <div class="c-field">
-                            <label class="c-field__label">Document Number</label>
+                            <label class="c-field__label">Номер паспорта</label>
                             <input class="c-input u-mb-small" type="text" placeholder="1234567890" required th:value="${documentNumber}" name="documentNumber">
                         </div>
 
                         <div class="c-field">
-                            <label class="c-field__label">Email Address</label>
+                            <label class="c-field__label">Email</label>
                             <input class="c-input u-mb-small" type="email" placeholder="e.g. adam@sandler.com" required th:value="${email}" name="email">
                         </div>
 
                         <div class="c-field u-mb-small">
-                            <label class="c-field__label">Password</label>
+                            <label class="c-field__label">Пароль</label>
                             <input class="c-input" type="password" placeholder="Numbers, Pharagraphs Only" required th:value="${password}" name="password">
                         </div>
 
-                        <input class="c-btn c-btn--fullwidth c-btn--info" type="submit" value="Create"/>
+                        <input class="c-btn c-btn--fullwidth c-btn--info" type="submit" value="Создать"/>
             </form>
         </div>
     </div>

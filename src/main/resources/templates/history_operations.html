@@ -22,7 +22,7 @@
             <nav class="c-navbar__nav collapse" id="main-nav">
                 <ul class="c-navbar__nav-list">
                     <li> <a href = "/main"><img src="/img/sber.png" width="200" height="151" ></a></li>
-                    <li><h2 class="c-navbar__title">History Operation</h2></li>
+                    <li><h2 class="c-navbar__title">История операций</h2></li>
                 </ul>
             </nav>
 
@@ -38,8 +38,8 @@
                     <span th:text="' ' + ${user.login}">User</span>
                 </div>
                 <div class="c-dropdown__menu has-arrow dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuAvatar">
-                    <a class="c-dropdown__item dropdown-item" href="/main/profile">My Profile</a>
-                    <a class="c-dropdown__item dropdown-item" href="/main/logout">Log out</a>
+                    <a class="c-dropdown__item dropdown-item" href="/main/profile">Мой профиль</a>
+                    <a class="c-dropdown__item dropdown-item" href="/main/logout">Выход</a>
                 </div>
             </div>
         </header>
@@ -48,7 +48,7 @@
             <!-- ======================= TABLE =======================-->
             <div class="row u-mt-medium">
                 <div class="col-12">
-                    <h3 th:text="'History Operation for Account: ' + ${account.accountNumber}" class="u-mb-small">History Operation for Account: </h3>
+                    <h3 th:text="'История операций по счету № ' + ${account.accountNumber}" class="u-mb-small">History Operation for Account: </h3>
                 </div>
             </div>
 
@@ -58,12 +58,12 @@
                         <table class="c-table">
                             <thead class="c-table__head">
                             <tr class="c-table__row">
-                                <th class="c-table__cell c-table__cell--head">Date</th>
-                                <th class="c-table__cell c-table__cell--head">Sender</th>
-                                <th class="c-table__cell c-table__cell--head">Reciever</th>
-                                <th class="c-table__cell c-table__cell--head">Type</th>
-                                <th class="c-table__cell c-table__cell--head">Status</th>
-                                <th class="c-table__cell c-table__cell--head">Amount</th>
+                                <th class="c-table__cell c-table__cell--head">Дата</th>
+                                <th class="c-table__cell c-table__cell--head">Отправитель</th>
+                                <th class="c-table__cell c-table__cell--head">Получатель</th>
+                                <th class="c-table__cell c-table__cell--head">Тип</th>
+                                <th class="c-table__cell c-table__cell--head">Статус</th>
+                                <th class="c-table__cell c-table__cell--head">Сумма</th>
                             </tr>
                             </thead>
 
@@ -83,16 +83,16 @@
                     <!-- ======================= PAGGINATION =======================-->
                     <ul class="c-pagination u-mb-medium">
                         <li th:if="${page.hasPrevious()}">
-                            <a th:href="@{/accounts/history(account_number=${account.accountNumber}, page=${page.number-1},size=${page.size})}" class="c-pagination__link"><i class="feather icon-chevron-left"></i> </a>
+                            <a th:href="@{/main/accounts/history(account_number=${account.accountNumber}, page=${page.number-1},size=${page.size})}" class="c-pagination__link"><i class="feather icon-chevron-left"></i> </a>
                         </li>
 
                         <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
                             <li th:if="${page.number == i}"><a class="c-pagination__link is-active">[[${i}+1]]</a></li>
-                            <li th:unless="${page.number == i}"><a class="c-pagination__link" th:href="@{/accounts/history(account_number=${account.accountNumber},page=${i},size=${page.size})}">[[${i}+1]]</a></li>
+                            <li th:unless="${page.number == i}"><a class="c-pagination__link" th:href="@{/main/accounts/history(account_number=${account.accountNumber},page=${i},size=${page.size})}">[[${i}+1]]</a></li>
                         </th:block>
 
                         <li th:if="${page.hasNext()}">
-                            <a th:href="@{/accounts/history(account_number=${account.accountNumber}, page=${page.number+1},size=${page.size})}" class="c-pagination__link"><i class="feather icon-chevron-right"></i> </a>
+                            <a th:href="@{/main/accounts/history(account_number=${account.accountNumber}, page=${page.number+1},size=${page.size})}" class="c-pagination__link"><i class="feather icon-chevron-right"></i> </a>
                         </li>
                     </ul>
 

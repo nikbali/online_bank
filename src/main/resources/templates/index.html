@@ -27,22 +27,22 @@
             <img src="/img/sber_log.png" alt="Sberbank">
           </span>
 
-            <h4 class="u-mb-medium">Sign In</h4>
+            <h4 class="u-mb-medium">Вход</h4>
             <form th:action="@{/signin}" method="post" th:object="${user}">
                 <p th:text="${msg}"/>
                 <div class="c-field">
-                    <label class="c-field__label">Login</label>
+                    <label class="c-field__label">Логин</label>
                     <input class="c-input u-mb-small" th:field="*{login}" id="inputLogin"  type="text">
                 </div>
 
                 <div class="c-field">
-                    <label class="c-field__label">Password</label>
+                    <label class="c-field__label">Пароль</label>
                     <input class="c-input u-mb-small"  th:field="*{password}" id="inputPassword" type="password" >
                 </div>
 
-                <button class="c-btn c-btn--fullwidth c-btn--info btn-block" name="sign-in" type="submit">Login</button>
+                <button class="c-btn c-btn--fullwidth c-btn--info btn-block" name="sign-in" type="submit">Войти</button>
 
-                <button class="c-btn c-btn--fullwidth c-btn--info btn-block" name="sign-up" type="submit">Sign Up</button>
+                <button class="c-btn c-btn--fullwidth c-btn--info btn-block" name="sign-up" type="submit">Регистрация</button>
             </form>
         </div>
     </div>

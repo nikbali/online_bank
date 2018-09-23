@@ -32,8 +32,8 @@
                     <span th:text="' ' + ${user.login}">User</span>
                 </div>
                 <div class="c-dropdown__menu has-arrow dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuAvatar">
-                    <a class="c-dropdown__item dropdown-item" href="/main/profile">My Profile</a>
-                    <a class="c-dropdown__item dropdown-item" href="/main/logout">Log out</a>
+                    <a class="c-dropdown__item dropdown-item" href="/main/profile">Мой профиль</a>
+                    <a class="c-dropdown__item dropdown-item" href="/main/logout">Выход</a>
                 </div>
             </div>
         </header>
@@ -48,7 +48,7 @@
                               <i class="feather icon-check"></i>
                             </span>
                         <div class="c-alert__content">
-                            <h4 class="c-alert__title">Success!</h4>
+                            <h4 class="c-alert__title">Успешно!</h4>
                         </div>
                     </div>
                     <!-- IF Error transfer-->
@@ -58,7 +58,7 @@
                             </span>
 
                         <div class="c-alert__content">
-                            <h4 class="c-alert__title">Error!</h4>
+                            <h4 class="c-alert__title">Ошибка!</h4>
                             <p th:text="${textError}">Текст ошибки</p>
                         </div>
                     </div>

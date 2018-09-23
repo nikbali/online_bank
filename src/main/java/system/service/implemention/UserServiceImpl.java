@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-
+    @Transactional
     public User createUser(User user, Set<UserRole> roles) throws Exception {
         if (this.checkLoginExists(user.getLogin())) {
             LOG.info("Error create! User with Login: %s already exists!", user.getLogin());
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
         return actions;
 
     }
-
+    @Transactional
     public void save(User user) {
         userRepository.save(user);
     }
