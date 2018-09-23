@@ -50,10 +50,8 @@ public final class JaxbUtils {
         history.generated.Account accountGenerated = objectFactory.createAccount();
         if (isSender) {
             accountGenerated.setAccountNumber(transaction.getSender().getAccountNumber());
-            accountGenerated.setUser(generateUserForXml(transaction.getSender().getUser(), objectFactory));
         } else {
             accountGenerated.setAccountNumber(transaction.getReciever().getAccountNumber());
-            accountGenerated.setUser(generateUserForXml(transaction.getReciever().getUser(), objectFactory));
         }
         return accountGenerated;
     }

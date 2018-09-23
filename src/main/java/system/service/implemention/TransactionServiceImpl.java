@@ -1,11 +1,14 @@
 package system.service.implemention;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import system.entity.Account;
+import system.entity.Action;
 import system.entity.Transaction;
 import system.entity.User;
 import system.enums.Bank;
@@ -13,6 +16,7 @@ import system.enums.StatusOperation;
 import system.enums.TypeOperation;
 import system.repository.AccountRepository;
 import system.repository.TransactionRepository;
+import system.service.AccountExporterService;
 import system.service.TransactionService;
 import system.service.UserService;
 import system.utils.UserUtils;
@@ -21,8 +25,8 @@ import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.Instant;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
+
 @Service
 @Transactional
 public class TransactionServiceImpl implements TransactionService {
@@ -121,6 +125,45 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Optional<Transaction> findById(long id) {
         return Optional.empty();
+    }
+
+    @Override
+    public List<Transaction> loadAllTransactionByUser(User user) {
+        List<Transaction> transactions = new ArrayList<>();
+        AccountExporterService accountExporterService = new AccountExporterImpl();
+        List<Account> accounts = user.getAccountList();
+        for(Account account : accounts){
+            transactions.addAll(accountExporterService.exportAccountHistory(account));
+        }
+        return transactions;
+    }
+
+    @Override
+    public List<Transaction> loadAllTransactions() {
+        return  Lists.newArrayList(transactionRepository.findAll());
+    }
+
+    @Override
+    public List<Transaction> loadAllTransactionsForRangeDate(Date from, Date to) {
+        NavigableMap<Instant, Transaction> mapa = new TreeMap<Instant, Transaction>();
+        for (Transaction oper : transactionRepository.findAll()) {
+            mapa.put(oper.getDate(), oper);
+        }
+        int count = 0;
+        List<Transaction> operations = new ArrayList<Transaction>(mapa.subMap(from.toInstant(), true, to.toInstant(), true).values());
+        return operations;
+    }
+
+    @Override
+    public List<Transaction> loadAllTransactionsForRangeDateByUser(User user, Date from, Date to) {
+        NavigableMap<Instant, Transaction> mapa = new TreeMap<Instant, Transaction>();
+        for (Transaction oper : loadAllTransactionByUser(user)) {
+            mapa.put(oper.getDate(), oper);
+        }
+        List<Transaction> operations = new ArrayList<Transaction>();
+        SortedMap<Instant, Transaction> map = mapa.subMap(from.toInstant(), to.toInstant());
+        for (Map.Entry<Instant, Transaction> entry : map.entrySet()) operations.add(entry.getValue());
+        return operations;
     }
 
     @Override

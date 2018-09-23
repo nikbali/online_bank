@@ -67,7 +67,6 @@
                             <thead class="c-table__head">
                             <tr class="c-table__row">
                                 <th class="c-table__cell c-table__cell--head">User</th>
-                                <th class="c-table__cell c-table__cell--head">Login</th>
                                 <th class="c-table__cell c-table__cell--head">Phone</th>
                                 <th class="c-table__cell c-table__cell--head">Document Number</th>
                                 <th class="c-table__cell c-table__cell--head">Accounts</th>
@@ -86,11 +85,11 @@
                                 </div>
                                 <div class="o-media__body">
                                     <h6 th:text="${client.last_name} + ' ' + ${client.first_name} + ' '+ ${client.middle_name}">##</h6>
+                                    <p th:text="${client.login}">#</p>
                                     <p th:text="${client.email}">#</p>
                                 </div>
                             </div>
                             </td>
-                            <td th:text="${client.login}" class="c-table__cell">#</td>
                             <td th:text="${client.phone}" class="c-table__cell">#</td>
                             <td th:text="${client.documentNumber}" class="c-table__cell">#</td>
                             <td class="c-table__cell">

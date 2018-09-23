@@ -63,15 +63,16 @@
                 <div class="c-card">
                     <h4 class="u-mb-small" th:text="'Download the report for: ' + ${login}"></h4>
 
-                    <form  method="post">
+                    <form  method="post" th:action="@{/admin/export}">
 
                         <div class="c-field">
                             <label class="c-field__label" for="from">From:</label>
-                            <input name="amount" class="c-input" type="text" id="from" placeholder="dd.ММ.YYYY">
+                            <input name="fromDate" class="c-input" type="text" id="from" placeholder="dd.ММ.YYYY">
                         </div>
+                        <input name="login" th:value="${login}" type = "hidden">
                         <div class="c-field">
                             <label class="c-field__label" for="to">To:</label>
-                            <input name="amount" class="c-input" type="text" id="to" placeholder="dd.ММ.YYYY">
+                            <input name="toDate" class="c-input" type="text" id="to" placeholder="dd.ММ.YYYY">
                         </div>
                         <div class="c-field">
                             <label class="c-field__label">Format:</label>
