@@ -1,25 +1,33 @@
 package system.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import system.entity.Account;
 import system.entity.Transaction;
 import system.entity.User;
+import system.enums.Bank;
+import system.enums.Currency;
+import system.rest_controller.Response;
+import system.rest_controller.TransactionDTO;
 import system.service.AccountService;
 import system.service.TransactionService;
 import system.utils.UserUtils;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.net.URI;
 
 @Controller
 @RequestMapping("/main/transfer")
@@ -228,11 +236,6 @@ public class TransferController {
             log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
             return model.addObject("errorTrue", true).addObject("textError", error_message);
         }
-        if(Double.parseDouble(amount) <= 0){
-            error_message = "Amount должен быть больше нуля";
-            log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
-            return model.addObject("errorTrue", true).addObject("textError", error_message);
-        }
         if(senderAccount.getAccount_balance().compareTo(BigDecimal.valueOf(Double.parseDouble(amount))) < 0){
             error_message = "На счете " + senderAccountNumber + "  недостаточно средств";
             log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
@@ -286,5 +289,102 @@ public class TransferController {
         model.addObject("user", user);
         model.addObject("all", user.getAccountList());
         return model;
+    }
+
+    @RequestMapping(value="/toAnotherBank", method=RequestMethod.POST)
+    public ModelAndView sendTransferAnotherForm1(@ModelAttribute("amount") String amount,
+                                          @ModelAttribute("senderAccountNumber") String senderAccountNumber,
+                                          @ModelAttribute("receiverAccountNumber") String receiverAccountNumber,
+                                          HttpSession session){
+        User user  = UserUtils.getUserFromSession(session);
+        String error_message = "";
+        ModelAndView model = new ModelAndView("redirect:/main/transfer/toAnotherBank");
+
+        try{
+            if(BigDecimal.valueOf(Double.parseDouble(amount)).compareTo(BigDecimal.ZERO) <= 0)
+            {
+                error_message = "Сумма перевода должна быть больше нуля";
+                log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+                return model.addObject("errorTrue", true).addObject("textError", error_message);
+            }
+        }
+        catch (NumberFormatException ex)
+        {
+            error_message = "Введенно некорректное значение в поле Amount";
+            log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
+        }
+
+
+        Account senderAccount = null;
+        for (Account acc : user.getAccountList()){
+            if(acc.getAccountNumber() == Long.parseLong(senderAccountNumber)){
+                senderAccount = acc;
+                break;
+            }
+        }
+        String to = receiverAccountNumber.substring(0, 2);
+        if (!Bank.existBankByBic(Integer.parseInt(to))) {
+            error_message = "Ошибка! Банк с таким идентификатором неизвестен!";
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
+        }
+        Bank bank = Bank.getBankByBic(Integer.parseInt(to));
+
+        Account receiverAccount = accountService.findByAccountNumber(Long.parseLong(receiverAccountNumber));
+
+        //создаем аккаунт, если раньше такого не было
+        if(receiverAccount == null){
+            receiverAccount = new Account();
+            receiverAccount.setCurrency(Currency.RUB);
+            receiverAccount.setBic(bank.getBic());
+            receiverAccount.setAccountNumber(Long.parseLong(receiverAccountNumber));
+        }
+
+        if(senderAccount == null) {
+            error_message = "У вас нет cчета с номером " + senderAccountNumber + ", попробуйте снова";
+            log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
+        }
+
+        if(senderAccount.getAccount_balance().compareTo(BigDecimal.valueOf(Double.parseDouble(amount))) < 0){
+            error_message = "На счете " + senderAccountNumber + "  недостаточно средств";
+            log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
+        }
+
+        //логика отправки post запроса
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            TransactionDTO dto = new TransactionDTO(senderAccountNumber, receiverAccountNumber, Currency.RUB.toString(), "Перевод", Double.parseDouble(amount));
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            String requestJson = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(dto);
+            log.info("Request JSON for transfer=" + requestJson);
+            HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
+            ResponseEntity<String> response = restTemplate.exchange(bank.getUrl(), HttpMethod.POST, entity, String.class);
+
+            if(!response.getStatusCode().equals(HttpStatus.OK)){
+                error_message = response.getBody();
+                log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+                return model.addObject("errorTrue", true).addObject("textError", error_message);
+            }
+
+            Transaction transaction = transactionService.transferToOtherBank(senderAccount, receiverAccount, BigDecimal.valueOf(Double.parseDouble(amount)));
+            if(transaction == null) {
+                error_message = "Ошибка на сервере, попробуйте позже";
+                log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+                return model.addObject("errorTrue", true).addObject("textError", error_message);
+            }
+
+            ////////////////////////////УСПЕХ/////////////////////////////////////////
+            log.info("Перевод: {} RUB со счета: {} на счет в другой банк проведен Успешно: {}", amount, senderAccountNumber, receiverAccountNumber);
+            return model.addObject("errorFalse", true);
+
+        }catch (Exception ex)
+        {
+            error_message = "Ошибка на сервере, попробуйте позже";
+            log.info("Ошибка при переводе {} c senderAccountNumber: {} на  receiverAccountNumber: {} : {}", amount, senderAccountNumber, receiverAccountNumber, error_message);
+            return model.addObject("errorTrue", true).addObject("textError", error_message);
+        }
     }
 }

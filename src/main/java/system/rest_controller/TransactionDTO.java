@@ -10,6 +10,7 @@ public class TransactionDTO {
     private  String comment;
     private  double amount;
 
+    public TransactionDTO(){};
     public TransactionDTO(String fromAccount,
                           String toAccount,
                           String currency,

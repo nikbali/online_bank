@@ -16,6 +16,7 @@ public interface TransactionService {
     Transaction deposit(Account account , BigDecimal amount);
     Transaction transfer(Account sender, Account receiver, BigDecimal amount);
     Transaction transferFromOtherBank(Account sender, Account receiver, BigDecimal amount, String comment);
+    Transaction transferToOtherBank(Account sender, Account receiver, BigDecimal amount);
     Optional<Transaction> findById(long id);
     List<Transaction> loadAllTransactionByUser(User user);
     List<Transaction> loadAllTransactions();

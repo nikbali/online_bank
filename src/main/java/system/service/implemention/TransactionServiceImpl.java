@@ -192,4 +192,32 @@ public class TransactionServiceImpl implements TransactionService {
     public long count() {
         return 0;
     }
+
+    @Override
+    @Transactional
+    public Transaction transferToOtherBank(Account sender, Account receiver, BigDecimal amount) {
+        LOG.info("Перевод в другой банка {} {} от {} к {} Status: {}", amount, sender.getCurrency(), sender.getAccountNumber(), receiver.getAccountNumber(), StatusOperation.IN_PROGRESS.getName());
+        if(amount.compareTo(BigDecimal.ZERO) > 0 &&
+                sender!=null && receiver!=null &&
+                sender != receiver &&
+                receiver.getCurrency() == sender.getCurrency() )
+        {
+            sender.setAccount_balance(sender.getAccount_balance().subtract(amount));
+            accountRepository.save(receiver);
+            accountRepository.save(sender);
+            Transaction transaction = new Transaction(
+                    amount,
+                    Instant.now(),
+                    "Перевод в другой банк " + amount.doubleValue() + sender.getCurrency().name(),
+                    StatusOperation.DONE,
+                    TypeOperation.TRANSFER_TO_ANOTHER_BANK,
+                    sender,
+                    receiver);
+            transactionRepository.save(transaction);
+            LOG.info("Перевод в другой банк {} {} от {} к {} Status: {}", amount, sender.getCurrency(), sender.getAccountNumber(), receiver.getAccountNumber(), StatusOperation.DONE.getName());
+            return transaction;
+        }
+        LOG.info("Перевод в другой банк {} {} от {} к {} Status: {}", amount, sender.getCurrency(), sender.getAccountNumber(), receiver.getAccountNumber(), StatusOperation.ERROR.getName());
+        return null;
+    }
 }
